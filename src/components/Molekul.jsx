@@ -1,6 +1,8 @@
 // Filename: Molekul.jsx
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import { Container } from 'react-bootstrap';
 import { iconList } from '../data/iconData.js';
 
@@ -18,10 +20,11 @@ export const Header = () => {
   );
 };
 
-export const Sidebar = () => {
+export const Sidebar = ({ onClose }) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(null);
     const [hoveredSubitem, setHoveredSubitem] = useState(null);
+    const navigate = useNavigate();
 
     const sidebarMenu = [
         { label: 'Minimize', icon: 'Back Icon Black' },
@@ -39,6 +42,17 @@ export const Sidebar = () => {
         { label: 'Logout', icon: 'Logout Icon' },
     ];
 
+    const pathMap = {
+        Dashboard: '/admin',
+        Profile: '/profile',
+        'Lihat Presensi': '/presensi',
+        'Cetak Presensi': '/cetak-presensi',
+        Jadwal: '/jadwal',
+        Kontak: '/kontak',
+        Informasi: '/informasi',
+        Logout: '/',
+    };
+
     const rightArrow = iconList.find((i) => i.label === 'Right Arrow White')?.src;
     const leftArrow = iconList.find((i) => i.label === 'Left Arrow White')?.src;
     const arrowDownWhite = iconList.find((i) => i.label === 'Arrow Down White')?.src;
@@ -55,7 +69,16 @@ export const Sidebar = () => {
                         <React.Fragment key={index}>
                             <li
                                 className="sidebar-item"
-                                onClick={() => item.hasDropdown && setIsDropdownOpen(!isDropdownOpen)}
+                                onClick={() => {
+                                    // Jika item "Minimize", jalankan fungsi tutup sidebar
+                                    if (item.label === 'Minimize' && onClose) {
+                                        onClose();
+                                    } else if (item.hasDropdown) {
+                                        setIsDropdownOpen(!isDropdownOpen);
+                                    } else if (pathMap[item.label]) {
+                                        navigate(pathMap[item.label]);
+                                    }
+                                }}
                                 onMouseEnter={() => setHoveredItem(item.label)}
                                 onMouseLeave={() => setHoveredItem(null)}
                             >
@@ -122,6 +145,11 @@ export const Sidebar = () => {
                                             <li
                                                 key={subIndex}
                                                 className="sidebar-subitem"
+                                                onClick={() => {
+                                                    if (pathMap[sub.label]) {
+                                                        navigate(pathMap[sub.label]);
+                                                    }
+                                                }}
                                                 onMouseEnter={() => setHoveredSubitem(sub.label)}
                                                 onMouseLeave={() => setHoveredSubitem(null)}
                                             >
@@ -165,13 +193,15 @@ export const Card = (props) => {
         width = '100%', 
         height = 'auto', 
         className = '', 
-        style = {}
+        style = {},
+        ...rest
     } = props;
 
     return (
         <div
             className={`custom-card ${className}`}
             style={{ width, height, ...style }}
+            {...rest}
         >
             {children}
         </div>

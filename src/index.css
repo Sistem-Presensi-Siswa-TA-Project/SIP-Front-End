@@ -6,7 +6,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Universal */
+/* Universal (Komponen HTML) */
 html,
 body,
 #root {
@@ -15,6 +15,10 @@ body,
   padding: 0;
   background-color: #FFF6F6 !important;
   font-family: 'Inter', sans-serif !important;
+}
+
+main {
+  padding-top: 90px; /* sama seperti tinggi header */
 }
 
 /* Button */
@@ -90,6 +94,24 @@ body,
   font-weight: bold !important;
 }
 
+.btn-light {
+  background-color: #FFF !important;
+  border-color: #FFF !important;
+  color: black !important;
+  border-radius: 10px !important;
+  font-weight: bold !important;
+}
+
+.btn-light:hover {
+  background-color: #379777 !important;
+  border-color: #379777 !important;
+  color: #000 !important;
+  border-radius: 15px !important;
+  border-width: 2px !important;
+  border-style: solid !important;
+  font-weight: bold !important;
+}
+
 /* Forms */
 .custom-textInput {
   border: none !important;
@@ -110,9 +132,13 @@ body,
 /* Header */
 .header-bar {
   background-color: #379777 !important;
-  height: 90px !important;
+  height: 100px !important;
   width: 100% !important;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.45) !important;
+  position: absolute;        /* Biar selalu di atas */
+  top: 0;
+  left: 0;
+  z-index: 1001;          /* Lebih tinggi dari sidebar */
 }
 
 .header-container {
@@ -142,17 +168,18 @@ body,
 .sidebar {
   background-color: #FFF;
   width: 260px;
-  height: 350px;
-  transition: height 0.1s ease;
+  height: 363px;
+  transition: height 0.3s ease;
   box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.45);
   border-bottom-right-radius: 25px;
-  padding-top: 12px;
+  padding-top: 28px;
   display: flex;
   flex-direction: column;
 }
 
 .sidebar-expanded {
-  height: 490px;
+  height: 508px;
+  transition: height 0.1s ease;
 }
 
 .sidebar-menu {
@@ -249,4 +276,65 @@ body,
 
 .custom-card:hover {
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.45);
+}
+
+/* Responsive */
+.custom-flex-container {
+  display: flex;
+  flex-direction: row;
+  gap: 50px;
+  padding-top: 20px;
+}
+
+/* Ukuran Desktop */
+@media (min-width: 1125px) {
+  .card-kecil {
+    max-width: 290px;
+  }
+
+  .custom-container {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: flex-start !important;
+    max-width: 1000px !important;
+  }
+}
+
+/* Ukuran Mobile */
+@media (max-width: 1124px) {
+  .custom-flex-container {
+    flex-direction: column !important;
+    gap: 24px;
+  }
+
+  .custom-container {
+    width: 100% !important;
+  }
+
+  .card-kecil {
+    max-width: 100% !important;
+  }
+  
+  .custom-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .sidebar-overlay {
+    top: 90px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 90px);
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 999;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    position: fixed; /* penting agar overlay tetap */
+  }
+
+  .sidebar-overlay .sidebar {
+    position: relative;
+    z-index: 1000;
+  }
 }

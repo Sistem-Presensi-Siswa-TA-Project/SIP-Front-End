@@ -133,3 +133,36 @@ export const DangerButton = (props) => {
         </BootstrapButton>
     );
 };
+
+export const LightButton = (props) => {
+    const {
+        children = 'Click Here',
+        variant = 'light',
+        onClick,
+        className = '',
+        type = 'button',
+        width = '100px',
+        height = '40px',
+        textSize = '14px',
+        style = {},
+        ...rest
+    } = props;
+
+    return (
+        <BootstrapButton
+            variant={variant}
+            type={type}
+            className={className}
+            onClick={onClick}
+            style={{
+                width: width,
+                height: height,
+                fontSize: textSize,
+                ...style,
+            }}
+            {...rest}
+        >
+            {children}
+        </BootstrapButton>
+    );
+};
