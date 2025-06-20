@@ -17,6 +17,7 @@ import LainnyaIconWhite from "../assets/another-white.svg";
 import LeftArrowWhite from "../assets/leftArrow-white.svg";
 import LoginImg from "../assets/bg-login.png";
 import Logo from "../assets/babussalam.png";
+import LogoutIcon from "../assets/logout.svg";
 import LogoutIconBlack from "../assets/logout-black.svg";
 import LogoutIconWhite from "../assets/logout-white.svg";
 import MenuIconBlack from "../assets/menu-black.svg";
@@ -24,6 +25,8 @@ import MenuIconWhite from "../assets/menu-white.svg";
 import PresensiIcon from "../assets/presensi-black.svg";
 import ProfileIcon from "../assets/profile-black.svg";
 import RightArrowWhite from "../assets/rightArrow-white.svg";
+import BackIconWhite from "../assets/iconBack-white.svg";
+import BackIconBlack from "../assets/iconBack-black.svg";
 
 export const iconList = [
   { id: 1, label: "Arrow Down Black", src: ArrowDownBlack },
@@ -49,4 +52,7 @@ export const iconList = [
   { id: 21, label: "Presensi Icon", src: PresensiIcon },
   { id: 22, label: "Profile Icon", src: ProfileIcon },
   { id: 23, label: "Right Arrow White", src: RightArrowWhite },
+  { id: 24, label: "Back Icon White", src: BackIconWhite },
+  { id: 25, label: "Back Icon Black", src: BackIconBlack },
+  { id: 25, label: "Logout Icon", src: LogoutIcon },
 ];
