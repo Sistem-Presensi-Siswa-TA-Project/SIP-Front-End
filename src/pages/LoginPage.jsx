@@ -1,3 +1,5 @@
+//Filename: LoginPage.jsx
+
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
@@ -11,6 +13,7 @@ import { getLoginErrorMessage } from '../handlers/ErrorHandler';
 function Login() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
@@ -96,6 +99,8 @@ function Login() {
               controlId="formPassword"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              show={showPassword}
+              toggleIcon={() => setShowPassword(!showPassword)}
             />
 
             {error.includes('error kode 2') && (

@@ -1,6 +1,7 @@
 // Filename: Forms.jsx
 import React from 'react';
 import { Form } from 'react-bootstrap';
+import { iconList } from '../data/iconData.js';
 
 export const TextInput = (props) => {
     const {
@@ -12,9 +13,13 @@ export const TextInput = (props) => {
         fontSize='15px',
         width = '310px',
         className = '',
+        show = false,
+        toggleIcon = null,
         style={},
         ...rest
     } = props;
+
+    const isPassword = type === 'password';
 
     return (
         <Form.Group 
@@ -30,16 +35,42 @@ export const TextInput = (props) => {
             {/* Label */}
             <div className="d-flex align-items-center mb-1">
                 <Form.Label className="fw-bold mb-0"> {label} </Form.Label>
-                {required && <span className="text-danger ms-1"> * </span>}
+                {required && <Form.Label className="fw-bold mb-0 text-danger"> * </Form.Label>}
             </div>
 
-            {/* Input */}
-            <Form.Control
-                type={type}
-                placeholder={placeholder}
-                className="custom-textInput"
-            />
+            {/* Input form wrapper */}
+            <div className="position-relative">
+                <Form.Control
+                    type={isPassword && show ? 'text' : type}
+                    placeholder={placeholder}
+                    className="custom-textInput"
+                    {...rest}
+                    style={isPassword ? { paddingRight: '40px' } : {}}
+                />
 
+                {/* Eye Icon (inside input password) */}
+                {isPassword && toggleIcon && (
+                    <div
+                        className="position-absolute top-50 translate-middle-y"
+                        style={{
+                            right: '10px',
+                            cursor: 'pointer',
+                        }}
+                        onClick={toggleIcon}
+                    >
+                        <img
+                            src={
+                                show
+                                ? iconList.find((i) => i.label === 'Eye Icon')?.src
+                                : iconList.find((i) => i.label === 'Eye Off Icon')?.src
+                            }
+                            alt="Toggle visibility"
+                            width="20"
+                            height="20"
+                        />
+                    </div>
+                )}
+            </div>
         </Form.Group>
     );
 };

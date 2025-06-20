@@ -32,6 +32,7 @@ Thumbs.db
 
 # Custom folders
 src/assets/
+public/
 
 # Logs
 logs
