@@ -30,11 +30,11 @@ function Login() {
     }
 
     // Routing berdasarkan role
-    if (user.role === 'guru') {
+    if (user.role === 'Guru') {
       navigate('/mapel');
-    } else if (user.role === 'admin') {
+    } else if (user.role === 'Admin') {
       navigate('/admin');
-    } else if (user.role === 'piket') {
+    } else if (user.role === 'Piket') {
       navigate('/piket');
     }
   };
@@ -131,7 +131,7 @@ function Login() {
           </div>
         </Form>
 
-        <small className="text-center mt-3" style={{ fontSize: '12px', color: '#808080' }}>
+        <small className="text-center mt-4" style={{ fontSize: '12px', color: '#808080' }}>
           Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
         </small>
       </div>

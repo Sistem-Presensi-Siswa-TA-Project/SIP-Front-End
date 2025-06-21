@@ -5,8 +5,11 @@ import ArrowDownBlack from "../assets/bottomArrow-black.svg";
 import ArrowDownWhite from "../assets/bottomArrow-white.svg";
 import ArrowTopBlack from "../assets/topArrow-black.svg";
 import ArrowTopWhite from "../assets/topArrow-white.svg";
+import BackIconWhite from "../assets/iconBack-white.svg";
+import BackIconBlack from "../assets/iconBack-black.svg";
 import CetakIcon from "../assets/cetak-black.svg";
 import DashboardIcon from "../assets/home-black.svg";
+import EmailIcon from "../assets/EmailIcon.svg";
 import IconEye from "../assets/visibility.svg";
 import IconEyeOff from "../assets/visibility-off.svg";
 import InformasiIcon from "../assets/information-black.svg";
@@ -22,11 +25,11 @@ import LogoutIconBlack from "../assets/logout-black.svg";
 import LogoutIconWhite from "../assets/logout-white.svg";
 import MenuIconBlack from "../assets/menu-black.svg";
 import MenuIconWhite from "../assets/menu-white.svg";
+import PhoneIcon from "../assets/phoneIcon.svg";
 import PresensiIcon from "../assets/presensi-black.svg";
 import ProfileIcon from "../assets/profile-black.svg";
 import RightArrowWhite from "../assets/rightArrow-white.svg";
-import BackIconWhite from "../assets/iconBack-white.svg";
-import BackIconBlack from "../assets/iconBack-black.svg";
+import UserIcon from "../assets/userIcon.svg";
 
 export const iconList = [
   { id: 1, label: "Arrow Down Black", src: ArrowDownBlack },
@@ -54,5 +57,8 @@ export const iconList = [
   { id: 23, label: "Menu Icon White", src: MenuIconWhite },
   { id: 24, label: "Presensi Icon", src: PresensiIcon },
   { id: 25, label: "Profile Icon", src: ProfileIcon },
-  { id: 26, label: "Right Arrow White", src: RightArrowWhite }
+  { id: 26, label: "Right Arrow White", src: RightArrowWhite },
+  { id: 27, label: "User Icon", src: UserIcon },
+  { id: 28, label: "Email Icon", src: EmailIcon },
+  { id: 29, label: "Phone Icon", src: PhoneIcon },
 ];

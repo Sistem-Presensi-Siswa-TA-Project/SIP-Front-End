@@ -10,7 +10,7 @@
 html,
 body,
 #root {
-  height: 100%;
+  height: calc(100% + 80px);
   margin: 0;
   padding: 0;
   background-color: #FFF6F6 !important;
@@ -19,6 +19,16 @@ body,
 
 main {
   padding-top: 90px; /* sama seperti tinggi header */
+}
+
+hr {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background-color: #000000 !important;
+  border: none !important;
+  opacity: 1 !important;
+  filter: brightness(0) contrast(50%); /* mempertegas warna hitam */
 }
 
 /* Button */
@@ -98,7 +108,7 @@ main {
   background-color: #FFF !important;
   border-color: #FFF !important;
   color: black !important;
-  border-radius: 10px !important;
+  border-radius: 12px !important;
   font-weight: bold !important;
 }
 
@@ -268,9 +278,9 @@ main {
 /* Card Component */
 .custom-card {
   background-color: #FFFFFF;
-  border-radius: 12px;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.45);
-  padding: 16px;
+  border-radius: 25px;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.45);
+  /* padding: 16px; */
   transition: box-shadow 0.3s ease;
 }
 
