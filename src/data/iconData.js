@@ -3,6 +3,8 @@
 // Icon dan image from assets
 import ArrowDownBlack from "../assets/bottomArrow-black.svg";
 import ArrowDownWhite from "../assets/bottomArrow-white.svg";
+import ArrowRightBlack from "../assets/arrowRight-black.svg";
+import ArrowRightWhite from "../assets/arrowRight-white.svg";
 import ArrowTopBlack from "../assets/topArrow-black.svg";
 import ArrowTopWhite from "../assets/topArrow-white.svg";
 import BackIconWhite from "../assets/iconBack-white.svg";
@@ -25,10 +27,16 @@ import LogoutIconBlack from "../assets/logout-black.svg";
 import LogoutIconWhite from "../assets/logout-white.svg";
 import MenuIconBlack from "../assets/menu-black.svg";
 import MenuIconWhite from "../assets/menu-white.svg";
+import MenuOpenBlack from "../assets/menuOpen-black.svg";
+import MenuOpenWhite from "../assets/menuOpen-white.svg";
 import PhoneIcon from "../assets/phoneIcon.svg";
+import PresensiButtonBlack from "../assets/presensiButton-black.svg";
+import PresensiButtonWhite from "../assets/presensiButton-white.svg";
 import PresensiIcon from "../assets/presensi-black.svg";
+import PresensiMapel from "../assets/presensi-mapel.svg";
 import ProfileIcon from "../assets/profile-black.svg";
 import RightArrowWhite from "../assets/rightArrow-white.svg";
+import ScanPresensi from "../assets/scan-presensi.svg";
 import UserIcon from "../assets/userIcon.svg";
 
 export const iconList = [
@@ -61,4 +69,12 @@ export const iconList = [
   { id: 27, label: "User Icon", src: UserIcon },
   { id: 28, label: "Email Icon", src: EmailIcon },
   { id: 29, label: "Phone Icon", src: PhoneIcon },
+  { id: 30, label: "Presensi Button Black", src: PresensiButtonBlack },
+  { id: 31, label: "Presensi Button White", src: PresensiButtonWhite },
+  { id: 32, label: "Presensi Mapel", src: PresensiMapel },
+  { id: 33, label: "Scan Presensi", src: ScanPresensi },
+  { id: 34, label: "Menu Open Black", src: MenuOpenBlack },
+  { id: 35, label: "Menu Open White", src: MenuOpenWhite },
+  { id: 36, label: "Arrow Right Black", src: ArrowRightBlack },
+  { id: 37, label: "Arrow Right White", src: ArrowRightWhite },
 ];

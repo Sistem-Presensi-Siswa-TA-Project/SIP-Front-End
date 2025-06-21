@@ -41,8 +41,9 @@ function Login() {
 
   return (
     <div className="d-flex vh-100">
+      {/* Background Login Page */}
       <div
-        className="d-none d-md-block"
+        className="d-none d-md-block bg-slide-in"
         style={{
           flex: 6.5,
           backgroundImage: `url(${loginBg})`,
@@ -51,8 +52,9 @@ function Login() {
         }}
       />
 
+      {/* Form Login */}
       <div
-        className="d-flex flex-column justify-content-center p-4 gap-4"
+        className="d-flex flex-column justify-content-center p-4 gap-4 form-slide-in"
         style={{ flex: 3.5, backgroundColor: '#FFF' }}
       >
         <div className="text-center mb-3">

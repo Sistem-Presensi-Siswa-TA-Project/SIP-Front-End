@@ -6,15 +6,28 @@ import { useNavigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
 import { iconList } from '../data/iconData.js';
 
-export const Header = () => {
+export const Header = ({ children='As User' }) => {
   const logo = iconList.find((i) => i.label === 'Logo')?.src;
 
   return (
-    <header className="header-bar">
+    <header className="header-bar animate-slide-down">
       <div className="header-container">
             <img src={logo} alt="Logo" className="header-logo" />
 
             <h5 className="header-title"> SMP Plus Babussalam </h5>
+
+            {/* Elemen children di sisi kanan */}
+            {children && (
+                <span style={{
+                    color: 'white',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    marginLeft: 'auto',
+                    marginRight: '30px',
+                }}>
+                    {children}
+                </span>
+            )}
         </div>
     </header>
   );
@@ -59,7 +72,7 @@ export const Sidebar = ({ onClose }) => {
     const arrowDownBlack = iconList.find((i) => i.label === 'Arrow Down Black')?.src;
 
     return (
-        <aside className={`sidebar ${isDropdownOpen ? 'sidebar-expanded' : ''}`}>
+        <aside className={`sidebar animate-sidebar ${isDropdownOpen ? 'sidebar-expanded' : ''}`}>
             <ul className="sidebar-menu">
                 {sidebarMenu.map((item, index) => {
                     const isHovered = hoveredItem === item.label;
@@ -199,7 +212,7 @@ export const Card = (props) => {
 
     return (
         <div
-            className={`custom-card ${className}`}
+            className={`custom-card animate-card ${className}`}
             style={{ width, height, ...style }}
             {...rest}
         >

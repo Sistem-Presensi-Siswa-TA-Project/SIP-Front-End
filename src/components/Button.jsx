@@ -166,3 +166,36 @@ export const LightButton = (props) => {
         </BootstrapButton>
     );
 };
+
+export const InfoButton = (props) => {
+    const {
+        children = 'Click Here',
+        variant = 'info',
+        onClick,
+        className = '',
+        type = 'button',
+        width = '100px',
+        height = '40px',
+        textSize = '14px',
+        style = {},
+        ...rest
+    } = props;
+
+    return (
+        <BootstrapButton
+            variant={variant}
+            type={type}
+            className={className}
+            onClick={onClick}
+            style={{
+                width: width,
+                height: height,
+                fontSize: textSize,
+                ...style,
+            }}
+            {...rest}
+        >
+            {children}
+        </BootstrapButton>
+    );
+};

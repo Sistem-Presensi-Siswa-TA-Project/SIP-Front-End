@@ -5,7 +5,6 @@ import Test from '../pages/Test.jsx';
 import Admin from '../pages/Dashboard-Admin.jsx';
 import Mapel from '../pages/Dashboard-Mapel.jsx';
 import Piket from '../pages/Dashboard-Piket.jsx';
-import LP from '../pages/LandingPage.jsx';
 // import NotFound from '../pages/NotFound.jsx';
 
 function AppRoutes() {

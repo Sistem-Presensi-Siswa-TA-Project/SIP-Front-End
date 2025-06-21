@@ -10,7 +10,7 @@
 html,
 body,
 #root {
-  height: calc(100% + 80px);
+  height: 100%;
   margin: 0;
   padding: 0;
   background-color: #FFF6F6 !important;
@@ -29,6 +29,13 @@ hr {
   border: none !important;
   opacity: 1 !important;
   filter: brightness(0) contrast(50%); /* mempertegas warna hitam */
+}
+
+footer {
+  width: 100%;
+  text-align: center; 
+  margin-top: 80px;
+  padding-bottom: 50px;
 }
 
 /* Button */
@@ -118,6 +125,24 @@ hr {
   color: #000 !important;
   border-radius: 15px !important;
   border-width: 2px !important;
+  border-style: solid !important;
+  font-weight: bold !important;
+}
+
+.btn-info {
+  background-color: #D6E7F9 !important;
+  border-color: #88A9C3 !important;
+  color: black !important;
+  border-radius: 8px !important;
+  font-weight: bold !important;
+}
+
+.btn-info:hover {
+  background-color: #D6E7F9 !important;
+  border-color: #88A9C3 !important;
+  color: #000 !important;
+  border-radius: 10px !important;
+  border-width: 1px !important;
   border-style: solid !important;
   font-weight: bold !important;
 }
@@ -280,7 +305,6 @@ hr {
   background-color: #FFFFFF;
   border-radius: 25px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.45);
-  /* padding: 16px; */
   transition: box-shadow 0.3s ease;
 }
 
@@ -299,7 +323,7 @@ hr {
 /* Ukuran Desktop */
 @media (min-width: 1125px) {
   .card-kecil {
-    max-width: 290px;
+    max-width: 100%;
   }
 
   .custom-container {
@@ -347,4 +371,101 @@ hr {
     position: relative;
     z-index: 1000;
   }
+}
+
+/* Ukuran Mobile Sedang -> Kecil (hanya menyeusikan ukuran teks) */
+@media (max-width: 560px) {
+  .header-title {
+    font-size: 20px !important;
+  }
+
+  .header-container span {
+    font-size: 14px !important;
+    margin-right: 20px !important;
+  }
+
+  .paragraf-flex-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 40px !important;
+    margin: 0 45px 30px 30px !important;
+  }
+}
+
+/* ~~~ Animasi Transisi ~~~ */
+
+/* Animasi background image slide in */
+.bg-slide-in {
+  transform: translateX(-100%);
+  opacity: 0;
+  animation: slideInLeft 1.0s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Animasi form login fade-in dari bawah */
+.form-slide-in {
+  transform: translateY(20px);
+  opacity: 0;
+  animation: slideInForm 1.0s ease forwards;
+}
+
+@keyframes slideInForm {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Slide Down */
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-down {
+  animation: slideDown 1.0s ease-out forwards;
+}
+
+/* Sidebar Slide In Left */
+@keyframes slideInLeftSidebar {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-sidebar {
+  animation: slideInLeftSidebar 1.0s ease-out forwards;
+}
+
+/* Card Fade-In Center */
+@keyframes fadeIn {
+  from {
+    transform: scale(0.75);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.animate-card {
+  animation: fadeIn 1.0s ease-out forwards;
 }
