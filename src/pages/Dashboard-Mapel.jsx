@@ -42,7 +42,7 @@ function DashboardMapel() {
 
   return (
     <div>
-      <Header> As Guru </Header>
+      <Header> Beranda Guru </Header>
 
       <main
         className="d-flex justify-content-center flex-wrap"
@@ -179,7 +179,7 @@ function DashboardMapel() {
                         <div style={{ flexGrow: 1 }}>
                           <strong style={{ display: 'block', marginBottom: '4px' }}> {item.label} </strong>
                           <span style={{ display: 'block', marginBottom: '4px' }}> {item.waktu} </span>
-                          <span style={{ display: 'block' }}> {item.kelas} </span>
+                          <span style={{ display: 'block' }}> Kelas {item.kelas} </span>
                         </div>
 
                         {/* Tombol Presensi */}

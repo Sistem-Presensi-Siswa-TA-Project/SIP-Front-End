@@ -20,6 +20,8 @@ import KontakIcon from "../assets/contact-black.svg";
 import LainnyaIconBlack from "../assets/another-black.svg";
 import LainnyaIconWhite from "../assets/another-white.svg";
 import LeftArrowWhite from "../assets/leftArrow-white.svg";
+import LeftArrowBlack from "../assets/leftArrow-black.svg";
+import LeftArrowYellow from "../assets/leftArrow-yellow.svg";
 import LoginImg from "../assets/bg-login.png";
 import Logo from "../assets/babussalam.png";
 import LogoutIcon from "../assets/logout.svg";
@@ -38,6 +40,10 @@ import ProfileIcon from "../assets/profile-black.svg";
 import RightArrowWhite from "../assets/rightArrow-white.svg";
 import ScanPresensi from "../assets/scan-presensi.svg";
 import UserIcon from "../assets/userIcon.svg";
+import AlpaIcon from "../assets/alpa-icon.svg";
+import SakitIcon from "../assets/sakit-icon.svg";
+import IzinIcon from "../assets/izin-icon.svg";
+import HadirIcon from "../assets/hadir-icon.svg";
 
 export const iconList = [
   { id: 1, label: "Arrow Down Black", src: ArrowDownBlack },
@@ -56,6 +62,8 @@ export const iconList = [
   { id: 14, label: "Lainnya Icon Black", src: LainnyaIconBlack },
   { id: 15, label: "Lainnya Icon White", src: LainnyaIconWhite },
   { id: 16, label: "Left Arrow White", src: LeftArrowWhite },
+  { id: 16, label: "Left Arrow Black", src: LeftArrowBlack },
+  { id: 16, label: "Left Arrow Yellow", src: LeftArrowYellow },
   { id: 17, label: "Login Image", src: LoginImg },
   { id: 18, label: "Logo", src: Logo },
   { id: 19, label: "Logout Icon", src: LogoutIcon },
@@ -77,4 +85,8 @@ export const iconList = [
   { id: 35, label: "Menu Open White", src: MenuOpenWhite },
   { id: 36, label: "Arrow Right Black", src: ArrowRightBlack },
   { id: 37, label: "Arrow Right White", src: ArrowRightWhite },
+  { id: 38, label: "Alpa Icon", src: AlpaIcon },
+  { id: 39, label: "Sakit Icon", src: SakitIcon },
+  { id: 40, label: "Izin Icon", src: IzinIcon },
+  { id: 41, label: "Hadir Icon", src: HadirIcon },
 ];

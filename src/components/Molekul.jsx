@@ -2,25 +2,29 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import { Container } from 'react-bootstrap';
 import { iconList } from '../data/iconData.js';
 
 export const Header = ({ children='As User' }) => {
   const logo = iconList.find((i) => i.label === 'Logo')?.src;
+  const navigate = useNavigate();
 
   return (
     <header className="header-bar animate-slide-down">
       <div className="header-container">
             <img src={logo} alt="Logo" className="header-logo" />
 
-            <h5 className="header-title"> SMP Plus Babussalam </h5>
+            <h5
+                className="header-title"
+                onClick={() => navigate('/mapel')}
+            >
+                SMP Plus Babussalam
+            </h5>
 
             {/* Elemen children di sisi kanan */}
             {children && (
                 <span style={{
                     color: 'white',
-                    fontSize: '16px',
+                    fontSize: '20px',
                     fontWeight: 'bold',
                     marginLeft: 'auto',
                     marginRight: '30px',

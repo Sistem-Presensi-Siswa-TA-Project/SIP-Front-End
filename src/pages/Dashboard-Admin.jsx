@@ -31,7 +31,7 @@ function DashboardAdmin() {
 
   return (
     <div>
-      <Header />
+      <Header> Beranda Admin </Header>
 
       <main
         className="d-flex justify-content-center flex-wrap"

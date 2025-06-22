@@ -38,7 +38,7 @@ function DashboardPiket() {
 
   return (
     <div>
-      <Header> As Piket </Header>
+      <Header> Beranda Piket </Header>
 
       <main
         className="d-flex justify-content-center flex-wrap"
@@ -150,7 +150,7 @@ function DashboardPiket() {
                   justifyContent: 'center',
                 }}
               >
-                <h1 style={{ fontSize: '85px', margin: 0, color: '#000' }}>
+                <h1 style={{ fontSize: '90px', margin: 0, color: '#000' }}>
                   {
                     currentTime.toLocaleTimeString('en-GB', {
                       hour: '2-digit',
