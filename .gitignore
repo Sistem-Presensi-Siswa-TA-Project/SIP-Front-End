@@ -31,7 +31,8 @@ build/
 Thumbs.db
 
 # Custom folders
-src/assets/
+# src/assets/       !!!!! PENTING !!!!!!
+# public/           !!!!! PENTING !!!!!!
 
 # Logs
 logs
