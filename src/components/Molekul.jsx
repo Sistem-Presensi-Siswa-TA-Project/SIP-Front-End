@@ -45,8 +45,8 @@ export const Sidebar = ({ onClose }) => {
 
     const sidebarMenu = [
         { label: 'Minimize', icon: 'Back Icon Black' },
-        { label: 'Dashboard', icon: 'Dashboard Icon' },
-        { label: 'Profile', icon: 'Profile Icon' },
+        { label: 'Beranda', icon: 'Dashboard Icon' },
+        { label: 'Profil', icon: 'Profile Icon' },
         { label: 'Lihat Presensi', icon: 'Presensi Icon' },
         { label: 'Cetak Presensi', icon: 'Cetak Icon' },
         { label: 'Jadwal', icon: 'Jadwal Icon' },
@@ -60,7 +60,7 @@ export const Sidebar = ({ onClose }) => {
     ];
 
     const pathMap = {
-        Dashboard: '/admin',
+        Dashboard: '/mapel',
         Profile: '/profile',
         'Lihat Presensi': '/presensi',
         'Cetak Presensi': '/cetak-presensi',
@@ -104,10 +104,11 @@ export const Sidebar = ({ onClose }) => {
                                         isHovered ? (
                                             <img 
                                                 src={leftArrow} 
-                                                width="18"
-                                                height="18" 
-                                                alt="Minimize" 
-                                                className="sidebar-icon" />
+                                                width="8"
+                                                height="8" 
+                                                alt="Minimize"
+                                                style={{ marginLeft: '5px', marginRight: '20px' }} 
+                                            />
                                         ) : (
                                             <img src={icon} alt="Minimize" className="sidebar-icon" />
                                         )

@@ -58,7 +58,7 @@ function DashboardMapel() {
         )}
 
         {/* Sidebar for Desktop only */}
-        {!sidebarOpen && (
+        {sidebarOpen && (
           <div className="d-none d-lg-block" style={{ flexShrink: 0 }}>
             <Sidebar onClose={handleToggleSidebar} />
           </div>
@@ -113,8 +113,8 @@ function DashboardMapel() {
                 <img
                   src={
                     sidebarOpen
-                      ? (isHovering ? menuIconWhite : menuIconBlack)
-                      : (isHovering ? menuOpenWhite : menuOpenBlack)
+                      ? (isHovering ? menuOpenWhite : menuOpenBlack)
+                      : (isHovering ? menuIconWhite : menuIconBlack)
                   }
                   alt="Menu"
                   width="50"
@@ -212,7 +212,7 @@ function DashboardMapel() {
                       </Card>
                     ))
                   ) : (
-                    // Pesan jadwal kosong
+                    // Pesan ketika jadwal kosong
                     <div
                       style={{
                         height: '100%',

@@ -43,7 +43,7 @@ footer {
   background-color: #379777 !important;
   border-color: #379777 !important;
   color: white !important;
-  border-radius: 10px !important;
+  border-radius: 10px;
   font-weight: bold !important;
 }
 
@@ -51,7 +51,7 @@ footer {
   background-color: #FFFFFF !important;
   border-color: #379777 !important;
   color: #379777 !important;
-  border-radius: 15px !important;
+  border-radius: 15px;
   border-width: 2px !important;
   border-style: solid !important;
   font-weight: bold !important;
@@ -79,7 +79,7 @@ footer {
   background-color: #33DB00 !important;
   border-color: #33DB00 !important;
   color: white !important;
-  border-radius: 10px !important;
+  border-radius: 10px;
   font-weight: bold !important;
 }
 
@@ -87,7 +87,7 @@ footer {
   background-color: #FFFFFF !important;
   border-color: #33DB00 !important;
   color: #33DB00 !important;
-  border-radius: 15px !important;
+  border-radius: 15px;
   border-width: 2px !important;
   border-style: solid !important;
   font-weight: bold !important;
@@ -372,12 +372,20 @@ footer {
   border-right: 1px solid #D6D6D6 !important;
 }
 
+.border-right {
+  border-right: 1px solid #D6D6D6 !important;
+}
+
+.border-left {
+  border-right: 1px solid #D6D6D6 !important;
+}
+
 /* Radio Form */
 .custom-radio {
   appearance: none;
   -webkit-appearance: none;
-  background-color: #fff;
-  border: 3px solid #D6D6D6 !important;
+  background-color: #FFF;
+  border: 3px solid #B3B3B3 !important;
   width: 20px;
   height: 20px;
   border-radius: 50%;
@@ -433,6 +441,29 @@ footer {
   background-color: #DB0004;
 }
 
+/* Form Input */
+.custom-formLabel {
+  font-weight: bold !important; 
+  color: #000 !important;
+}
+
+.custom-formInput {
+  border: 1px solid #333 !important;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25) !important;
+  background-color: white !important;
+}
+
+.custom-formInput.readonly-input {
+  background-color: #D6D6D6 !important;
+}
+
+.custom-formInput:focus {
+  /* Warna border saat input (termasuk readonly) difokus */
+  border: 3px solid #379777 !important;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25) !important;
+}
+
+
 /* === Responsive === */
 .custom-flex-container {
   display: flex;
@@ -451,8 +482,18 @@ footer {
     display: flex !important;
     justify-content: center !important;
     align-items: flex-start !important;
-    max-width: 1000px !important;
+    max-width: 1100px !important;
   }
+
+  .custom-width-form-besar {
+    font-weight: bold !important;
+    width: 200px !important;
+  }
+
+  .custom-width-form-kecil {
+    font-weight: bold !important;
+    width: 150px !important;
+  } 
 }
 
 /* Ukuran Mobile */
@@ -492,6 +533,16 @@ footer {
     position: relative;
     z-index: 1000;
   }
+
+  .custom-width-form-besar {
+    font-weight: bold !important;
+    width: 200px !important;
+  }
+
+  .custom-width-form-kecil {
+    font-weight: bold !important;
+    width: 200px !important;
+  }
 }
 
 /* Ukuran Mobile Sedang -> Kecil (hanya menyeusikan ukuran teks) */
@@ -518,6 +569,17 @@ footer {
 
   .custom-table td {
     font-size: 14px !important;
+  }
+  
+  .custom-width-form-besar,
+  .custom-width-form-kecil {
+    font-weight: bold !important;
+    width: 130px !important;
+  }
+
+  .width-button-mobile {
+    width: 130px !important;
+    font-size: 13px !important;
   }
 }
 
@@ -601,4 +663,14 @@ footer {
 
 .animate-button {
   animation: fadeIn 1.2s ease-out forwards;
+}
+
+/* Bounce Effect */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }

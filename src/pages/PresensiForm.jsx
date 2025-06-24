@@ -1,11 +1,11 @@
 // Filename: PresensiPage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Table } from 'react-bootstrap';
 import { Header, Card } from '../components/Molekul.jsx';
 import { DangerButton, SecondaryButton, SuccessButton } from '../components/Button.jsx';
 import { handlePresensiChange } from '../handlers/PresensiHandler.jsx';
 import { iconList } from '../data/iconData.js';
-import Table from 'react-bootstrap/Table';
 
 function PresensiForm() {
     const navigate = useNavigate();
@@ -38,7 +38,7 @@ function PresensiForm() {
             className="d-flex justify-content-center flex-wrap"
             style={{ gap: '20px' }}
         >
-            <div className="d-flex flex-column align-items-start w-100 px-4" style={{ maxWidth: '1000px', paddingTop: '40px', }}>
+            <div className="d-flex flex-column align-items-start w-100 px-4" style={{ maxWidth: '1100px', paddingTop: '40px', }}>
             {/* Button Back */}
             <SecondaryButton
                 className="animate-button d-flex flex-row gap-2"
@@ -110,23 +110,23 @@ function PresensiForm() {
             <Card style={{ width: '100%', marginTop: '45px', padding: '30px' }}>
                 {/* Title */}
                 <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '22px' }}> 
-                Presensi Siswa 
+                    Presensi Siswa 
                 </h3>
 
                 {/* Keterangan */}
                 <div className="d-flex flex-wrap align-items-center gap-3 mb-3">
-                <div className="d-flex align-items-center gap-1">
-                    <img src={alpaIcon} alt="Alpa" width="28" height="28" /> <strong> = Alpa </strong>
-                </div>
-                <div className="d-flex align-items-center gap-1">
-                    <img src={sakitIcon} alt="Sakit" width="28" height="28" /> <strong> = Sakit </strong>
-                </div>
-                <div className="d-flex align-items-center gap-1">
-                    <img src={izinIcon} alt="Izin" width="28" height="28" /> <strong> = Izin </strong>
-                </div>
-                <div className="d-flex align-items-center gap-1">
-                    <img src={hadirIcon} alt="Hadir" width="28" height="28" /> <strong> = Hadir </strong>
-                </div>
+                    <div className="d-flex align-items-center gap-1">
+                        <img src={hadirIcon} alt="Hadir" width="28" height="28" /> <strong> = Hadir </strong>
+                    </div>
+                    <div className="d-flex align-items-center gap-1">
+                        <img src={izinIcon} alt="Izin" width="28" height="28" /> <strong> = Izin </strong>
+                    </div>
+                    <div className="d-flex align-items-center gap-1">
+                        <img src={sakitIcon} alt="Sakit" width="28" height="28" /> <strong> = Sakit </strong>
+                    </div>
+                    <div className="d-flex align-items-center gap-1">
+                        <img src={alpaIcon} alt="Alpa" width="28" height="28" /> <strong> = Alpa </strong>
+                    </div>
                 </div>
 
                 {/* Tabel Presensi */}
@@ -141,7 +141,8 @@ function PresensiForm() {
                     <Table className="custom-table border-vertikal">
                         <thead style={{ backgroundColor: '#D6E7F9', textAlign: 'center' }}>
                             <tr>
-                                <th style={{ minWidth: '120px' }}> NIS </th>
+                                <th style={{ minWidth: '30px' }}> No. </th>
+                                <th style={{ minWidth: '130px' }}> NIS </th>
                                 <th style={{ minWidth: '250px' }}> Nama Siswa </th>
                                 <th style={{ width: '70px' }}> Hadir </th>
                                 <th style={{ width: '70px' }}> Izin </th>
@@ -153,6 +154,7 @@ function PresensiForm() {
                         <tbody>
                             {[...Array(20)].map((_, i) => (
                                 <tr key={i} style={{ backgroundColor: i % 2 === 0 ? '#F3F3F3' : '#FFF' }}>
+                                    <td className="text-center" style={{ verticalAlign: 'middle' }}> {i+1}. </td>
                                     <td className="text-center" style={{ verticalAlign: 'middle' }}> 210102039 </td>
                                     <td className="text-left" style={{ verticalAlign: 'middle' }}> Nama Siswa </td>
                                     {['hadir', 'izin', 'sakit', 'alpa'].map((status, idx) => (

@@ -44,6 +44,8 @@ import AlpaIcon from "../assets/alpa-icon.svg";
 import SakitIcon from "../assets/sakit-icon.svg";
 import IzinIcon from "../assets/izin-icon.svg";
 import HadirIcon from "../assets/hadir-icon.svg";
+import ProfileDefault from "../assets/profile-default.png";
+import AddProfile from "../assets/add-profile.svg";
 
 export const iconList = [
   { id: 1, label: "Arrow Down Black", src: ArrowDownBlack },
@@ -89,4 +91,6 @@ export const iconList = [
   { id: 39, label: "Sakit Icon", src: SakitIcon },
   { id: 40, label: "Izin Icon", src: IzinIcon },
   { id: 41, label: "Hadir Icon", src: HadirIcon },
+  { id: 42, label: "Profile Default", src: ProfileDefault },
+  { id: 43, label: "Add Profile", src: AddProfile },
 ];

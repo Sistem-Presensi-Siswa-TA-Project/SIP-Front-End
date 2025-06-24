@@ -1,12 +1,12 @@
-// Filename: PresensiPage.jsx
+// Filename: LihatPresensi.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Table } from 'react-bootstrap';
 import { Header, Card } from '../components/Molekul.jsx';
 import { SecondaryButton, InfoButton } from '../components/Button.jsx';
 import { iconList } from '../data/iconData.js';
-import Table from 'react-bootstrap/Table';
 
-function Presensi() {
+function LihatPresensi() {
   const navigate = useNavigate();
   const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
   const [infoButtonHovering, setInfoButtonHovering] = useState(false);
@@ -21,13 +21,13 @@ function Presensi() {
 
   return (
     <div>
-      <Header> Presensi </Header>
+      <Header> Lihat Presensi </Header>
 
       <main
         className="d-flex justify-content-center flex-wrap"
         style={{ gap: '20px' }}
       >
-        <div className="d-flex flex-column align-items-start w-100 px-4" style={{ maxWidth: '1000px', paddingTop: '40px', }}>
+        <div className="d-flex flex-column align-items-start w-100 px-4" style={{ maxWidth: '1100px', paddingTop: '40px', }}>
           {/* Button Back */}
           <SecondaryButton
             className="animate-button d-flex flex-row gap-2"
@@ -78,7 +78,7 @@ function Presensi() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '16px', color: '#1c1c1c' }}>
               {[
-                ['Nama Guru', 'Mr. Sukiman Bin Sukijan'],
+                ['Nama Guru', 'Sukiman Bin Sukijan'],
                 ['Mata Pelajaran', 'Bahasa Indonesia'],
                 ['Kelas', '7A'],
                 ['Jumlah Siswa', '20 siswa'],
@@ -86,10 +86,20 @@ function Presensi() {
                 ['Pertemuan ke-', '2'],
                 ['Tanggal', '22 Juni 2025'],
               ].map(([label, value], index) => (
-                <div key={index} style={{ display: 'flex' }}>
-                  <div style={{ width: '180px', fontWeight: 'bold' }}> {label} </div>
-                  <div style={{ width: '12px' }}> : </div>
-                  <div style={{ flex: 1 }}> {value} </div>
+                <div key={index} style={{ display: 'flex', flexDirection: 'row' }}>
+                  <div className="d-flex flex-row gap-4"> 
+                    <div className="custom-width-form-besar"> {label} </div>
+                    <div style={{ width: '15px' }}> : </div>
+                  </div>
+
+                  <div 
+                    style={{ 
+                        wordBreak: 'break-word', 
+                        overflowWrap: 'break-word', 
+                    }}
+                  > 
+                    {value} 
+                  </div>
                 </div>
               ))}
             </div>
@@ -107,16 +117,16 @@ function Presensi() {
               {/* Keterangan */}
               <div className="d-flex flex-wrap align-items-center gap-3">
                 <div className="d-flex justify-content-center align-items-center gap-1">
-                  <img src={alpaIcon} alt="Alpa" width="28" height="28" /> <strong> = Alpa </strong>
-                </div>
-                <div className="d-flex justify-content-center align-items-center gap-1">
-                  <img src={sakitIcon} alt="Sakit" width="28" height="28" /> <strong> = Sakit </strong>
+                  <img src={hadirIcon} alt="Hadir" width="28" height="28" /> <strong> = Hadir </strong>
                 </div>
                 <div className="d-flex justify-content-center align-items-center gap-1">
                   <img src={izinIcon} alt="Izin" width="28" height="28" /> <strong> = Izin </strong>
                 </div>
                 <div className="d-flex justify-content-center align-items-center gap-1">
-                  <img src={hadirIcon} alt="Hadir" width="28" height="28" /> <strong> = Hadir </strong>
+                  <img src={sakitIcon} alt="Sakit" width="28" height="28" /> <strong> = Sakit </strong>
+                </div>
+                <div className="d-flex justify-content-center align-items-center gap-1">
+                  <img src={alpaIcon} alt="Alpa" width="28" height="28" /> <strong> = Alpa </strong>
                 </div>
               </div>
 
@@ -157,6 +167,7 @@ function Presensi() {
               <Table className="custom-table">
                 <thead>
                   <tr>
+                    <th className="border-right"> No. </th>
                     <th> NIS </th>
                     <th> Nama Siswa </th>
                     <th> Mata Pelajaran </th>
@@ -167,6 +178,7 @@ function Presensi() {
                 <tbody>
                   {[...Array(20)].map((_, i) => (
                     <tr key={i}>
+                      <td className="border-right"> {i+1}. </td>
                       <td> 20242025 </td>
                       <td> Nama Siswa </td>
                       <td> Mata Pelajaran </td>
@@ -222,4 +234,4 @@ function Presensi() {
   );
 }
 
-export default Presensi;
+export default LihatPresensi;
