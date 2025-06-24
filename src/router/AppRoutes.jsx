@@ -7,8 +7,11 @@ import Guru from '../pages/Dashboard-Guru.jsx';
 import Piket from '../pages/Dashboard-Piket.jsx';
 import Profile from '../pages/ProfilePage.jsx';
 import ProfileForm from '../pages/ProfileForm.jsx';
+import Password from '../pages/PasswordPage.jsx';
 import LihatPresensi from '../pages/LihatPresensi.jsx';
 import PresensiForm from '../pages/PresensiForm.jsx';
+import DaftarKelas from '../pages/DaftarKelas.jsx';
+import DaftarGuruMapel from '../pages/DaftarGuruMapel.jsx';
 import NotFound from '../pages/NotFoundPage.jsx';
 
 function AppRoutes() {
@@ -20,8 +23,11 @@ function AppRoutes() {
       <Route path = "/piket" element = {<Piket />} />
       <Route path = "/profile" element = {<Profile />} />
       <Route path = "/profile-form" element = {<ProfileForm />} />
+      <Route path = "/ubah-password" element = {<Password />} />
       <Route path = "/lihat-presensi" element = {<LihatPresensi />} />
       <Route path = "/presensi-form" element = {<PresensiForm />} />
+      <Route path = "/daftar-kelas" element = {<DaftarKelas />} />
+      <Route path = "/kelas/:kelasId" element = {<DaftarGuruMapel />} />
       <Route path = "*" element = {<NotFound />} />
       <Route path = "/test" element = {<Test/>} />
     </Routes>

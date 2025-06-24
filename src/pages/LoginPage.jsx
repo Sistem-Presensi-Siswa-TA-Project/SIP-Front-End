@@ -31,7 +31,7 @@ function Login() {
 
     // Routing berdasarkan role
     if (user.role === 'Guru') {
-      navigate('/mapel');
+      navigate('/guru');
     } else if (user.role === 'Admin') {
       navigate('/admin');
     } else if (user.role === 'Piket') {

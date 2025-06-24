@@ -26,7 +26,6 @@ import LoginImg from "../assets/bg-login.png";
 import Logo from "../assets/babussalam.png";
 import LogoutIcon from "../assets/logout.svg";
 import LogoutIconBlack from "../assets/logout-black.svg";
-import LogoutIconWhite from "../assets/logout-white.svg";
 import MenuIconBlack from "../assets/menu-black.svg";
 import MenuIconWhite from "../assets/menu-white.svg";
 import MenuOpenBlack from "../assets/menuOpen-black.svg";
@@ -70,7 +69,7 @@ export const iconList = [
   { id: 18, label: "Logo", src: Logo },
   { id: 19, label: "Logout Icon", src: LogoutIcon },
   { id: 20, label: "Logout Icon Black", src: LogoutIconBlack },
-  { id: 21, label: "Logout Icon White", src: LogoutIconWhite },
+  { id: 21, label: "Add Profile", src: AddProfile },
   { id: 22, label: "Menu Icon Black", src: MenuIconBlack },
   { id: 23, label: "Menu Icon White", src: MenuIconWhite },
   { id: 24, label: "Presensi Icon", src: PresensiIcon },
@@ -92,5 +91,4 @@ export const iconList = [
   { id: 40, label: "Izin Icon", src: IzinIcon },
   { id: 41, label: "Hadir Icon", src: HadirIcon },
   { id: 42, label: "Profile Default", src: ProfileDefault },
-  { id: 43, label: "Add Profile", src: AddProfile },
 ];

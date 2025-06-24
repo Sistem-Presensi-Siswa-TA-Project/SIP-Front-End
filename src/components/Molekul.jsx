@@ -15,7 +15,7 @@ export const Header = ({ children='As User' }) => {
 
             <h5
                 className="header-title"
-                onClick={() => navigate('/mapel')}
+                onClick={() => navigate('/guru')}
             >
                 SMP Plus Babussalam
             </h5>
@@ -62,7 +62,7 @@ export const Sidebar = ({ onClose }) => {
     const pathMap = {
         Dashboard: '/mapel',
         Profile: '/profile',
-        'Lihat Presensi': '/presensi',
+        'Lihat Presensi': '/daftar-kelas',
         'Cetak Presensi': '/cetak-presensi',
         Jadwal: '/jadwal',
         Kontak: '/kontak',
@@ -222,6 +222,43 @@ export const Card = (props) => {
             {...rest}
         >
             {children}
+        </div>
+    );
+};
+
+export const CardPresensi = (props) => {
+    const {
+        namaKelas, 
+        tahunAjar, 
+        totalSiswa, 
+        to,
+    } = props;
+
+    const navigate = useNavigate();
+    const arrowRightIcon = iconList.find(i => i.label === 'Arrow Right Black')?.src;
+
+    return (
+        <div className="card-presensi">
+            {/* Header */}
+            <div className="card-presensi-header">
+                <h5 className="card-presensi-title"> {namaKelas} </h5>
+            </div>
+
+            {/* Body */}
+            <div className="card-presensi-body d-flex flex-column gap-1">
+                <span className="text-secondary"> {tahunAjar} </span>
+
+                <div className="d-flex justify-content-between align-items-center">
+                    <span className="text-secondary"> Jumlah Siswa </span>
+                    <span className="text-dark fw-bold"> {totalSiswa} </span>
+                </div>
+            </div>
+
+            {/* Footer */}
+            <div className="card-presensi-footer" onClick={() => navigate(to)}>
+                <span className="fw-bold"> Lihat Detail </span>
+                <img src={arrowRightIcon} alt="Lihat Detail" width="20" height="20" className="ms-2" />
+            </div>
         </div>
     );
 };

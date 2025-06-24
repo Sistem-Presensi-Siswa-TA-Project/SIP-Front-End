@@ -115,6 +115,7 @@ function Profile() {
                                         className="width-button-mobile"
                                         onMouseEnter={() => setPrimaryButtonHovering(true)}
                                         onMouseLeave={() => setPrimaryButtonHovering(false)}
+                                        onClick={() => navigate('/ubah-password')}
                                         style={{ 
                                             justifyContent: 'center', 
                                             alignItems: 'center',
@@ -133,6 +134,7 @@ function Profile() {
                                         className="width-button-mobile"
                                         onMouseEnter={() => setPrimaryButtonHovering(true)}
                                         onMouseLeave={() => setPrimaryButtonHovering(false)}
+                                        onClick={() => navigate('/profile-form')}
                                         style={{ 
                                             justifyContent: 'center', 
                                             alignItems: 'center',

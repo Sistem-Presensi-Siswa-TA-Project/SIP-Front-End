@@ -141,27 +141,27 @@ function PresensiForm() {
                     <Table className="custom-table border-vertikal">
                         <thead style={{ backgroundColor: '#D6E7F9', textAlign: 'center' }}>
                             <tr>
-                                <th style={{ minWidth: '30px' }}> No. </th>
-                                <th style={{ minWidth: '130px' }}> NIS </th>
-                                <th style={{ minWidth: '250px' }}> Nama Siswa </th>
-                                <th style={{ width: '70px' }}> Hadir </th>
-                                <th style={{ width: '70px' }}> Izin </th>
-                                <th style={{ width: '70px' }}> Sakit </th>
-                                <th style={{ width: '70px' }}> Alpa </th>
+                                <th style={{ minWidth: '30px', padding: '16px' }}> No. </th>
+                                <th style={{ minWidth: '130px', padding: '16px' }}> NIS </th>
+                                <th style={{ minWidth: '250px', padding: '16px' }}> Nama Siswa </th>
+                                <th style={{ width: '70px', padding: '16px' }}> Hadir </th>
+                                <th style={{ width: '70px', padding: '16px' }}> Izin </th>
+                                <th style={{ width: '70px', padding: '16px' }}> Sakit </th>
+                                <th style={{ width: '70px', padding: '16px' }}> Alpa </th>
                             </tr>
                         </thead>
 
                         <tbody>
                             {[...Array(20)].map((_, i) => (
                                 <tr key={i} style={{ backgroundColor: i % 2 === 0 ? '#F3F3F3' : '#FFF' }}>
-                                    <td className="text-center" style={{ verticalAlign: 'middle' }}> {i+1}. </td>
-                                    <td className="text-center" style={{ verticalAlign: 'middle' }}> 210102039 </td>
-                                    <td className="text-left" style={{ verticalAlign: 'middle' }}> Nama Siswa </td>
+                                    <td className="text-center" style={{ verticalAlign: 'middle', padding: '14px' }}> {i+1}. </td>
+                                    <td className="text-center" style={{ verticalAlign: 'middle', padding: '14px' }}> 210102039 </td>
+                                    <td className="text-left" style={{ verticalAlign: 'middle', padding: '14px' }}> Nama Siswa </td>
                                     {['hadir', 'izin', 'sakit', 'alpa'].map((status, idx) => (
                                         <td
                                             key={idx}
                                             className={`text-center`}
-                                            style={{ width: '70px', padding: '8px 4px', verticalAlign: 'middle' }}
+                                            style={{ width: '70px', padding: '10px 6px', verticalAlign: 'middle' }}
                                         >
                                             <input
                                                 className={`custom-radio ${status}`}

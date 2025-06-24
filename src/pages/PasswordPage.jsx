@@ -1,4 +1,4 @@
-// Filename: ProfileForm.jsx
+// Filename: PasswordPage.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header, Card } from '../components/Molekul.jsx';
@@ -6,7 +6,7 @@ import { SuccessButton, SecondaryButton } from '../components/Button.jsx';
 import { iconList } from '../data/iconData.js';
 import { FormInput } from '../components/Forms.jsx'
 
-function ProfileForm() {
+function PasswordForm() {
     const navigate = useNavigate();
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
@@ -15,32 +15,13 @@ function ProfileForm() {
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
 
     const [formData, setFormData] = useState({
-        namaLengkap: '',
-        email: '',
-        alamatDomisili: '',
-        jenisKelamin: '',
-        kewarganegaraan: '',
-        desa: '',
-        tempatLahir: '',
-        tanggalLahir: '',
-        rt: '',
-        rw: '',
-        nip: '',
-        kecamatan: '',
-        agama: '',
-        mapel: '',
-        kabupaten: '',
-        nik: '',
-        status: '',
-        provinsi: '',
-        hp: '',
-        pendidikan: '',
-        kodePos: '',
+        username: '',
+        password: '',
     });
 
     return (
         <div>
-        <Header> Form Presensi </Header>
+        <Header> Form Password </Header>
 
         <main
             className="d-flex justify-content-center flex-wrap"
@@ -56,20 +37,20 @@ function ProfileForm() {
                     onMouseEnter={() => setSecondaryButtonHovering(true)}
                     onMouseLeave={() => setSecondaryButtonHovering(false)}
                     style={{ 
-                    justifyContent: 'center', 
-                    alignItems: 'center',
-                    boxShadow: secondaryButtonHovering ? '6px 6px 12px rgba(0, 0, 0, 0.5)' : '2px 2px 8px rgba(0, 0, 0, 0.5)',
-                    transition: 'box-shadow 0.2s ease-in-out',
+                        justifyContent: 'center', 
+                        alignItems: 'center',
+                        boxShadow: secondaryButtonHovering ? '6px 6px 12px rgba(0, 0, 0, 0.5)' : '2px 2px 8px rgba(0, 0, 0, 0.5)',
+                        transition: 'box-shadow 0.2s ease-in-out',
                     }}
                 >
                     <img
-                    src={secondaryButtonHovering ? leftArrowYellow : leftArrowBlack}
-                    alt="Back"
-                    width="15"
-                    height="15"
-                    style={{ 
-                        marginLeft: '4px',
-                    }}
+                        src={secondaryButtonHovering ? leftArrowYellow : leftArrowBlack}
+                        alt="Back"
+                        width="15"
+                        height="15"
+                        style={{ 
+                            marginLeft: '4px',
+                        }}
                     />
 
                     <span style={{ 
@@ -91,65 +72,29 @@ function ProfileForm() {
                         padding: '30px',
                     }}
                 >
-                    <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '25px' }}> DATA DIRI </h3>
+                    <h4 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '25px' }}> UBAH PASSWORD </h4>
 
                     <div className="row" style={{ rowGap: '16px' }}>
                         {[
-                            ['Nama Lengkap', 'namaLengkap'],
-                            ['Email', 'email'],
-                            ['Alamat Lengkap', 'alamat'],
-                            ['RT', 'rt'],
-                            ['RW', 'rw'],
-                            ['Jenis Kelamin', 'jenisKelamin'],
-                            ['Kewarganegaraan', 'kewarganegaraan'],
-                            ['Desa/Kelurahan', 'desa'],
-                            ['Tempat Lahir', 'tempatLahir'],
-                            ['Tanggal Lahir', 'tanggalLahir'],
-                            ['NIP/NISN', 'nomorInduk'],
-                            ['Kecamatan', 'kecamatan'],
-                            ['Agama', 'agama'],
-                            ['Mata Pelajaran', 'mapel'],
-                            ['Kabupaten/Kota', 'kabupaten'],
-                            ['Nomor Induk Kependudukan (NIK)', 'nik'],
-                            ['Status', 'status'],
-                            ['Provinsi', 'provinsi'],
-                            ['Nomor Handphone', 'hp'],
-                            ['Pendidikan', 'pendidikan'],
-                            ['Kode Pos', 'kodePos'],
+                            ['Username', 'username'],
+                            ['Password Baru', 'passwordBaru'],
                         ].map(([label, name], index) => {
                             const isRequired = [
-                                'namaLengkap', 
-                                'agama', 
-                                'nomorInduk', 
-                                'kewarganegaraan', 
-                                'alamat', 
-                                'email', 
-                                'jenisKelamin', 
-                                'tempatLahir', 
-                                'tanggalLahir', 
-                                'nik', 
-                                'hp',
-                                'desa',
-                                'kecamatan',
-                                'kabupaten',
-                                'provinsi',
+                                'username', 
+                                'passwordBaru', 
 
                             ].includes(name);
 
-                            const isReadOnly = ['mapel', 'status', 'nomorInduk', 'namaLengkap'].includes(name);
+                            const isReadOnly = ['username'].includes(name);
                             
                             return (
-                                <div className="col-md-4 col-sm-12" key={index}>
+                                <div className="col-md-6 col-sm-12" key={index}>
                                     <FormInput
                                         label={label}
                                         name={name}
                                         type={
-                                            name === 'email'
-                                                ? 'email'
-                                                : name === 'tanggalLahir'
-                                                ? 'date'
-                                                : name === 'hp'
-                                                ? 'tel'
+                                            name === 'passwordBaru'
+                                                ? 'password'
                                                 : 'text'
                                         }
                                         value={formData[name]}
@@ -166,7 +111,7 @@ function ProfileForm() {
                     </div>
 
                     {/* Tombol Simpan */}
-                    <div className="d-flex justify-content-end justify-content-md-center mt-4">
+                    <div className="d-flex justify-content-end mt-4">
                         <SuccessButton
                             className="d-flex align-items-center justify-content-center"
                             width="150px"
@@ -195,11 +140,11 @@ function ProfileForm() {
 
         <footer>
             <small style={{ fontSize: '14px', color: '#808080' }}>
-            Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
+                Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
             </small>
         </footer>
         </div>
     );
 }
 
-export default ProfileForm;
+export default PasswordForm;

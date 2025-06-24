@@ -167,23 +167,23 @@ function LihatPresensi() {
               <Table className="custom-table">
                 <thead>
                   <tr>
-                    <th className="border-right"> No. </th>
-                    <th> NIS </th>
-                    <th> Nama Siswa </th>
-                    <th> Mata Pelajaran </th>
-                    <th> Kelas </th>
-                    <th> Keterangan </th>
+                    <th className="border-right" style={{ padding: '16px' }}> No. </th>
+                    <th style={{ padding: '16px' }}> NIS </th>
+                    <th style={{ padding: '16px' }}> Nama Siswa </th>
+                    <th style={{ padding: '16px' }}> Mata Pelajaran </th>
+                    <th style={{ padding: '16px' }}> Kelas </th>
+                    <th style={{ padding: '16px' }}> Keterangan </th>
                   </tr>
                 </thead>
                 <tbody>
                   {[...Array(20)].map((_, i) => (
                     <tr key={i}>
-                      <td className="border-right"> {i+1}. </td>
-                      <td> 20242025 </td>
-                      <td> Nama Siswa </td>
-                      <td> Mata Pelajaran </td>
-                      <td> Kelas </td>
-                      <td>
+                      <td className="border-right" style={{ padding: '14px' }}> {i+1}. </td>
+                      <td style={{ padding: '14px' }}> 20242025 </td>
+                      <td style={{ padding: '14px' }}> Nama Siswa </td>
+                      <td style={{ padding: '14px' }}> Mata Pelajaran </td>
+                      <td style={{ padding: '14px' }}> Kelas </td>
+                      <td style={{ padding: '14px' }}>
                         <img
                           src={[
                             alpaIcon,

@@ -1,5 +1,5 @@
 // Filename: Forms.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, InputGroup } from 'react-bootstrap';
 import { iconList } from '../data/iconData.js';
 
@@ -24,9 +24,12 @@ export const FormInput = (props) => {
         readOnly = false,
         required = false,
         placeholder = '',
+        ...rest
     } = props;
 
     const isPhoneField = name === 'hp';
+    const isPassword = type === 'password';
+    const [showPassword, setShowPassword] = useState(false);
 
     const handlePhoneChange = (e) => {
         const inputValue = e.target.value;
@@ -36,14 +39,14 @@ export const FormInput = (props) => {
     };
 
     return (
-        <Form.Group className="mb-3" controlId={name}>
-            <Form.Label className="custom-formLabel" style={{ fontSize: '14px' }}>
+        <Form.Group className="mb-3" controlId={name} {...rest}>
+            <Form.Label className="custom-formLabel" style={{ fontSize: '14px', marginBottom: '12px' }}>
                 {label}
                 {required && <span className="text-danger"> * </span>}
             </Form.Label>
 
             {isPhoneField ? (
-                /* KHUSUS INPUT HANDPHONE */
+                // === Input khusus untuk nomor HP dengan prefix +62 ===
                 <InputGroup>
                     <InputGroup.Text
                         style={{
@@ -75,9 +78,45 @@ export const FormInput = (props) => {
                             borderRadius: '0 4px 4px 0',
                             borderLeft: 'none',
                         }}
+                        {...rest}
                     />
                 </InputGroup>
+            ) : isPassword ? (
+                // === Input password dengan toggle visibility ===
+                <div className="position-relative">
+                    <Form.Control
+                        className="custom-formInput"
+                        type={showPassword ? 'text' : 'password'}
+                        name={name}
+                        value={value}
+                        onChange={onChange}
+                        required={required}
+                        disabled={disabled}
+                        readOnly={readOnly}
+                        placeholder={placeholder}
+                        style={{ fontSize: '14px', paddingRight: '40px' }}
+                        {...rest}
+                    />
+
+                    <div
+                        className="position-absolute top-50 translate-middle-y"
+                        style={{ right: '12px', cursor: 'pointer' }}
+                        onClick={() => setShowPassword(!showPassword)}
+                    >
+                        <img
+                            src={
+                                showPassword
+                                    ? iconList.find((i) => i.label === 'Eye Icon')?.src
+                                    : iconList.find((i) => i.label === 'Eye Off Icon')?.src
+                            }
+                            alt="Toggle password"
+                            width="20"
+                            height="20"
+                        />
+                    </div>
+                </div>
             ) : (
+                // === Input biasa ===
                 <Form.Control
                     className={`custom-formInput ${readOnly ? 'readonly-input' : ''}`}
                     type={type}
@@ -88,9 +127,8 @@ export const FormInput = (props) => {
                     disabled={disabled}
                     readOnly={readOnly}
                     placeholder={placeholder}
-                    style={{
-                        fontSize: '14px',
-                    }}
+                    style={{ fontSize: '14px' }}
+                    {...rest}
                 />
             )}
         </Form.Group>
@@ -138,8 +176,8 @@ export const TextInput = (props) => {
                     type={isPassword && show ? 'text' : type}
                     placeholder={placeholder}
                     className="custom-textInput"
-                    {...rest}
                     style={isPassword ? { paddingRight: '40px' } : {}}
+                    {...rest}
                 />
 
                 {/* Eye Icon (inside input password) */}

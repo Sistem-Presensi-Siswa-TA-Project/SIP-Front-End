@@ -307,7 +307,7 @@ footer {
   font-size: 16px;
 }
 
-/* Card Component */
+/* Card Container */
 .custom-card {
   background-color: #FFFFFF;
   border-radius: 25px;
@@ -317,6 +317,57 @@ footer {
 
 .custom-card:hover {
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.45);
+}
+
+/* Card Presensi */
+.card-presensi {
+  background-color: white;
+  border-radius: 13px !important;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid #D6D6D6 !important;
+  padding: 0;
+  cursor: pointer;
+  transition: box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+}
+
+.card-presensi:hover {
+  box-shadow: 6px 6px 12px rgba(0, 0, 0, 0.35) !important;
+}
+
+.card-presensi-header {
+  background: linear-gradient(to right, #379777 0%, #379777 45%, #FFF112 100%);
+  border-top-left-radius: 13px !important;
+  border-top-right-radius: 13px !important;
+  padding: 12px 16px;
+}
+
+.card-presensi-title {
+  margin: 0;
+  font-size: 18px;
+  color: white;
+  font-weight: bold;
+}
+
+.card-presensi-body {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px;
+  font-size: 15px;
+}
+
+.card-presensi-footer {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  gap: 4px;
+  padding: 10px 16px 18px;
+  font-size: 15px;
+}
+
+.card-presensi-footer span:hover {
+  text-decoration: underline !important;
 }
 
 /* Tabel */
@@ -331,16 +382,15 @@ footer {
   background-color: #379777 !important;
   color: #FFF !important;
   font-weight: bold !important;
-  padding: 16px !important;
+  padding: 16px;
   border: none;
-  font-size: 16px !important;
+  font-size: 16px;
 }
 
 .custom-table td {
-  padding: 10px !important;
   border: none;
-  padding: 14px !important;
-  font-size: 16px !important;
+  padding: 14px;
+  font-size: 16px;
 }
 
 .custom-table tr {
@@ -543,9 +593,19 @@ footer {
     font-weight: bold !important;
     width: 200px !important;
   }
+
+  .table-responsive {
+    width: 100% !important;
+    overflow-x: auto !important;
+  }
+
+  .custom-table {
+    /* Memastikan konten tidak terlalu mepet di layar mobile */
+    min-width: 550px;
+  }
 }
 
-/* Ukuran Mobile Sedang -> Kecil (hanya menyeusikan ukuran teks) */
+/* Ukuran Mobile Sedang -> Kecil */
 @media (max-width: 560px) {
   .header-title {
     font-size: 20px !important;
@@ -581,6 +641,11 @@ footer {
     width: 130px !important;
     font-size: 13px !important;
   }
+
+  /* .table-responsive {
+    width: calc(100% + 200px) !important;
+    overflow-x: auto !important;
+  } */
 }
 
 /* ~~~ Animasi Transisi ~~~ */
