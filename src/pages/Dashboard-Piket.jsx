@@ -38,7 +38,7 @@ function DashboardPiket() {
 
   return (
     <div>
-      <Header> Beranda Piket </Header>
+      <Header> Beranda </Header>
 
       <main
         className="d-flex justify-content-center flex-wrap"

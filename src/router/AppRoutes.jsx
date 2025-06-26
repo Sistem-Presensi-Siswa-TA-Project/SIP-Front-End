@@ -11,7 +11,9 @@ import Password from '../pages/PasswordPage.jsx';
 import LihatPresensi from '../pages/LihatPresensi.jsx';
 import PresensiForm from '../pages/PresensiForm.jsx';
 import DaftarKelas from '../pages/DaftarKelas.jsx';
-import DaftarGuruMapel from '../pages/DaftarGuruMapel.jsx';
+import DaftarGuru from '../pages/DaftarGuru.jsx';
+import DaftarPertemuan from '../pages/DaftarPertemuan.jsx';
+import Kontak from '../pages/KontakPage.jsx';
 import NotFound from '../pages/NotFoundPage.jsx';
 
 function AppRoutes() {
@@ -27,7 +29,9 @@ function AppRoutes() {
       <Route path = "/lihat-presensi" element = {<LihatPresensi />} />
       <Route path = "/presensi-form" element = {<PresensiForm />} />
       <Route path = "/daftar-kelas" element = {<DaftarKelas />} />
-      <Route path = "/kelas/:kelasId" element = {<DaftarGuruMapel />} />
+      <Route path = "/kelas/:kelasId" element = {<DaftarGuru />} />
+      <Route path = "/pertemuan" element = {<DaftarPertemuan />} />
+      <Route path = "/kontak" element = {<Kontak />} />
       <Route path = "*" element = {<NotFound />} />
       <Route path = "/test" element = {<Test/>} />
     </Routes>

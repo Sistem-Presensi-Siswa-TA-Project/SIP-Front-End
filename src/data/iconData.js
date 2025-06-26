@@ -45,6 +45,7 @@ import IzinIcon from "../assets/izin-icon.svg";
 import HadirIcon from "../assets/hadir-icon.svg";
 import ProfileDefault from "../assets/profile-default.png";
 import AddProfile from "../assets/add-profile.svg";
+import LokasiBlack from "../assets/lokasi-black.svg";
 
 export const iconList = [
   { id: 1, label: "Arrow Down Black", src: ArrowDownBlack },
@@ -91,4 +92,5 @@ export const iconList = [
   { id: 40, label: "Izin Icon", src: IzinIcon },
   { id: 41, label: "Hadir Icon", src: HadirIcon },
   { id: 42, label: "Profile Default", src: ProfileDefault },
+  { id: 43, label: "Lokasi Black", src: LokasiBlack },
 ];

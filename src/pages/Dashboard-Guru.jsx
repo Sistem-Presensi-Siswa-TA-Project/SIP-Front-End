@@ -42,7 +42,7 @@ function DashboardMapel() {
 
   return (
     <div>
-      <Header> Beranda Guru </Header>
+      <Header> Beranda </Header>
 
       <main
         className="d-flex justify-content-center flex-wrap"

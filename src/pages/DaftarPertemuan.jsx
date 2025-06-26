@@ -1,30 +1,30 @@
-// Filename: Daftar-GuruMapel.jsx
+// Filename: DaftarPertemuan.jsx
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card } from '../components/Molekul.jsx';
-import { SecondaryButton, InfoButton } from '../components/Button.jsx';
+import { SecondaryButton, InfoButton, SuccessButton } from '../components/Button.jsx';
 import { iconList } from '../data/iconData.js';
 
 function DaftarGuruMapel() {
     const navigate = useNavigate();
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
+    const [successButtonHovering, setSuccessButtonHovering] = useState(false);
     const [hoveredId, setHoveredId] = useState(null);
-    const { kelasId } = useParams();
 
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
     const presensiButtonBlack = iconList.find((i) => i.label === 'Presensi Button Black')?.src;
 
-    // Dummy data guru
-    const daftarGuru = Array(8).fill({
-        nama: 'Nama Guru',
-        mapel: 'Mata Pelajaran',
+    // Dummy data pertemuan
+    const daftarPertemuan = Array(10).fill({
+        label: 'Pertemuan ke-',
+        tanggal: 'Tanggal Pertemuan',
     });
 
     return (
         <div>
-            <Header> Daftar Guru & Mapel </Header>
+            <Header> Daftar Pertemuan </Header>
 
             <main
                 className="d-flex justify-content-center flex-wrap"
@@ -70,22 +70,45 @@ function DaftarGuruMapel() {
                     {/* Daftar Guru/Mapel */}
                     <Card style={{ width: '100%', marginTop: '45px', padding: '30px' }}>
                         {/* Title */}
-                        <h4 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '22px' }}> 
-                            Kelas {kelasId?.toUpperCase()}
-                        </h4>
+                        <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '20px' }}> 
+                            Pertemuan
+                        </h3>
+
+                        {/* Tombol Simpan */}
+                        <div className="d-flex justify-content-start justify-content-md-end" style={{ marginRight: '5px' }}>
+                            <SuccessButton
+                                className="d-flex align-items-center justify-content-center"
+                                width="200px"
+                                height="43px"
+                                style={{
+                                    padding: '20px',
+                                    fontWeight: 'bold',
+                                    fontSize: '16px',
+                                    borderRadius: '6px',
+                                    boxShadow: successButtonHovering
+                                        ? '4px 4px 8px rgba(0, 0, 0, 0.5)'
+                                        : '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                    transition: 'box-shadow 0.2s ease-in-out',
+                                }}
+                                onMouseEnter={() => setSuccessButtonHovering(true)}
+                                onMouseLeave={() => setSuccessButtonHovering(false)}
+                            >
+                                + Tambah Presensi
+                            </SuccessButton>
+                        </div>
 
                         {/* Wrapper Tabel */}
-                        <div className="table-responsive" style={{ marginTop: '25px', borderRadius: '10px', border: '2px solid #D6D6D6' }}>
+                        <div className="table-responsive" style={{ marginTop: '20px', borderRadius: '10px', border: '2px solid #D6D6D6' }}>
                             <Table className="custom-table">
                                 <thead>
                                     <tr>
-                                        <th style={{ textAlign: 'left', padding: '16px 16px 16px 50px', fontSize: '18px' }}> Daftar Guru </th>
+                                        <th style={{ textAlign: 'left', padding: '16px 16px 16px 50px', fontSize: '18px' }}> Daftar Pertemuan </th>
                                         <th style={{ textAlign: 'right', padding: '16px 55px 16px 16px', fontSize: '18px' }}> Aksi </th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    {daftarGuru.map((guru, i) => (
+                                    {daftarPertemuan.map((pertemuan, i) => (
                                         <tr key={i}>
                                             <td style={{ padding: '14px 14px 14px 25px' }}>
                                                 <div className="d-flex align-items-start gap-3">
@@ -103,8 +126,8 @@ function DaftarGuruMapel() {
 
                                                     {/* Nama Guru dan Mapel */}
                                                     <div className="d-flex flex-column">
-                                                        <span style={{ fontWeight: 'bold', textAlign: 'left', marginBottom: '4px' }}> {guru.nama} </span>
-                                                        <span style={{ color: '#666', fontSize: '14px', textAlign: 'left' }}> {guru.mapel} </span>
+                                                        <span style={{ fontWeight: 'bold', textAlign: 'left', marginBottom: '4px' }}> {pertemuan.label}{i+1} </span>
+                                                        <span style={{ color: '#666', fontSize: '14px', textAlign: 'left' }}> {pertemuan.tanggal} </span>
                                                     </div>
                                                 </div>
                                             </td>
@@ -132,7 +155,7 @@ function DaftarGuruMapel() {
                                                         width="20"
                                                         height="20"
                                                     />
-                                                    <span style={{ fontWeight: 'bold', fontSize: '13px' }}> Presensi </span>
+                                                    <span style={{ fontWeight: 'bold', fontSize: '13px' }}> Lihat </span>
                                                 </InfoButton>
                                             </td>
                                         </tr>

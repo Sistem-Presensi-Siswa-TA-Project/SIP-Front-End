@@ -186,8 +186,8 @@ function PresensiForm() {
                     <div className="d-flex justify-content-end mt-4">
                         <DangerButton
                             className="d-flex align-items-center justify-content-center"
-                            width="120px"
-                            height="45px"
+                            width="140px"
+                            height="42px"
                             style={{
                                 padding: '8px 28px',
                                 fontWeight: 'bold',
@@ -210,8 +210,8 @@ function PresensiForm() {
                     <div className="d-flex justify-content-end mt-4">
                         <SuccessButton
                             className="d-flex align-items-center justify-content-center"
-                            width="120px"
-                            height="45px"
+                            width="140px"
+                            height="42px"
                             style={{
                                 padding: '8px 28px',
                                 fontWeight: 'bold',

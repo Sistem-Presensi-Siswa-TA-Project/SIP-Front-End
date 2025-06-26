@@ -60,8 +60,8 @@ export const Sidebar = ({ onClose }) => {
     ];
 
     const pathMap = {
-        Dashboard: '/mapel',
-        Profile: '/profile',
+        Beranda: '/guru',
+        Profil: '/profile',
         'Lihat Presensi': '/daftar-kelas',
         'Cetak Presensi': '/cetak-presensi',
         Jadwal: '/jadwal',

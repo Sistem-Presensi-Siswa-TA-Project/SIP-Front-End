@@ -24,11 +24,14 @@ export const FormInput = (props) => {
         readOnly = false,
         required = false,
         placeholder = '',
+        rows = 4,
+        as,
         ...rest
     } = props;
 
     const isPhoneField = name === 'hp';
     const isPassword = type === 'password';
+    const isTextarea = as === 'textarea';
     const [showPassword, setShowPassword] = useState(false);
 
     const handlePhoneChange = (e) => {
@@ -45,7 +48,23 @@ export const FormInput = (props) => {
                 {required && <span className="text-danger"> * </span>}
             </Form.Label>
 
-            {isPhoneField ? (
+            {isTextarea ? (
+                // === Input khusus textarea ===
+                <Form.Control
+                    as="textarea"
+                    rows={rows}
+                    className="custom-formInput"
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    required={required}
+                    disabled={disabled}
+                    readOnly={readOnly}
+                    placeholder={placeholder}
+                    style={{ fontSize: '14px' }}
+                    {...rest}
+                />
+            ) : isPhoneField ? (
                 // === Input khusus untuk nomor HP dengan prefix +62 ===
                 <InputGroup>
                     <InputGroup.Text
