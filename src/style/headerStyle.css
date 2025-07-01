@@ -1,0 +1,49 @@
+/* Filename: headerStyle.css */
+
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Header */
+.header-bar {
+  background-color: #379777 !important;
+  height: 100px !important;
+  width: 100% !important;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.45) !important;
+  position: absolute;        /* Biar selalu di atas */
+  top: 0;
+  left: 0;
+  z-index: 1001;          /* Lebih tinggi dari sidebar */
+}
+
+.header-container {
+  display: flex !important;
+  align-items: center !important;
+  height: 100% !important;
+  padding-left: 30px !important;
+  padding-right: 1rem !important;
+}
+
+.header-logo {
+  width: 55px !important;
+  height: 55px !important;
+  object-fit: contain !important;
+  margin-right: 14px !important;
+  border-radius: 6px !important;
+}
+
+.header-title {
+  color: white !important;
+  font-size: 26px !important;
+  font-weight: bold !important;
+  margin-bottom: 0 !important;
+  transition: color 0.1s ease;
+  cursor: pointer;
+}
+
+.header-title:hover {
+  color: #FFF112 !important;
+  text-decoration: underline !important;
+}

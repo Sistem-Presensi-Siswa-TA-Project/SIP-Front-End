@@ -1,0 +1,52 @@
+/* Filename: tableStyle.css */
+
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Tabel */
+.custom-table {
+  width: 100%;
+  border-collapse: collapse !important;
+  text-align: center !important;
+  margin-bottom: 0 !important;
+}
+
+.custom-table th {
+  background-color: #379777 !important;
+  color: #FFF !important;
+  font-weight: bold !important;
+  padding: 16px;
+  border: none;
+  font-size: 16px;
+}
+
+.custom-table td {
+  border: none;
+  padding: 14px;
+  font-size: 16px;
+}
+
+.custom-table tr {
+  border-bottom: 1px solid #D6D6D6 !important;
+}
+
+.custom-table tr:nth-child(even) {
+  background-color: #FFF !important;
+}
+
+.custom-table tr:nth-child(odd) {
+  background-color: #F3F3F3 !important;
+}
+
+.custom-table tbody tr:hover {
+  background-color: #C0BEBE !important;
+}
+
+.table tbody td,
+.table tbody tr {
+  /* Force override bootstrap table background */
+  background-color: transparent !important;
+}

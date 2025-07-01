@@ -1,14 +1,12 @@
 // Filename: Dashboard-Mapel.jsx
 import React, { useState, useEffect } from 'react';
-import { Header, Sidebar, Card } from '../components/Molekul.jsx';
-import { LightButton, InfoButton } from '../components/Button.jsx';
-import { iconList } from '../data/iconData.js';
-import { mapelList } from '../data/mapelData.js';
+import { Header, Sidebar, Card } from '../../components/Molekul.jsx';
+import { LightButton } from '../../components/Button.jsx';
+import { iconList } from '../../data/iconData.js';
 
-function DashboardMapel() {
+function DashboardAdmin() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
-  const [hoveredId, setHoveredId] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
 
   // Mengambil icon dari iconData.js
@@ -17,15 +15,6 @@ function DashboardMapel() {
   const userIcon = iconList.find((i) => i.label === 'User Icon')?.src;
   const emailIcon = iconList.find((i) => i.label === 'Email Icon')?.src;
   const phoneIcon = iconList.find((i) => i.label === 'Phone Icon')?.src;
-  const presensiButtonBlack = iconList.find((i) => i.label === 'Presensi Button Black')?.src;
-  const menuOpenBlack = iconList.find((i) => i.label === 'Menu Open Black')?.src;
-  const menuOpenWhite = iconList.find((i) => i.label === 'Menu Open White')?.src;
-
-  // Mengambil nama hari ini (up-to-date)
-  const hariIni = new Date().toLocaleDateString('id-ID', { weekday: 'long' });
-
-  // Melakukan filter jadwal pelajaran sesuai hari ini
-  const mapelHariIni = mapelList.filter((item) => item.hari === hariIni);
 
   const handleToggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -58,7 +47,7 @@ function DashboardMapel() {
         )}
 
         {/* Sidebar for Desktop only */}
-        {sidebarOpen && (
+        {!sidebarOpen && (
           <div className="d-none d-lg-block" style={{ flexShrink: 0 }}>
             <Sidebar onClose={handleToggleSidebar} />
           </div>
@@ -111,15 +100,12 @@ function DashboardMapel() {
               >
 
                 <img
-                  src={
-                    sidebarOpen
-                      ? (isHovering ? menuOpenWhite : menuOpenBlack)
-                      : (isHovering ? menuIconWhite : menuIconBlack)
-                  }
+                  src={isHovering ? menuIconWhite : menuIconBlack}
                   alt="Menu"
                   width="50"
                   height="50"
                 />
+                
               </LightButton>
             </div>
           </Card>
@@ -127,107 +113,8 @@ function DashboardMapel() {
           {/* Kolom Bawah */}
           <div className="d-flex flex-column flex-lg-row custom-container gap-5" style={{ marginTop: '20px', width: '900px' }}>
             {/* Kolom Kiri Bawah Tengah */}
-            <Card className="w-100 mx-auto d-flex justify-content-center align-items-center" style={{ width: '900px', height: '540px', padding: '16px' }}>
-                <div
-                  className="w-100 mx-auto d-flex flex-column align-items-center" 
-                  style={
-                    { 
-                      backgroundColor: '#A3A3A3', 
-                      width: '515px', 
-                      height: '510px', 
-                      borderRadius: '25px',
-                      boxShadow: 'inset 0 0 16px rgba(0, 0, 0, 0.45)',
-                      overflowY: 'auto',
-                      padding: '20px',
-                      gap: '20px',
-                      scrollbarWidth: 'none',           // Untuk Firefox
-                      msOverflowStyle: 'none',          // Untuk IE/Edge lama
-                    }
-                  }
-                > 
-                  {/* Daftar Mata Pelajaran */}
-                  {mapelHariIni.length > 0 ? (
-                    mapelHariIni.map((item) => (
-
-                      <Card
-                        key={item.id}
-                        className="d-flex align-items-center justify-content-between"
-                        style={{
-                          width: '470px',
-                          height: '115px',
-                          padding: '16px',
-                          borderRadius: '20px',
-                          display: 'flex',
-                          boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-                        }}
-                      >
-                        {/* Placeholder Icon */}
-                        <div
-                          style={{
-                            width: '60px',
-                            height: '60px',
-                            backgroundColor: '#fff',
-                            borderRadius: '16px',
-                            marginLeft: '5px',
-                            marginRight: '15px',
-                            flexShrink: 0,
-                            boxShadow: 'inset 2px 2px 10px rgba(0,0,0,0.45)'
-                          }}
-                        />
-
-                        {/* Text Info */}
-                        <div style={{ flexGrow: 1 }}>
-                          <strong style={{ display: 'block', marginBottom: '4px' }}> {item.label} </strong>
-                          <span style={{ display: 'block', marginBottom: '4px' }}> {item.waktu} </span>
-                          <span style={{ display: 'block' }}> Kelas {item.kelas} </span>
-                        </div>
-
-                        {/* Tombol Presensi */}
-                        <InfoButton
-                          variant="info"
-                          height="35px"
-                          width="105px"
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: '6px',
-                            boxShadow: hoveredId === item.id ? 'inset 2px 2px 10px rgba(0, 0, 0, 0.45)' : 'none',
-                            transition: 'box-shadow 0.2s ease-in-out',
-                          }}
-
-                          onMouseEnter={() => setHoveredId(item.id)}
-                          onMouseLeave={() => setHoveredId(null)}
-                          onClick={() => console.log(`Presensi untuk ${item.label} - ${item.kelas}`)}
-                        >
-                          <img
-                            src={presensiButtonBlack}
-                            alt="Presensi"
-                            width="20"
-                            height="20"
-                          />
-
-                          <span style={{ fontWeight: 'bold', fontSize: '13px' }}> Presensi </span>
-                        </InfoButton>
-                      </Card>
-                    ))
-                  ) : (
-                    // Pesan ketika jadwal kosong
-                    <div
-                      style={{
-                        height: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <p style={{ color: 'white', fontWeight: 'bold', fontSize: '20px' }}>
-                        ~~ Tidak ada jadwal hari ini ~~
-                      </p>
-                    </div>
-                  )}
-                  
-                </div>
+            <Card className="w-100 mx-auto" style={{ width: '900px', height: '540px', padding: '16px' }}>
+              
             </Card>
 
             {/* Kolom Kanan Bawah tengah */}
@@ -274,10 +161,8 @@ function DashboardMapel() {
                 <hr style={{ margin: '0 0 24px 0' }}/> 
 
                 <div 
-                  className="paragraf-flex-container" 
+                  className="d-flex flex-column" 
                   style={{ 
-                    display: 'flex',
-                    flexDirection: 'column',
                     textAlign: 'justify', 
                     margin: '0 20px 0 20px', 
                     fontSize: '12px' 
@@ -331,14 +216,8 @@ function DashboardMapel() {
           </div>
         </div>
       </main>
-
-      <footer>
-        <small style={{ fontSize: '14px', color: '#808080' }}>
-          Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
-        </small>
-      </footer>
     </div>
   );
 }
 
-export default DashboardMapel;
+export default DashboardAdmin;

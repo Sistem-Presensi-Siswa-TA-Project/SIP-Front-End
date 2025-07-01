@@ -1,5 +1,5 @@
 // Filename: Button.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { Button as BootstrapButton } from 'react-bootstrap';
 
 export const PrimaryButton = (props) => {
@@ -197,5 +197,43 @@ export const InfoButton = (props) => {
         >
             {children}
         </BootstrapButton>
+    );
+};
+
+export const ToggleButton = (props) => {
+    const {
+        onToggle,
+        childrenA,
+        childrenB,
+        ...rest
+    } = props;
+
+    const [active, setActive] = useState('btnA');
+
+    const handleToggle = (type) => {
+        setActive(type);
+        if (onToggle) onToggle(type);
+    };
+
+    return (
+        <div className="d-flex togglebtn-container">
+            <button
+                className={`togglebtn-custom ${active === 'btnA' ? 'togglebtn-animate' : ''}`}
+                type="button"
+                onClick={() => handleToggle('btnA')}
+                {...rest}
+            >
+                {childrenA}
+            </button>
+
+            <button
+                className={`togglebtn-custom ${active === 'btnB' ? 'togglebtn-animate' : ''}`}
+                type="button"
+                onClick={() => handleToggle('btnB')}
+                {...rest}
+            >
+                {childrenB}
+            </button>
+        </div>
     );
 };

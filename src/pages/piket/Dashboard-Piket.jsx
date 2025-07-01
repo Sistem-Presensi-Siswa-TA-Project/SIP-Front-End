@@ -1,9 +1,9 @@
-// Filename: Dashboard-Mapel.jsx
+// Filename: Dashboard-Piket.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Header, Sidebar, Card } from '../components/Molekul.jsx';
-import { LightButton } from '../components/Button.jsx';
-import { iconList } from '../data/iconData.js';
+import { Header, Sidebar, Card } from '../../components/Molekul.jsx';
+import { LightButton } from '../../components/Button.jsx';
+import { iconList } from '../../data/iconData.js';
 
 function DashboardPiket() {
   const navigate = useNavigate();
@@ -46,17 +46,36 @@ function DashboardPiket() {
       >
         {/* Sidebar Overlay for Mobile and Tablet */}
         {sidebarOpen && (
-          <div className="sidebar-overlay d-lg-none" onClick={handleToggleSidebar}>
-            <div onClick={(e) => e.stopPropagation()}>
-              <Sidebar onClose={handleToggleSidebar} />
+          <>
+            {/* Overlay yang menutupi seluruh layar, tidak bisa di klik */}
+            <div className="sidebar-overlay d-lg-none"/>
+
+            {/* Sidebar tetap bisa di klik */}
+            <div
+              className="d-lg-none"
+              style={{ position: 'fixed', left: 0, zIndex: 1000 }}
+            >
+              <Sidebar
+                onClose={handleToggleSidebar}
+                pathMap={{
+                  Beranda: '/piket',
+                  'Lihat Presensi': '/cari-presensi'
+                }}
+              />
             </div>
-          </div>
+          </>
         )}
 
         {/* Sidebar for Desktop only */}
-        {!sidebarOpen && (
+        {sidebarOpen && (
           <div className="d-none d-lg-block" style={{ flexShrink: 0 }}>
-            <Sidebar onClose={handleToggleSidebar} />
+            <Sidebar
+              onClose={handleToggleSidebar}
+              pathMap={{
+                Beranda: '/piket',
+                'Lihat Presensi': '/cari-presensi'
+              }}
+            />
           </div>
         )}
 
@@ -109,8 +128,8 @@ function DashboardPiket() {
                 <img
                   src={
                     sidebarOpen
-                      ? (isHovering ? menuIconWhite : menuIconBlack)
-                      : (isHovering ? menuOpenWhite : menuOpenBlack)
+                      ? (isHovering ? menuOpenWhite : menuOpenBlack)
+                      : (isHovering ? menuIconWhite : menuIconBlack)
                   }
                   alt="Menu"
                   width="50"
@@ -150,7 +169,7 @@ function DashboardPiket() {
                   justifyContent: 'center',
                 }}
               >
-                <h1 style={{ fontSize: '90px', margin: 0, color: '#000' }}>
+                <h1 className="custom-clock" style={{ fontSize: '93px', margin: 0, color: '#000' }}>
                   {
                     currentTime.toLocaleTimeString('en-GB', {
                       hour: '2-digit',
@@ -209,7 +228,7 @@ function DashboardPiket() {
               <Card 
                 className="w-100 card-kecil" 
                 style={{ height: '180px', position: 'relative' }}
-                onClick={() => navigate('/presensi-mapel')}
+                onClick={() => navigate('/piket/daftar-kelas')}
               >
                 <div style={{
                   height: '100%',

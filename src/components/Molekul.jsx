@@ -37,7 +37,12 @@ export const Header = ({ children='As User' }) => {
   );
 };
 
-export const Sidebar = ({ onClose }) => {
+export const Sidebar = (props) => {
+    const {
+        onClose,
+        pathMap: customPathMap = {},
+    } = props;
+
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(null);
     const [hoveredSubitem, setHoveredSubitem] = useState(null);
@@ -59,16 +64,19 @@ export const Sidebar = ({ onClose }) => {
         { label: 'Logout', icon: 'Logout Icon' },
     ];
 
-    const pathMap = {
+    const defaultPathMap = {
         Beranda: '/guru',
         Profil: '/profile',
-        'Lihat Presensi': '/daftar-kelas',
+        'Lihat Presensi': '/guru/daftar-kelas',
         'Cetak Presensi': '/cetak-presensi',
         Jadwal: '/jadwal',
         Kontak: '/kontak',
         Informasi: '/informasi',
         Logout: '/',
     };
+
+    // Merge default dan custom (custom menimpa default jika ada)
+    const pathMap = { ...defaultPathMap, ...customPathMap };
 
     const rightArrow = iconList.find((i) => i.label === 'Right Arrow White')?.src;
     const leftArrow = iconList.find((i) => i.label === 'Left Arrow White')?.src;

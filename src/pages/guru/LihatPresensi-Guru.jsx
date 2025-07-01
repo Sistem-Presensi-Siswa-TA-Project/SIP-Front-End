@@ -1,12 +1,12 @@
-// Filename: LihatPresensi.jsx
+// Filename: LihatPresensi-Guru.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
-import { Header, Card } from '../components/Molekul.jsx';
-import { SecondaryButton, InfoButton } from '../components/Button.jsx';
-import { iconList } from '../data/iconData.js';
+import { Header, Card } from '../../components/Molekul.jsx';
+import { SecondaryButton, InfoButton } from '../../components/Button.jsx';
+import { iconList } from '../../data/iconData.js';
 
-function LihatPresensi() {
+function LihatPresensiGuru() {
   const navigate = useNavigate();
   const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
   const [infoButtonHovering, setInfoButtonHovering] = useState(false);
@@ -168,7 +168,7 @@ function LihatPresensi() {
                 <thead>
                   <tr>
                     <th className="border-right" style={{ padding: '16px' }}> No. </th>
-                    <th style={{ padding: '16px' }}> NIS </th>
+                    <th style={{ padding: '16px' }}> NISN </th>
                     <th style={{ padding: '16px' }}> Nama Siswa </th>
                     <th style={{ padding: '16px' }}> Mata Pelajaran </th>
                     <th style={{ padding: '16px' }}> Kelas </th>
@@ -180,9 +180,9 @@ function LihatPresensi() {
                     <tr key={i}>
                       <td className="border-right" style={{ padding: '14px' }}> {i+1}. </td>
                       <td style={{ padding: '14px' }}> 20242025 </td>
-                      <td style={{ padding: '14px' }}> Nama Siswa </td>
-                      <td style={{ padding: '14px' }}> Mata Pelajaran </td>
-                      <td style={{ padding: '14px' }}> Kelas </td>
+                      <td style={{ padding: '14px', textAlign: 'left' }}> Nama Siswa ABCDEFGH IJKLMNO </td>
+                      <td style={{ padding: '14px' }}> Pendidikan Kewarganegaraan </td>
+                      <td style={{ padding: '14px' }}> VIII C </td>
                       <td style={{ padding: '14px' }}>
                         <img
                           src={[
@@ -234,4 +234,4 @@ function LihatPresensi() {
   );
 }
 
-export default LihatPresensi;
+export default LihatPresensiGuru;

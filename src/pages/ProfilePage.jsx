@@ -180,7 +180,7 @@ function Profile() {
                     </Card>
 
                     {/* Data Akademik & Alamat */}
-                    <div className="custom-container d-flex flex-column align-items-end" style={{ gap: '50px', width: '800px' }}>
+                    <div className="custom-container d-flex flex-column align-items-end" style={{ gap: '40px', width: '800px' }}>
                         {/* Data Akademik */}
                         <Card className="w-100 card-kecil" height="calc(100% + 10px)" style={{ padding: '20px' }}>
                             <div className="w-100 d-flex flex-column px-2 py-1">

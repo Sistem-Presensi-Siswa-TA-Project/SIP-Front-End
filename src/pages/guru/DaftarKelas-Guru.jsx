@@ -1,11 +1,11 @@
-// Filename: DaftarKelas.jsx
+// Filename: DaftarKelas-Guru.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Header, Card, CardPresensi } from '../components/Molekul.jsx';
-import { SecondaryButton } from '../components/Button.jsx';
-import { iconList } from '../data/iconData.js';
+import { Header, Card, CardPresensi } from '../../components/Molekul.jsx';
+import { SecondaryButton } from '../../components/Button.jsx';
+import { iconList } from '../../data/iconData.js';
 
-function DaftarKelas() {
+function DaftarKelasGuru() {
     const navigate = useNavigate();
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
 
@@ -78,7 +78,7 @@ function DaftarKelas() {
                                         namaKelas={`Kelas ${kelas}`}
                                         tahunAjar="202X/202X Ganjil"
                                         totalSiswa="XX"
-                                        to={`/kelas/${kelas.toUpperCase()}`}
+                                        to={'/pertemuan'}
                                     />
                                 </div>
                             ))}
@@ -96,4 +96,4 @@ function DaftarKelas() {
     );
 }
 
-export default DaftarKelas;
+export default DaftarKelasGuru;

@@ -1,19 +1,23 @@
 // Filename: AppRoutes.jsx
 import { Routes, Route } from 'react-router-dom';
 import Login from '../pages/LoginPage.jsx';
-import Test from '../pages/Test.jsx';
-import Admin from '../pages/Dashboard-Admin.jsx';
-import Guru from '../pages/Dashboard-Guru.jsx';
-import Piket from '../pages/Dashboard-Piket.jsx';
+import Admin from '../pages/admin/Dashboard-Admin.jsx';
+import Guru from '../pages/guru/Dashboard-Guru.jsx';
+import Piket from '../pages/piket/Dashboard-Piket.jsx';
 import Profile from '../pages/ProfilePage.jsx';
 import ProfileForm from '../pages/ProfileForm.jsx';
-import Password from '../pages/PasswordPage.jsx';
-import LihatPresensi from '../pages/LihatPresensi.jsx';
-import PresensiForm from '../pages/PresensiForm.jsx';
-import DaftarKelas from '../pages/DaftarKelas.jsx';
-import DaftarGuru from '../pages/DaftarGuru.jsx';
-import DaftarPertemuan from '../pages/DaftarPertemuan.jsx';
+import UbahPassword from '../pages/UbahPasswordPage.jsx';
+import LihatPresensiGuru from '../pages/guru/LihatPresensi-Guru.jsx';
+import LihatPresensiMapel from '../pages/piket/LihatPresensiMapel.jsx';
+import LihatPresensiPiket from '../pages/piket/LihatPresensiPiket.jsx';
+import CariPresensi from '../pages/piket/CariPresensi.jsx';
+import PresensiForm from '../pages/guru/PresensiForm.jsx';
+import DaftarKelasPiket from '../pages/piket/DaftarKelas-Piket.jsx';
+import DaftarKelasGuru from '../pages/guru/DaftarKelas-Guru.jsx';
+import DaftarGuru from '../pages/piket/DaftarGuru.jsx';
+import DaftarPertemuan from '../pages/guru/DaftarPertemuan.jsx';
 import Kontak from '../pages/KontakPage.jsx';
+import Informasi from '../pages/InformasiPage.jsx';
 import NotFound from '../pages/NotFoundPage.jsx';
 
 function AppRoutes() {
@@ -25,15 +29,19 @@ function AppRoutes() {
       <Route path = "/piket" element = {<Piket />} />
       <Route path = "/profile" element = {<Profile />} />
       <Route path = "/profile-form" element = {<ProfileForm />} />
-      <Route path = "/ubah-password" element = {<Password />} />
-      <Route path = "/lihat-presensi" element = {<LihatPresensi />} />
+      <Route path = "/ubah-password" element = {<UbahPassword />} />
+      <Route path = "/guru/lihat-presensi" element = {<LihatPresensiGuru />} />
+      <Route path = "/mapel/lihat-presensi" element = {<LihatPresensiMapel />} />
+      <Route path = "/piket/lihat-presensi" element = {<LihatPresensiPiket />} />
+      <Route path = "/cari-presensi" element = {<CariPresensi />} />
       <Route path = "/presensi-form" element = {<PresensiForm />} />
-      <Route path = "/daftar-kelas" element = {<DaftarKelas />} />
+      <Route path = "/piket/daftar-kelas" element = {<DaftarKelasPiket />} />
+      <Route path = "/guru/daftar-kelas" element = {<DaftarKelasGuru />} />
       <Route path = "/kelas/:kelasId" element = {<DaftarGuru />} />
       <Route path = "/pertemuan" element = {<DaftarPertemuan />} />
       <Route path = "/kontak" element = {<Kontak />} />
+      <Route path = "/informasi" element = {<Informasi />} />
       <Route path = "*" element = {<NotFound />} />
-      <Route path = "/test" element = {<Test/>} />
     </Routes>
   );
 };

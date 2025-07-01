@@ -1,0 +1,107 @@
+/* Filename: formStyle.css */
+
+@import "tailwindcss";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Forms */
+.custom-textInput {
+  border: none !important;
+  border-bottom: 1px solid #666 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  font-size: 14px !important;
+}
+
+.custom-textInput:focus {
+  border-bottom: 2px solid #379777 !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Form Input */
+.custom-formLabel {
+  font-weight: bold !important; 
+  color: #000 !important;
+}
+
+.custom-formInput {
+  border: 1px solid #333 !important;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25) !important;
+  background-color: white !important;
+}
+
+.custom-formInput.readonly-input {
+  background-color: #D6D6D6 !important;
+}
+
+.custom-formInput:focus {
+  /* Warna border saat input (termasuk readonly) difokus */
+  border: 3px solid #379777 !important;
+  box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Radio Form */
+.custom-radio {
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: #FFF;
+  border: 3px solid #B3B3B3 !important;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  margin: auto;
+  display: block;
+  transition: border-color 0.2s ease-in;
+}
+
+.custom-radio:checked::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: background-color 0.2s ease-in;
+}
+
+.custom-radio.hadir:checked {
+  border-color: #33DB00 !important;
+}
+
+.custom-radio.hadir:checked::before {
+  background-color: #33DB00;
+}
+
+.custom-radio.izin:checked {
+  border-color: #2B44E2 !important;
+}
+
+.custom-radio.izin:checked::before {
+  background-color: #2B44E2;
+}
+
+.custom-radio.sakit:checked {
+  border-color: #D4A328 !important;
+}
+
+.custom-radio.sakit:checked::before {
+  background-color: #D4A328;
+}
+
+.custom-radio.alpa:checked {
+  border-color: #DB0004 !important;
+}
+
+.custom-radio.alpa:checked::before {
+  background-color: #DB0004;
+}

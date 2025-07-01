@@ -20,6 +20,7 @@ export const FormInput = (props) => {
         name,
         value,
         onChange,
+        fontSize = '14px',
         disabled = false,
         readOnly = false,
         required = false,
@@ -43,9 +44,9 @@ export const FormInput = (props) => {
 
     return (
         <Form.Group className="mb-3" controlId={name} {...rest}>
-            <Form.Label className="custom-formLabel" style={{ fontSize: '14px', marginBottom: '12px' }}>
+            <Form.Label className="custom-formLabel" style={{ fontSize, marginBottom: '12px' }}>
                 {label}
-                {required && <span className="text-danger"> * </span>}
+                {required && <span className="text-danger">* </span>}
             </Form.Label>
 
             {isTextarea ? (
@@ -72,7 +73,7 @@ export const FormInput = (props) => {
                             backgroundColor: '#D6D6D6',
                             color: '#000',
                             fontWeight: 'bold',
-                            fontSize: '14px',
+                            fontSize,
                             border: '1px solid #333',
                             borderRight: 'none',
                             boxShadow: '0px 2px 3px rgba(0, 0, 0, 0.25)',
@@ -93,7 +94,7 @@ export const FormInput = (props) => {
                         readOnly={readOnly}
                         placeholder={placeholder}
                         style={{
-                            fontSize: '14px',
+                            fontSize,
                             borderRadius: '0 4px 4px 0',
                             borderLeft: 'none',
                         }}
@@ -113,7 +114,7 @@ export const FormInput = (props) => {
                         disabled={disabled}
                         readOnly={readOnly}
                         placeholder={placeholder}
-                        style={{ fontSize: '14px', paddingRight: '40px' }}
+                        style={{ fontSize, paddingRight: '40px' }}
                         {...rest}
                     />
 
@@ -146,7 +147,7 @@ export const FormInput = (props) => {
                     disabled={disabled}
                     readOnly={readOnly}
                     placeholder={placeholder}
-                    style={{ fontSize: '14px' }}
+                    style={{ fontSize }}
                     {...rest}
                 />
             )}
