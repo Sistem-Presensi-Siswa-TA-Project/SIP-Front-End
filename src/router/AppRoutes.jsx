@@ -11,6 +11,7 @@ import LihatPresensiGuru from '../pages/guru/LihatPresensi-Guru.jsx';
 import LihatPresensiMapel from '../pages/piket/LihatPresensiMapel.jsx';
 import LihatPresensiPiket from '../pages/piket/LihatPresensiPiket.jsx';
 import CariPresensi from '../pages/piket/CariPresensi.jsx';
+import ScanPresensi from '../pages/piket/ScanPresensi.jsx';
 import PresensiForm from '../pages/guru/PresensiForm.jsx';
 import DaftarKelasPiket from '../pages/piket/DaftarKelas-Piket.jsx';
 import DaftarKelasGuru from '../pages/guru/DaftarKelas-Guru.jsx';
@@ -34,6 +35,7 @@ function AppRoutes() {
       <Route path = "/mapel/lihat-presensi" element = {<LihatPresensiMapel />} />
       <Route path = "/piket/lihat-presensi" element = {<LihatPresensiPiket />} />
       <Route path = "/cari-presensi" element = {<CariPresensi />} />
+      <Route path = "/scan-presensi" element = {<ScanPresensi />} />
       <Route path = "/presensi-form" element = {<PresensiForm />} />
       <Route path = "/piket/daftar-kelas" element = {<DaftarKelasPiket />} />
       <Route path = "/guru/daftar-kelas" element = {<DaftarKelasGuru />} />

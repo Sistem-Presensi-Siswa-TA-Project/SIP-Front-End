@@ -188,7 +188,7 @@ function DashboardPiket() {
               <Card 
                 className="w-100 card-kecil" 
                 style={{ height: '160px', position: 'relative' }} 
-                onClick={() => navigate('/presensi-piket')}
+                onClick={() => navigate('/scan-presensi')}
               >
                 <div style={
                     {

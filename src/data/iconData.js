@@ -11,6 +11,8 @@ import ArrowTopBlack from "../assets/topArrow-black.svg";
 import ArrowTopWhite from "../assets/topArrow-white.svg";
 import BackIconBlack from "../assets/iconBack-black.svg";
 import BackIconWhite from "../assets/iconBack-white.svg";
+import CancelIconA from "../assets/cancelIconA.svg";
+import CancelIconB from "../assets/cancelIconB.svg";
 import CetakIcon from "../assets/cetak-black.svg";
 import DashboardIcon from "../assets/home-black.svg";
 import EmailIcon from "../assets/EmailIcon.svg";
@@ -45,7 +47,9 @@ import ProfileIcon from "../assets/profile-black.svg";
 import RightArrowWhite from "../assets/rightArrow-white.svg";
 import SakitIcon from "../assets/sakit-icon.svg";
 import ScanPresensi from "../assets/scan-presensi.svg";
+import SwapCamera from "../assets/swap-camera.svg";
 import UserIcon from "../assets/userIcon.svg";
+import QRCode from "../assets/qrcode-icon.png";
 
 export const iconList = [
   { id: 1, label: "Add Profile", src: AddProfile },
@@ -93,4 +97,8 @@ export const iconList = [
   { id: 43, label: "Sakit Icon", src: SakitIcon },
   { id: 44, label: "Scan Presensi", src: ScanPresensi },
   { id: 45, label: "User Icon", src: UserIcon },
+  { id: 46, label: "QR Code", src: QRCode },
+  { id: 47, label: "Cancel Icon A", src: CancelIconA },
+  { id: 48, label: "Cancel Icon B", src: CancelIconB },
+  { id: 49, label: "Swap Camera", src: SwapCamera },
 ];

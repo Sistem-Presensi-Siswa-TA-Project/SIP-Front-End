@@ -133,7 +133,6 @@ function ProfileForm() {
                                 'kecamatan',
                                 'kabupaten',
                                 'provinsi',
-
                             ].includes(name);
 
                             const isReadOnly = ['mapel', 'status', 'nomorInduk', 'namaLengkap'].includes(name);

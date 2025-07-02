@@ -1,6 +1,6 @@
 // Filename: Molekul.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { iconList } from '../data/iconData.js';
 
@@ -270,3 +270,66 @@ export const CardPresensi = (props) => {
         </div>
     );
 };
+
+export const OnCam = forwardRef((props, ref) => {
+    const videoRef = useRef();
+    const streamRef = useRef();
+    const [facingMode, setFacingMode] = useState('environment'); // default kamera belakang
+    
+    const isPcOrLaptop = () => {
+        return !/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    };
+
+    const startCamera = (mode = 'environment') => {
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+        }
+
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: mode } })
+            .then((stream) => {
+                streamRef.current = stream;
+                if (videoRef.current) {
+                    videoRef.current.srcObject = stream;
+                    videoRef.current.play();
+                }
+            })
+            .catch((err) => {
+                console.error("Gagal akses kamera:", err);
+                alert("Tidak dapat membuka kamera. Mohon cek izin browser atau device!");
+            });
+    };
+
+    useEffect(() => {
+        startCamera(facingMode);
+
+        return () => {
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach(track => track.stop());
+            }
+        };
+    }, [facingMode]);
+
+    useImperativeHandle(ref, () => ({
+        stopCamera: () => {
+            if (streamRef.current) {
+                streamRef.current.getTracks().forEach(track => track.stop());
+                videoRef.current.srcObject = null;
+            }
+        },
+        swapCamera: () => {
+            setFacingMode((prev) => prev === 'user' ? 'environment' : 'user');
+        }
+    }));
+
+    return (
+        <div style={{ width: '100%', maxWidth: '400px', borderRadius: '15px', overflow: 'hidden' }}>
+            <video 
+                ref={videoRef} 
+                style={{ 
+                    width: '100%', 
+                    transform: (facingMode === 'user' || isPcOrLaptop()) ? 'scaleX(-1)' : 'none' 
+                }} 
+            />
+        </div>
+    );
+});

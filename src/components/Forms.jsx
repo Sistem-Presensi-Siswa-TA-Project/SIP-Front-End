@@ -27,12 +27,14 @@ export const FormInput = (props) => {
         placeholder = '',
         rows = 4,
         as,
+        options = [],
         ...rest
     } = props;
 
     const isPhoneField = name === 'hp';
     const isPassword = type === 'password';
     const isTextarea = as === 'textarea';
+    const isSelect = options.length > 0;
     const [showPassword, setShowPassword] = useState(false);
 
     const handlePhoneChange = (e) => {
@@ -49,7 +51,26 @@ export const FormInput = (props) => {
                 {required && <span className="text-danger">* </span>}
             </Form.Label>
 
-            {isTextarea ? (
+            {isSelect ? (
+                // === Dropdown (select) ===
+                <Form.Select
+                    className="custom-formInput"
+                    label={label}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    required={required}
+                    disabled={disabled}
+                    style={{ fontSize }}
+                >
+                    <option value="" disabled hidden> {placeholder} </option>
+                    {options.map((opt, idx) => (
+                        <option key={idx} value={opt}>
+                            {opt}
+                        </option>
+                    ))}
+                </Form.Select>
+            ) : isTextarea ? (
                 // === Input khusus textarea ===
                 <Form.Control
                     as="textarea"
