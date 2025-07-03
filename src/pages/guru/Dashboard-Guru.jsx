@@ -63,9 +63,30 @@ function DashboardGuru() {
             >
               <Sidebar
                 onClose={handleToggleSidebar}
+
+                sidebarCustomMenu={{
+                  sidebarMenu: [
+                    { label: 'Minimize', icon: 'Back Icon Black' },
+                    { label: 'Beranda', icon: 'Dashboard Icon' },
+                    { label: 'Profil', icon: 'Profile Icon' },
+                    { label: 'Lihat Presensi', icon: 'Presensi Icon' },
+                    { label: 'Cetak Presensi', icon: 'Cetak Icon' },
+                    { label: 'Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
+                  ],
+                  dropdownItems: [
+                    { label: 'Kontak', icon: 'Kontak Icon' },
+                    { label: 'Informasi', icon: 'Informasi Icon' },
+                    { label: 'Logout', icon: 'Logout Icon' },
+                  ]
+                }}
+
                 pathMap={{
                   Beranda: '/guru',
-                  'Lihat Presensi': '/guru/daftar-kelas'
+                  Profil: '/guru/profile',
+                  'Lihat Presensi': '/guru/kelas',
+                  'Cetak Presensi': '/guru/kelas',
+                  Kontak: '/guru/kontak',
+                  Informasi: '/guru/informasi',
                 }}
               />
             </div>
@@ -77,9 +98,30 @@ function DashboardGuru() {
           <div className="d-none d-lg-block" style={{ flexShrink: 0 }}>
             <Sidebar 
               onClose={handleToggleSidebar}
+
+              sidebarCustomMenu={{
+                sidebarMenu: [
+                  { label: 'Minimize', icon: 'Back Icon Black' },
+                  { label: 'Beranda', icon: 'Dashboard Icon' },
+                  { label: 'Profil', icon: 'Profile Icon' },
+                  { label: 'Lihat Presensi', icon: 'Presensi Icon' },
+                  { label: 'Cetak Presensi', icon: 'Cetak Icon' },
+                  { label: 'Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
+                ],
+                dropdownItems: [
+                  { label: 'Kontak', icon: 'Kontak Icon' },
+                  { label: 'Informasi', icon: 'Informasi Icon' },
+                  { label: 'Logout', icon: 'Logout Icon' },
+                ]
+              }}
+              
               pathMap={{
                 Beranda: '/guru',
-                'Lihat Presensi': '/guru/daftar-kelas'
+                Profil: '/guru/profile',
+                'Lihat Presensi': '/guru/kelas',
+                'Cetak Presensi': '/guru/kelas',
+                Kontak: '/guru/kontak',
+                Informasi: '/guru/informasi',
               }}
             />
           </div>

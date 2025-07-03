@@ -122,7 +122,7 @@ function DaftarGuru() {
                                                         boxShadow: hoveredId === i ? 'inset 2px 2px 10px rgba(0, 0, 0, 0.45)' : 'none',
                                                         transition: 'box-shadow 0.2s ease-in-out',
                                                     }}
-                                                    onClick={() => navigate('/pertemuan')}
+                                                    onClick={() => navigate(`/piket/kelas/${kelasId.toUpperCase()}/pertemuan`)}
                                                     onMouseEnter={() => setHoveredId(i)}
                                                     onMouseLeave={() => setHoveredId(null)}
                                                 >

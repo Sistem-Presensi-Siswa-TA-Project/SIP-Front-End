@@ -10,7 +10,7 @@ function CariPresensi() {
     const navigate = useNavigate();
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [primaryButtonHovering, setPrimaryButtonHovering] = useState(false);
-    const [formType, setFormType] = useState('mapel');
+    const [formType, setFormType] = useState('btnA');
 
     const [formData, setFormData] = useState({
         tanggal: '',
@@ -129,7 +129,13 @@ function CariPresensi() {
                                 className="width-button-mobile"
                                 onMouseEnter={() => setPrimaryButtonHovering(true)}
                                 onMouseLeave={() => setPrimaryButtonHovering(false)}
-                                onClick={() => navigate('/piket/lihat-presensi')}
+                                onClick={() => {
+                                    if (formType === 'btnA') {
+                                        navigate('/piket/cari-presensi/presensi-mapel');
+                                    } else {
+                                        navigate('/piket/cari-presensi/presensi-piket');
+                                    }
+                                }}
                                 style={{ 
                                     justifyContent: 'center', 
                                     alignItems: 'center',

@@ -1,17 +1,24 @@
 // Filename: DaftarPertemuan.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card } from '../../components/Molekul.jsx';
 import { SecondaryButton, InfoButton, SuccessButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
 
-function DaftarGuruMapel() {
-    const navigate = useNavigate();
+function DaftarPertemuan() {
+    // State Hovering
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
     const [hoveredId, setHoveredId] = useState(null);
+    
+    // Navigasi Page
+    const navigate = useNavigate();
+    const { kelasId } = useParams();
+    const location = useLocation();
+    const prefix = location.pathname.startsWith('/piket') ? '/piket' : '/guru';
 
+    // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
     const presensiButtonBlack = iconList.find((i) => i.label === 'Presensi Button Black')?.src;
@@ -71,7 +78,7 @@ function DaftarGuruMapel() {
                     <Card style={{ width: '100%', marginTop: '45px', padding: '30px' }}>
                         {/* Title */}
                         <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '20px' }}> 
-                            Pertemuan
+                            Daftar Pertemuan Kelas {kelasId?.toUpperCase()}
                         </h3>
 
                         {/* Tombol Simpan */}
@@ -133,7 +140,7 @@ function DaftarGuruMapel() {
                                             </td>
 
                                             <td className="d-flex justify-content-end align-items-center" style={{ textAlign: 'right', padding: '20px 20px 14px 14px' }}>
-                                                {/* Tombol Presensi */}
+                                                {/* Tombol Lihat */}
                                                 <InfoButton
                                                     height="35px"
                                                     width="105px"
@@ -145,7 +152,9 @@ function DaftarGuruMapel() {
                                                         boxShadow: hoveredId === i ? 'inset 2px 2px 10px rgba(0, 0, 0, 0.45)' : 'none',
                                                         transition: 'box-shadow 0.2s ease-in-out',
                                                     }}
-                                                    onClick={() => navigate('/lihat-presensi')}
+                                                    onClick={() => navigate(
+                                                        `${prefix}/kelas/${kelasId?.toUpperCase()}/pertemuan/lihat-presensi`
+                                                    )}
                                                     onMouseEnter={() => setHoveredId(i)}
                                                     onMouseLeave={() => setHoveredId(null)}
                                                 >
@@ -155,7 +164,9 @@ function DaftarGuruMapel() {
                                                         width="20"
                                                         height="20"
                                                     />
-                                                    <span style={{ fontWeight: 'bold', fontSize: '13px' }}> Lihat </span>
+                                                    <span style={{ fontWeight: 'bold', fontSize: '13px' }}> 
+                                                        Lihat 
+                                                    </span>
                                                 </InfoButton>
                                             </td>
                                         </tr>
@@ -176,4 +187,4 @@ function DaftarGuruMapel() {
     );
 }
 
-export default DaftarGuruMapel;
+export default DaftarPertemuan;

@@ -200,6 +200,41 @@ export const InfoButton = (props) => {
     );
 };
 
+export const CustomButton = (props) => {
+    const {
+        children = 'Click Here',
+        variant = 'custom',
+        onClick,
+        className = '',
+        type = 'button',
+        width = '100px',
+        height = '40px',
+        textSize = '14px',
+        backgroundColor = '',
+        style = {},
+        ...rest
+    } = props;
+
+    return (
+        <button
+            variant={variant}
+            type={type}
+            className={`btn-custom ${className}`}
+            onClick={onClick}
+            style={{
+                width: width,
+                height: height,
+                fontSize: textSize,
+                backgroundColor: backgroundColor,
+                ...style,
+            }}
+            {...rest}
+        >
+            {children}
+        </button>
+    );
+};
+
 export const ToggleButton = (props) => {
     const {
         onToggle,

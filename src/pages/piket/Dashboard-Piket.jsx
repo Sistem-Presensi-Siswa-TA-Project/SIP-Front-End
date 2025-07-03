@@ -57,9 +57,28 @@ function DashboardPiket() {
             >
               <Sidebar
                 onClose={handleToggleSidebar}
+                
+                sidebarCustomMenu={{
+                  sidebarMenu: [
+                    { label: 'Minimize', icon: 'Back Icon Black' },
+                    { label: 'Beranda', icon: 'Dashboard Icon' },
+                    { label: 'Profil', icon: 'Profile Icon' },
+                    { label: 'Cari Presensi', icon: 'Presensi Icon' },
+                    { label: 'Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
+                  ],
+                  dropdownItems: [
+                    { label: 'Kontak', icon: 'Kontak Icon' },
+                    { label: 'Informasi', icon: 'Informasi Icon' },
+                    { label: 'Logout', icon: 'Logout Icon' },
+                  ]
+                }}
+
                 pathMap={{
                   Beranda: '/piket',
-                  'Lihat Presensi': '/cari-presensi'
+                  Profil: '/piket/profile',
+                  'Cari Presensi': '/piket/cari-presensi',
+                  Kontak: '/piket/kontak',
+                  Informasi: '/piket/informasi',
                 }}
               />
             </div>
@@ -71,9 +90,28 @@ function DashboardPiket() {
           <div className="d-none d-lg-block" style={{ flexShrink: 0 }}>
             <Sidebar
               onClose={handleToggleSidebar}
+
+              sidebarCustomMenu={{
+                sidebarMenu: [
+                  { label: 'Minimize', icon: 'Back Icon Black' },
+                  { label: 'Beranda', icon: 'Dashboard Icon' },
+                  { label: 'Profil', icon: 'Profile Icon' },
+                  { label: 'Cari Presensi', icon: 'Presensi Icon' },
+                  { label: 'Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
+                ],
+                dropdownItems: [
+                  { label: 'Kontak', icon: 'Kontak Icon' },
+                  { label: 'Informasi', icon: 'Informasi Icon' },
+                  { label: 'Logout', icon: 'Logout Icon' },
+                ]
+              }}
+
               pathMap={{
                 Beranda: '/piket',
-                'Lihat Presensi': '/cari-presensi'
+                Profil: '/piket/profile',
+                'Cari Presensi': '/piket/cari-presensi',
+                Kontak: '/piket/kontak',
+                Informasi: '/piket/informasi',
               }}
             />
           </div>
@@ -188,7 +226,7 @@ function DashboardPiket() {
               <Card 
                 className="w-100 card-kecil" 
                 style={{ height: '160px', position: 'relative' }} 
-                onClick={() => navigate('/scan-presensi')}
+                onClick={() => navigate('/piket/scan-presensi')}
               >
                 <div style={
                     {
@@ -228,7 +266,7 @@ function DashboardPiket() {
               <Card 
                 className="w-100 card-kecil" 
                 style={{ height: '180px', position: 'relative' }}
-                onClick={() => navigate('/piket/daftar-kelas')}
+                onClick={() => navigate('/piket/kelas')}
               >
                 <div style={{
                   height: '100%',

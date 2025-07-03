@@ -1,16 +1,23 @@
 // Filename: LihatPresensi-Guru.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card } from '../../components/Molekul.jsx';
 import { SecondaryButton, InfoButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
 
-function LihatPresensiGuru() {
-  const navigate = useNavigate();
+function LihatPresensi() {
+  // State Hovering
   const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
   const [infoButtonHovering, setInfoButtonHovering] = useState(false);
 
+  // Navigasi Page
+  const navigate = useNavigate();
+  const { kelasId } = useParams();
+  const location = useLocation();
+  const prefix = location.pathname.startsWith('/piket') ? '/piket' : '/guru';
+
+  // Icon from iconList
   const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
   const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
   const hadirIcon = iconList.find((i) => i.label === 'Hadir Icon')?.src;
@@ -80,7 +87,7 @@ function LihatPresensiGuru() {
               {[
                 ['Nama Guru', 'Sukiman Bin Sukijan'],
                 ['Mata Pelajaran', 'Bahasa Indonesia'],
-                ['Kelas', '7A'],
+                ['Kelas', `${kelasId?.toUpperCase()}`],
                 ['Jumlah Siswa', '20 siswa'],
                 ['Tahun Ajaran', '2024/2025'],
                 ['Pertemuan ke-', '2'],
@@ -145,9 +152,11 @@ function LihatPresensiGuru() {
                       : '2px 2px 4px rgba(0, 0, 0, 0.5)',
                     transition: 'box-shadow 0.2s ease-in-out',
                   }}
+                  onClick={() => navigate(
+                    `${prefix}/kelas/${kelasId?.toUpperCase()}/pertemuan/lihat-presensi/presensi-form`
+                  )}
                   onMouseEnter={() => setInfoButtonHovering(true)}
                   onMouseLeave={() => setInfoButtonHovering(false)}
-                  onClick={() => navigate('/presensi-form')}
                 >
                   <img src={presensiButtonBlack} alt="Presensi" width="20" height="20" />
                   <span style={{ fontWeight: 'bold', fontSize: '14px' }}> Ubah </span>
@@ -234,4 +243,4 @@ function LihatPresensiGuru() {
   );
 }
 
-export default LihatPresensiGuru;
+export default LihatPresensi;

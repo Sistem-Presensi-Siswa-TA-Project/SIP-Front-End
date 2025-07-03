@@ -78,7 +78,7 @@ function DaftarKelasPiket() {
                                         namaKelas={`Kelas ${kelas}`}
                                         tahunAjar="202X/202X Ganjil"
                                         totalSiswa="XX"
-                                        to={`/kelas/${kelas.toUpperCase()}`}
+                                        to={`/piket/kelas/${kelas.toUpperCase()}`}
                                     />
                                 </div>
                             ))}

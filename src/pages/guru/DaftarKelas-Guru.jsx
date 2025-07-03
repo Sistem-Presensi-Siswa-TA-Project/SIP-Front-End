@@ -78,7 +78,7 @@ function DaftarKelasGuru() {
                                         namaKelas={`Kelas ${kelas}`}
                                         tahunAjar="202X/202X Ganjil"
                                         totalSiswa="XX"
-                                        to={'/pertemuan'}
+                                        to={`/guru/kelas/${kelas.toUpperCase()}/pertemuan`}
                                     />
                                 </div>
                             ))}

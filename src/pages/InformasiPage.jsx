@@ -60,11 +60,6 @@ function Informasi() {
 
                     {/* Informasi Akademik */}
                     <Card style={{ width: '100%', marginTop: '45px', padding: '30px' }}>
-                        {/* Title */}
-                        <h4 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '22px' }}> 
-                            Informasi
-                        </h4>
-
                         {/* Wrapper Tabel */}
                         <div 
                             className="table-responsive mx-auto" 

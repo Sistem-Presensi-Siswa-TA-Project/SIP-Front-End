@@ -1,8 +1,8 @@
 // Filename: ScanPresensi.jsx
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Header, Card, OnCam } from '../../components/Molekul.jsx';
-import { SuccessButton, SecondaryButton } from '../../components/Button.jsx';
+import { Header, Card, Camera } from '../../components/Molekul.jsx';
+import { CustomButton, SecondaryButton } from '../../components/Button.jsx';
 import { FormInput } from '../../components/Forms.jsx';
 import { iconList } from '../../data/iconData.js';
 
@@ -11,7 +11,7 @@ function ScanPresensi() {
     const camRef = useRef();
 
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
-    const [successButtonHovering, setSuccessButtonHovering] = useState(false);
+    const [customButtonHovering, setCustomButtonHovering] = useState(false);
     const [qrCodeHovering, setQRCodeHovering] = useState(false);
     const [teksHovering, setTeksHovering] = useState(false);
     const [cancelButtonHovering, setCancelButtonHovering] = useState(false);
@@ -138,7 +138,7 @@ function ScanPresensi() {
                                         boxShadow: '2px 2px 12px rgba(0, 0, 0, 0.4)'
                                     }}
                                 >
-                                    <OnCam ref={camRef} />
+                                    <Camera ref={camRef} />
 
                                     {/* Tombol Close */}
                                     <img 
@@ -241,7 +241,7 @@ function ScanPresensi() {
 
                         {/* Tombol Simpan */}
                         <div className="d-flex justify-content-end justify-content-md-center mt-4">
-                            <SuccessButton
+                            <CustomButton
                                 className="d-flex align-items-center justify-content-center"
                                 width="120px"
                                 height="45px"
@@ -250,18 +250,20 @@ function ScanPresensi() {
                                     padding: '8px 28px',
                                     fontWeight: 'bold',
                                     fontSize: '14px',
-                                    borderRadius: successButtonHovering ? '14px' : '12px',
-                                    backgroundColor: isButtonDisabled ? '#666' : '#33DB00',
+                                    borderRadius: customButtonHovering ? '14px' : '12px',
+                                    backgroundColor: isButtonDisabled 
+                                        ? '#666' 
+                                        : (customButtonHovering ? '#FFF' : '#33DB00'),
                                     borderColor: isButtonDisabled ? '#666' : '#33DB00',
-                                    color: 'white',
-                                    boxShadow: !isButtonDisabled && successButtonHovering
+                                    color: customButtonHovering ? '#33DB00' : 'white',
+                                    boxShadow: !isButtonDisabled && customButtonHovering
                                         ? '4px 4px 8px rgba(0, 0, 0, 0.5)'
-                                        : '3px 3px 6px rgba(0, 0, 0, 0.5)',
+                                        : '2px 2px 4px rgba(0, 0, 0, 0.5)',
                                     transition: 'box-shadow 0.2s ease-in-out',
                                     cursor: isButtonDisabled ? 'not-allowed' : 'pointer'
                                 }}
-                                onMouseEnter={() => !isButtonDisabled && setSuccessButtonHovering(true)}
-                                onMouseLeave={() => !isButtonDisabled && setSuccessButtonHovering(false)}
+                                onMouseEnter={() => !isButtonDisabled && setCustomButtonHovering(true)}
+                                onMouseLeave={() => !isButtonDisabled && setCustomButtonHovering(false)}
                                 onClick={() => {
                                     if (!isButtonDisabled) {
                                         // aksi simpan
@@ -270,7 +272,7 @@ function ScanPresensi() {
                                 }}
                             >
                                 SIMPAN
-                            </SuccessButton>
+                            </CustomButton>
                         </div>
                     </Card>
                 </div>

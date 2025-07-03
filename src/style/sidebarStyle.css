@@ -10,18 +10,14 @@
 .sidebar {
   background-color: #FFF;
   width: 260px;
-  height: 363px;
+  height: auto;
+  padding-bottom: 13px;
   transition: height 0.3s ease;
   box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.45);
   border-bottom-right-radius: 25px;
   padding-top: 28px;
   display: flex;
   flex-direction: column;
-}
-
-.sidebar-expanded {
-  height: 508px;
-  transition: height 0.1s ease;
 }
 
 .sidebar-menu {

@@ -1,6 +1,6 @@
 // Filename: PresensiForm.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card } from '../../components/Molekul.jsx';
 import { DangerButton, SecondaryButton, SuccessButton } from '../../components/Button.jsx';
@@ -8,11 +8,15 @@ import { handlePresensiChange } from '../../handlers/PresensiHandler.jsx';
 import { iconList } from '../../data/iconData.js';
 
 function PresensiForm() {
-    const navigate = useNavigate();
+    // State Hovering
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
     const [dangerButtonHovering, setDangerButtonHovering] = useState(false);
-
+    
+    // Navigasi Page
+    const navigate = useNavigate();
+    const { kelasId } = useParams();
+    
     const [presensiData, setPresensiData] = useState(
         // default semua "hadir"
         Array(20).fill('hadir')
@@ -98,7 +102,7 @@ function PresensiForm() {
                             {[
                                 ['Nama Guru', 'Mr. Sukiman Bin Sukijan'],
                                 ['Mata Pelajaran', 'Bahasa Indonesia'],
-                                ['Kelas', '7A'],
+                                ['Kelas', `${kelasId?.toUpperCase()}`],
                                 ['Jumlah Siswa', '20 siswa'],
                                 ['Tahun Ajaran', '2024/2025'],
                                 ['Pertemuan ke-', '2'],

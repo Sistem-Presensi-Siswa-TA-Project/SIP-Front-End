@@ -1,46 +1,55 @@
 // Filename: Molekul.jsx
 
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { iconList } from '../data/iconData.js';
 
 export const Header = ({ children='As User' }) => {
-  const logo = iconList.find((i) => i.label === 'Logo')?.src;
-  const navigate = useNavigate();
+    const logo = iconList.find((i) => i.label === 'Logo')?.src;
 
-  return (
-    <header className="header-bar animate-slide-down">
-      <div className="header-container">
-            <img src={logo} alt="Logo" className="header-logo" />
+    // Navigasi Page
+    const location = useLocation();
+    const prefix = location.pathname.startsWith('/admin') 
+        ? '/admin' : (location.pathname.startsWith('/guru') 
+        ? '/guru' : '/piket');
+    const navigate = useNavigate();
 
-            <h5
-                className="header-title"
-                onClick={() => navigate('/guru')}
-            >
-                SMP Plus Babussalam
-            </h5>
+    return (
+        <header className="header-bar animate-slide-down">
+        <div className="header-container">
+                <img src={logo} alt="Logo" className="header-logo" />
 
-            {/* Elemen children di sisi kanan */}
-            {children && (
-                <span style={{
-                    color: 'white',
-                    fontSize: '20px',
-                    fontWeight: 'bold',
-                    marginLeft: 'auto',
-                    marginRight: '30px',
-                }}>
-                    {children}
-                </span>
-            )}
-        </div>
-    </header>
-  );
+                <h5
+                    className="header-title"
+                    onClick={() => navigate(
+                        `${prefix}`
+                    )}
+                >
+                    SMP Plus Babussalam
+                </h5>
+
+                {/* Elemen children di sisi kanan */}
+                {children && (
+                    <span style={{
+                        color: 'white',
+                        fontSize: '20px',
+                        fontWeight: 'bold',
+                        marginLeft: 'auto',
+                        marginRight: '30px',
+                    }}>
+                        {children}
+                    </span>
+                )}
+            </div>
+        </header>
+    );
 };
 
 export const Sidebar = (props) => {
     const {
         onClose,
         pathMap: customPathMap = {},
+        sidebarCustomMenu = {},
     } = props;
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -48,17 +57,16 @@ export const Sidebar = (props) => {
     const [hoveredSubitem, setHoveredSubitem] = useState(null);
     const navigate = useNavigate();
 
-    const sidebarMenu = [
+    const sidebarMenu = sidebarCustomMenu.sidebarMenu || [
         { label: 'Minimize', icon: 'Back Icon Black' },
         { label: 'Beranda', icon: 'Dashboard Icon' },
         { label: 'Profil', icon: 'Profile Icon' },
         { label: 'Lihat Presensi', icon: 'Presensi Icon' },
         { label: 'Cetak Presensi', icon: 'Cetak Icon' },
-        { label: 'Jadwal', icon: 'Jadwal Icon' },
         { label: 'Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
     ];
 
-    const dropdownItems = [
+    const dropdownItems = sidebarCustomMenu.dropdownItems || [
         { label: 'Kontak', icon: 'Kontak Icon' },
         { label: 'Informasi', icon: 'Informasi Icon' },
         { label: 'Logout', icon: 'Logout Icon' },
@@ -84,7 +92,7 @@ export const Sidebar = (props) => {
     const arrowDownBlack = iconList.find((i) => i.label === 'Arrow Down Black')?.src;
 
     return (
-        <aside className={`sidebar animate-sidebar ${isDropdownOpen ? 'sidebar-expanded' : ''}`}>
+        <aside className='sidebar animate-sidebar'>
             <ul className="sidebar-menu">
                 {sidebarMenu.map((item, index) => {
                     const isHovered = hoveredItem === item.label;
@@ -271,7 +279,7 @@ export const CardPresensi = (props) => {
     );
 };
 
-export const OnCam = forwardRef((props, ref) => {
+export const Camera = forwardRef((props, ref) => {
     const videoRef = useRef();
     const streamRef = useRef();
     const [facingMode, setFacingMode] = useState('environment'); // default kamera belakang
