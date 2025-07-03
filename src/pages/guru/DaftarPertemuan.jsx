@@ -139,7 +139,10 @@ function DaftarPertemuan() {
                                                 </div>
                                             </td>
 
-                                            <td className="d-flex justify-content-end align-items-center" style={{ textAlign: 'right', padding: '20px 20px 14px 14px' }}>
+                                            <td 
+                                                className="d-flex justify-content-end align-items-center" 
+                                                style={{ textAlign: 'right', padding: '20px 20px 14px 14px' }}
+                                            >
                                                 {/* Tombol Lihat */}
                                                 <InfoButton
                                                     height="35px"

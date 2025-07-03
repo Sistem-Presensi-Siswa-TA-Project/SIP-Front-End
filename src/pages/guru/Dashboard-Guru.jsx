@@ -119,7 +119,7 @@ function DashboardGuru() {
                 Beranda: '/guru',
                 Profil: '/guru/profile',
                 'Lihat Presensi': '/guru/kelas',
-                'Cetak Presensi': '/guru/kelas',
+                'Cetak Presensi': '/guru/cetak-presensi',
                 Kontak: '/guru/kontak',
                 Informasi: '/guru/informasi',
               }}

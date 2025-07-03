@@ -19,6 +19,8 @@ import LihatPresensi from '../pages/guru/LihatPresensi.jsx';
 import PresensiForm from '../pages/guru/PresensiForm.jsx';
 import DaftarKelasGuru from '../pages/guru/DaftarKelas-Guru.jsx';
 import DaftarPertemuan from '../pages/guru/DaftarPertemuan.jsx';
+import CetakPresensi from '../pages/guru/CetakPresensi.jsx';
+import OpsiCetakPresensi from '../pages/guru/OpsiCetakPresensi.jsx';
 
 // Piket Page
 import Piket from '../pages/piket/Dashboard-Piket.jsx';
@@ -57,6 +59,9 @@ function AppRoutes() {
       <Route path = "/guru/kelas/:kelasId/pertemuan" element = {<DaftarPertemuan />} />
       <Route path = "/guru/kelas/:kelasId/pertemuan/lihat-presensi" element = {<LihatPresensi />} />
       <Route path = "/guru/kelas/:kelasId/pertemuan/lihat-presensi/presensi-form" element = {<PresensiForm />} />
+
+      <Route path = "/guru/cetak-presensi" element = {<CetakPresensi />} />
+      <Route path = "/guru/cetak-presensi/kelas/:kelasId" element = {<OpsiCetakPresensi />} />
 
       {/* Piket Route */}
       <Route path = "/piket" element = {<Piket />} />

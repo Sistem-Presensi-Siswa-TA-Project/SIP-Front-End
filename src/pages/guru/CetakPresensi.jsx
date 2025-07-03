@@ -1,11 +1,11 @@
-// Filename: DaftarKelas-Piket.jsx
+// Filename: CetakPresensi.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header, Card, CardPresensi } from '../../components/Molekul.jsx';
 import { SecondaryButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
 
-function DaftarKelasPiket() {
+function CetakPresensi() {
     const navigate = useNavigate();
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
 
@@ -78,8 +78,8 @@ function DaftarKelasPiket() {
                                         namaKelas={`Kelas ${kelas}`}
                                         tahunAjar="202X/202X Ganjil"
                                         totalSiswa="XX"
-                                        children="Lihat Detail"
-                                        to={`/piket/kelas/${kelas.toUpperCase()}`}
+                                        children="Cetak Presensi"
+                                        to={`/guru/cetak-presensi/kelas/${kelas.toUpperCase()}`}
                                     />
                                 </div>
                             ))}
@@ -97,4 +97,4 @@ function DaftarKelasPiket() {
     );
 }
 
-export default DaftarKelasPiket;
+export default CetakPresensi;

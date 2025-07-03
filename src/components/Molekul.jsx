@@ -246,7 +246,8 @@ export const CardPresensi = (props) => {
     const {
         namaKelas, 
         tahunAjar, 
-        totalSiswa, 
+        totalSiswa,
+        children,
         to,
     } = props;
 
@@ -272,7 +273,7 @@ export const CardPresensi = (props) => {
 
             {/* Footer */}
             <div className="card-presensi-footer" onClick={() => navigate(to)}>
-                <span className="fw-bold"> Lihat Detail </span>
+                <span className="fw-bold"> {children} </span>
                 <img src={arrowRightIcon} alt="Lihat Detail" width="20" height="20" className="ms-2" />
             </div>
         </div>
