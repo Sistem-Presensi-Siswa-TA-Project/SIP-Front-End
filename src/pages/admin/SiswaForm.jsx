@@ -1,12 +1,12 @@
-// Filename: ProfileForm.jsx
+// Filename: SiswaForm.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Header, Card } from '../components/Molekul.jsx';
-import { SuccessButton, SecondaryButton } from '../components/Button.jsx';
-import { iconList } from '../data/iconData.js';
-import { FormInput } from '../components/Forms.jsx'
+import { Header, Card } from '../../components/Molekul.jsx';
+import { SuccessButton, SecondaryButton } from '../../components/Button.jsx';
+import { FormInput } from '../../components/Forms.jsx'
+import { iconList } from '../../data/iconData.js';
 
-function ProfileForm() {
+function SiswaForm() {
     const navigate = useNavigate();
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
@@ -15,32 +15,19 @@ function ProfileForm() {
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
 
     const [formData, setFormData] = useState({
-        namaLengkap: '',
-        email: '',
-        alamatDomisili: '',
+        nisn: '',
+        nama: '',
+        kelas: '',
         jenisKelamin: '',
-        kewarganegaraan: '',
-        desa: '',
         tempatLahir: '',
         tanggalLahir: '',
-        rt: '',
-        rw: '',
-        nip: '',
-        kecamatan: '',
-        agama: '',
-        mapel: '',
-        kabupaten: '',
-        nik: '',
-        status: '',
-        provinsi: '',
         hp: '',
-        pendidikan: '',
-        kodePos: '',
+        kelasGabungan: '',
     });
 
     return (
         <div>
-        <Header> Form Presensi </Header>
+        <Header> Form Siswa </Header>
 
         <main
             className="d-flex justify-content-center flex-wrap"
@@ -91,51 +78,27 @@ function ProfileForm() {
                         padding: '30px',
                     }}
                 >
-                    <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '25px' }}> DATA DIRI </h3>
+                    <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '25px' }}> 
+                        DATA SISWA 
+                    </h3>
 
                     <div className="row" style={{ rowGap: '16px' }}>
                         {[
-                            ['Nama Lengkap', 'namaLengkap'],
-                            ['Email', 'email'],
-                            ['Alamat Lengkap', 'alamat'],
-                            ['RT', 'rt'],
-                            ['RW', 'rw'],
+                            ['Nomor Induk Siswa Nasional (NISN)', 'nisn'],
+                            ['Nama Lengkap', 'nama'],
+                            ['Kelas', 'kelas'],
                             ['Jenis Kelamin', 'jenisKelamin'],
-                            ['Kewarganegaraan', 'kewarganegaraan'],
-                            ['Desa/Kelurahan', 'desa'],
                             ['Tempat Lahir', 'tempatLahir'],
                             ['Tanggal Lahir', 'tanggalLahir'],
-                            ['NIP/NISN', 'nomorInduk'],
-                            ['Kecamatan', 'kecamatan'],
-                            ['Agama', 'agama'],
-                            ['Mata Pelajaran', 'mapel'],
-                            ['Kabupaten/Kota', 'kabupaten'],
-                            ['Nomor Induk Kependudukan (NIK)', 'nik'],
-                            ['Status', 'status'],
-                            ['Provinsi', 'provinsi'],
                             ['Nomor Handphone', 'hp'],
-                            ['Pendidikan', 'pendidikan'],
-                            ['Kode Pos', 'kodePos'],
+                            ['Kelas Gabungan', 'kelasGabungan'],
                         ].map(([label, name], index) => {
                             const isRequired = [
-                                'namaLengkap', 
-                                'agama', 
-                                'nomorInduk', 
-                                'kewarganegaraan', 
-                                'alamat', 
-                                'email', 
+                                'nisn', 
+                                'nama', 
+                                'kelas', 
                                 'jenisKelamin', 
-                                'tempatLahir', 
-                                'tanggalLahir', 
-                                'nik', 
-                                'hp',
-                                'desa',
-                                'kecamatan',
-                                'kabupaten',
-                                'provinsi',
                             ].includes(name);
-
-                            const isReadOnly = ['mapel', 'nomorInduk', 'namaLengkap'].includes(name);
                             
                             return (
                                 <div className="col-md-4 col-sm-12" key={index}>
@@ -143,9 +106,7 @@ function ProfileForm() {
                                         label={label}
                                         name={name}
                                         type={
-                                            name === 'email'
-                                                ? 'email'
-                                                : name === 'tanggalLahir'
+                                            name === 'tanggalLahir'
                                                 ? 'date'
                                                 : name === 'hp'
                                                 ? 'tel'
@@ -153,7 +114,6 @@ function ProfileForm() {
                                         }
                                         value={formData[name]}
                                         required={isRequired}
-                                        readOnly={isReadOnly}
                                         placeholder={label}
                                         onChange={(e) =>
                                             setFormData((prev) => ({ ...prev, [name]: e.target.value }))
@@ -201,4 +161,4 @@ function ProfileForm() {
     );
 }
 
-export default ProfileForm;
+export default SiswaForm;

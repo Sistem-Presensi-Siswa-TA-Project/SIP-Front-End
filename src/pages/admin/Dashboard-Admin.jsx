@@ -1,10 +1,12 @@
-// Filename: Dashboard-Mapel.jsx
+// Filename: Dashboard-Admin.jsx
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Header, Sidebar, Card } from '../../components/Molekul.jsx';
 import { LightButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
 
 function DashboardAdmin() {
+  const navigate = useNavigate();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -15,6 +17,11 @@ function DashboardAdmin() {
   const userIcon = iconList.find((i) => i.label === 'User Icon')?.src;
   const emailIcon = iconList.find((i) => i.label === 'Email Icon')?.src;
   const phoneIcon = iconList.find((i) => i.label === 'Phone Icon')?.src;
+  const presensiMapel = iconList.find((i) => i.label === 'Presensi Mapel')?.src;
+  const scanPresensi = iconList.find((i) => i.label === 'Scan Presensi')?.src;
+  const menuOpenBlack = iconList.find((i) => i.label === 'Menu Open Black')?.src;
+  const menuOpenWhite = iconList.find((i) => i.label === 'Menu Open White')?.src;
+  const arrowRightBlack = iconList.find((i) => i.label === 'Arrow Right Black')?.src;
 
   const handleToggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -39,17 +46,83 @@ function DashboardAdmin() {
       >
         {/* Sidebar Overlay for Mobile and Tablet */}
         {sidebarOpen && (
-          <div className="sidebar-overlay d-lg-none" onClick={handleToggleSidebar}>
-            <div onClick={(e) => e.stopPropagation()}>
-              <Sidebar onClose={handleToggleSidebar} />
+          <>
+            {/* Overlay yang menutupi seluruh layar, tidak bisa di klik */}
+            <div className="sidebar-overlay d-lg-none"/>
+
+            {/* Sidebar tetap bisa di klik */}
+            <div
+              className="d-lg-none"
+              style={{ position: 'fixed', left: 0, zIndex: 1000 }}
+            >
+              <Sidebar
+                onClose={handleToggleSidebar}
+                
+                sidebarCustomMenu={{
+                  sidebarMenu: [
+                    { label: 'Minimize', icon: 'Back Icon Black' },
+                    { label: 'Beranda', icon: 'Dashboard Icon' },
+                    { label: 'Profil', icon: 'Profile Icon' },
+                    { label: 'Hak Akses Pengguna', icon: 'Presensi Icon' },
+                    { label: 'Kelola Data Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
+                    { label: 'Logout', icon: 'Logout Icon Black' },
+                  ],
+                  dropdownItems: [
+                    { label: 'Data Siswa', icon: 'Kontak Icon' },
+                    { label: 'Data Guru', icon: 'Informasi Icon' },
+                    { label: 'Data Mata Pelajaran', icon: 'Informasi Icon' },
+                    { label: 'Data Presensi', icon: 'Informasi Icon' },
+                    { label: 'Jadwal', icon: 'Jadwal Icon Gray' },
+                  ]
+                }}
+
+                pathMap={{
+                  Beranda: '/piket',
+                  Profil: '/piket/profile',
+                  'Cari Presensi': '/piket/cari-presensi',
+                  Kontak: '/piket/kontak',
+                  Informasi: '/piket/informasi',
+                }}
+              />
             </div>
-          </div>
+          </>
         )}
 
         {/* Sidebar for Desktop only */}
-        {!sidebarOpen && (
+        {sidebarOpen && (
           <div className="d-none d-lg-block" style={{ flexShrink: 0 }}>
-            <Sidebar onClose={handleToggleSidebar} />
+            <Sidebar
+              onClose={handleToggleSidebar}
+
+              sidebarCustomMenu={{
+                sidebarMenu: [
+                    { label: 'Minimize', icon: 'Back Icon Black' },
+                    { label: 'Beranda', icon: 'Dashboard Icon' },
+                    { label: 'Profil', icon: 'Profile Icon' },
+                    { label: 'Hak Akses Pengguna', icon: 'Presensi Icon' },
+                    { label: 'Kelola Data Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
+                    { label: 'Logout', icon: 'Logout Icon Black' },
+                  ],
+                  dropdownItems: [
+                    { label: 'Data Siswa', icon: 'Kontak Icon' },
+                    { label: 'Data Guru', icon: 'Informasi Icon' },
+                    { label: 'Data Mata Pelajaran', icon: 'Informasi Icon' },
+                    { label: 'Data Presensi', icon: 'Informasi Icon' },
+                    { label: 'Jadwal', icon: 'Jadwal Icon Gray' },
+                  ]
+              }}
+              
+              pathMap={{
+                Beranda: '/admin',
+                Profil: '/admin/profile',
+                'Hak Akses Pengguna': '/admin/data/pengguna',
+                'Data Siswa': '/admin/data/siswa',
+                'Data Guru': '/admin/data/guru',
+                'Data Mata Pelajaran': '/admin/data/mapel',
+                'Data Presensi': '/admin/data/presensi',
+                'Jadwal': '/admin/data/jadwal',
+              }}
+            />
           </div>
         )}
 
@@ -58,7 +131,7 @@ function DashboardAdmin() {
           className="d-flex flex-column align-items-center"
           style={{ flex: 6, gap: '20px', paddingTop: '35px', width: '100%' }}
         >
-          {/* Kolom Atas */}
+          {/* Kolom Atas (Identitas User) */}
           <Card width="100%" height="auto" style={{ maxWidth: '900px', padding: '16px' }}>
             <div className="d-flex justify-content-between align-items-center w-100">
               {/* Icon User */}
@@ -100,122 +173,218 @@ function DashboardAdmin() {
               >
 
                 <img
-                  src={isHovering ? menuIconWhite : menuIconBlack}
+                  src={
+                    sidebarOpen
+                      ? (isHovering ? menuOpenWhite : menuOpenBlack)
+                      : (isHovering ? menuIconWhite : menuIconBlack)
+                  }
                   alt="Menu"
                   width="50"
                   height="50"
-                />
-                
+                />      
               </LightButton>
             </div>
           </Card>
 
-          {/* Kolom Bawah */}
+          {/* Kolom Tengah */}
           <div className="d-flex flex-column flex-lg-row custom-container gap-5" style={{ marginTop: '20px', width: '900px' }}>
-            {/* Kolom Kiri Bawah Tengah */}
-            <Card className="w-100 mx-auto" style={{ width: '900px', height: '540px', padding: '16px' }}>
-              
+            {/* Kolom Kiri Bawah Tengah (Waktu & Tanggal) */}
+            <Card className="w-100 mx-auto" style={{ width: '600px', height: '390px', display: 'flex', flexDirection: 'column' }}>
+              {/* Bagian Atas: Tanggal */}
+              <div>
+                <p style={{ margin: '20px 0 15px 20px', fontSize: '22px' }}>
+                  <strong>
+                    {
+                      new Date().toLocaleDateString('id-ID', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })
+                    }
+                  </strong>
+                </p>
+                <hr style={{ margin: '0 0 0 0', height: '4px' }} />
+              </div>
+
+              {/* Bagian Tengah: Jam */}
+              <div 
+                style={{
+                  flexGrow: 1,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <h1 className="custom-clock" style={{ fontSize: '93px', margin: 0, color: '#000' }}>
+                  {
+                    currentTime.toLocaleTimeString('en-GB', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                      second: '2-digit',
+                      hour12: false,
+                    })
+                  }
+                </h1>
+              </div>
             </Card>
 
             {/* Kolom Kanan Bawah tengah */}
-            <div className="custom-container d-flex flex-column align-items-end" style={{ gap: '50px', width: '500px' }}>
-              {/* Waktu & Tanggal */}
-              <Card className="w-100 card-kecil" style={{ height: '220px' }}>
-                <p style={{ margin: '20px 0 15px 20px' }}> 
-                  <strong> 
+            <div className="custom-container d-flex flex-column align-items-center justify-content-center" style={{ gap: '50px', width: '700px' }}>
+              {/* Scan Presensi */}
+              <Card 
+                className="w-100 card-kecil" 
+                style={{ height: '160px', position: 'relative' }} 
+                onClick={() => navigate('/admin/data/siswa')}
+              >
+                <div style={
                     {
-                      new Date().toLocaleDateString('id-ID', {
-                        weekday: 'long',   // Hari
-                        year: 'numeric',   // Tahun
-                        month: 'long',     // Bulan
-                        day: 'numeric',    // Tanggal 
-                      })
-                    } 
-                  </strong> 
-                </p>
-
-                <hr style={{ margin: '0 0 28px 0' }}/>
-
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <h1 style={{ fontSize: '56px', marginTop: '12px' }}>
-                    {
-                      currentTime.toLocaleTimeString('en-GB', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        second: '2-digit',
-                        hour12: false,
-                      })
+                      height: '100%',
+                      display: 'flex',
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center'
                     }
-                  </h1>
+                  }
+                >
+                  <img 
+                    src={scanPresensi} 
+                    alt="scan presensi" 
+                    width="80px" 
+                    height="80px"
+                    style={{ marginRight: '15px' }} 
+                  />
+                  <span style={{ fontSize: '25px', fontWeight: 'bold', color: "#000" }}> Kelola Data Siswa </span>
                 </div>
+
+                {/* Ikon panah kanan */}
+                <img
+                  src={arrowRightBlack}
+                  alt="arrow"
+                  width="35"
+                  height="35"
+                  style={{
+                    position: 'absolute',
+                    bottom: '10px',
+                    right: '20px'
+                  }}
+                />
               </Card>
 
-              {/* Pengumuman */}
-              <Card className="w-100 card-kecil" style={{ height: '270px' }}>
-                <p style={{ margin: '20px 0 15px 20px' }}> 
-                  <strong> 
-                    Pengumuman
-                  </strong> 
-                </p>
+              {/* Presensi Mata Pelajaran */}
+              <Card 
+                className="w-100 card-kecil" 
+                style={{ height: '180px', position: 'relative' }}
+                onClick={() => navigate('/admin/data/guru')}
+              >
+                <div style={{
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  paddingBottom: '15px',
+                  alignItems: 'center'
+                }}>
+                  <img 
+                    src={presensiMapel} 
+                    alt="presensi mapel" 
+                    width="80px" 
+                    height="80px"
+                    style={{ marginRight: '15px' }} 
+                  />
 
-                <hr style={{ margin: '0 0 24px 0' }}/> 
-
-                <div 
-                  className="d-flex flex-column" 
-                  style={{ 
-                    textAlign: 'justify', 
-                    margin: '0 20px 0 20px', 
-                    fontSize: '12px' 
-                  }}
-                >
-                  {/* Informasi Pengumuman */}
-                  <p>
-                    Pastikan untuk memeriksa jadwal pelajaran secara berkala. 
-                    Jika ada perubahan, akan diinformasikan melalui email. 
-                    Untuk pertanyaan lebih lanjut, silahkan hubungi sekolah
-                  </p>
-
-                  {/* Email Sekolah */}
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img 
-                      src={emailIcon} 
-                      alt="email" 
-                      width="20px" 
-                      height="20px"
-                      style={
-                        {
-                          marginRight: '5px'
-                        }
-                      } 
-                    />
-
-                    <span> smpplus@babussalam.ac.id </span>
-                  </div>
-                  
-                  <br />
-
-                  {/* Kontak Sekolah */}
-                  <div style={{ display: 'flex', alignItems: 'center' }}>
-                    <img 
-                      src={phoneIcon} 
-                      alt="phone" 
-                      width="20px" 
-                      height="20px"
-                      style={
-                        {
-                          marginRight: '5px'
-                        }
-                      } 
-                    />
-
-                    <span> +62-812-4567-8910 </span>
+                  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: '4px' }}>
+                    <span style={{ fontSize: '25px', fontWeight: 'bold', color: "#000" }}> Kelola Data Guru </span>
                   </div>
                 </div>
+
+                {/* Ikon panah kanan */}
+                <img
+                  src={arrowRightBlack}
+                  alt="arrow"
+                  width="35"
+                  height="35"
+                  style={{
+                    position: 'absolute',
+                    bottom: '10px',
+                    right: '20px'
+                  }}
+                />
               </Card>
             </div>
           </div>
+
+          {/* Kolom Bawah (Pengumuman) */}
+          <Card width="100%" height="auto" style={{ maxWidth: '900px', marginTop: '20px' }}>
+            <p style={{ margin: '20px 0 15px 30px', fontSize: '22px' }}> 
+              <strong> 
+                Pengumuman
+              </strong> 
+            </p>
+
+            <hr style={{ margin: '0 0 20px 0' }}/> 
+
+            <div 
+              className="paragraf-flex-container"
+              style={{ 
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                margin: '0 60px 35px 30px', 
+                fontSize: '15px', 
+                gap: '80px',
+              }}
+            >
+              {/* Informasi Pengumuman */}
+              <p style={{ flex: 1, textAlign: 'justify', marginBottom: 1 }}>
+                Pastikan untuk memeriksa jadwal pelajaran secara berkala. 
+                Jika ada perubahan, akan diinformasikan melalui email. 
+                Pertanyaan lebih lanjut, silakan hubungi kontak yang tersedia.
+              </p>
+
+              {/* Kontak Sekolah */}
+              <div style={{ 
+                  display: 'flex', 
+                  flexDirection: 'column', 
+                  justifyContent: 'center', 
+                  gap: '10px',
+                  background: 'none',
+                }}
+              >
+                {/* Email */}
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <img 
+                    src={emailIcon} 
+                    alt="email" 
+                    width="20px" 
+                    height="20px" 
+                    style={{ marginRight: '6px' }} 
+                  />
+                  <span> smpplus@babussalam.ac.id </span>
+                </div>
+
+                {/* Telepon */}
+                <div style={{ display: 'flex', alignItems: 'center' }}>
+                  <img 
+                    src={phoneIcon} 
+                    alt="phone" 
+                    width="20px" 
+                    height="20px" 
+                    style={{ marginRight: '6px' }} 
+                  />
+                  <span> +62-812-4567-8910 </span>
+                </div>
+              </div>
+            </div>
+          </Card>
         </div>
       </main>
+
+      <footer>
+        <small style={{ fontSize: '14px', color: '#808080' }}>
+          Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
+        </small>
+      </footer>
     </div>
   );
 }

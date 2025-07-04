@@ -155,6 +155,23 @@ footer {
 
 /* Ukuran Mobile Sedang -> Kecil */
 @media (max-width: 560px) {
+  h1 { font-size: 2rem; }     /* Sama dengan h2 mobile */
+  h2 { font-size: 1.5rem; }   /* Sama dengan h3 mobile */
+  h3 { font-size: 1.25rem; }  /* Sama dengan h4 mobile */
+  h4 { font-size: 1rem; }     /* Sama dengan h5 mobile */
+  h5 { font-size: 0.85rem; }  /* Sama dengan h6 mobile */
+  h6 { font-size: 0.75rem; }  /* Semakin kecil */
+
+  .btn-success {
+    /* Mengurangi ukuran semua property button sebesar 15% */
+    transform: scale(0.85) !important;
+  }
+
+  .btn-danger {
+    /* Mengurangi ukuran semua property button sebesar 15% */
+    transform: scale(0.85) !important;
+  }
+
   .header-title {
     font-size: 20px !important;
   }

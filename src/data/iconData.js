@@ -2,6 +2,8 @@
 
 // Icon dan image from assets
 import AddProfile from "../assets/add-profile.svg";
+import AddWhite from "../assets/add-white.svg";
+import AddGreen from "../assets/add-green.svg";
 import AlpaIcon from "../assets/alpa-icon.svg";
 import ArrowDownBlack from "../assets/bottomArrow-black.svg";
 import ArrowDownWhite from "../assets/bottomArrow-white.svg";
@@ -15,13 +17,15 @@ import CancelIconA from "../assets/cancelIconA.svg";
 import CancelIconB from "../assets/cancelIconB.svg";
 import CetakIcon from "../assets/cetak-black.svg";
 import DashboardIcon from "../assets/home-black.svg";
+import DeleteIcon from "../assets/delete-icon.svg";
 import EmailIcon from "../assets/EmailIcon.svg";
 import HadirIcon from "../assets/hadir-icon.svg";
 import IconEye from "../assets/visibility.svg";
 import IconEyeOff from "../assets/visibility-off.svg";
 import InformasiIcon from "../assets/information-black.svg";
 import IzinIcon from "../assets/izin-icon.svg";
-import JadwalIcon from "../assets/jadwal-black.svg";
+import JadwalIconBlack from "../assets/jadwal-black.svg";
+import JadwalIconGray from "../assets/jadwal-gray.svg";
 import KontakIcon from "../assets/contact-black.svg";
 import LeftArrowBlack from "../assets/leftArrow-black.svg";
 import LeftArrowWhite from "../assets/leftArrow-white.svg";
@@ -37,6 +41,7 @@ import MenuIconBlack from "../assets/menu-black.svg";
 import MenuIconWhite from "../assets/menu-white.svg";
 import MenuOpenBlack from "../assets/menuOpen-black.svg";
 import MenuOpenWhite from "../assets/menuOpen-white.svg";
+import PencilIcon from "../assets/pencil-icon.svg";
 import PhoneIcon from "../assets/phoneIcon.svg";
 import PresensiButtonBlack from "../assets/presensiButton-black.svg";
 import PresensiButtonWhite from "../assets/presensiButton-white.svg";
@@ -70,7 +75,7 @@ export const iconList = [
   { id: 16, label: "Hadir Icon", src: HadirIcon },
   { id: 17, label: "Informasi Icon", src: InformasiIcon },
   { id: 18, label: "Izin Icon", src: IzinIcon },
-  { id: 19, label: "Jadwal Icon", src: JadwalIcon },
+  { id: 19, label: "Jadwal Icon Black", src: JadwalIconBlack },
   { id: 20, label: "Kontak Icon", src: KontakIcon },
   { id: 21, label: "Left Arrow Black", src: LeftArrowBlack },
   { id: 22, label: "Left Arrow White", src: LeftArrowWhite },
@@ -101,4 +106,9 @@ export const iconList = [
   { id: 47, label: "Cancel Icon A", src: CancelIconA },
   { id: 48, label: "Cancel Icon B", src: CancelIconB },
   { id: 49, label: "Swap Camera", src: SwapCamera },
+  { id: 50, label: "Jadwal Icon Gray", src: JadwalIconGray },
+  { id: 51, label: "Add White", src: AddWhite},
+  { id: 52, label: "Add Green", src: AddGreen },
+  { id: 53, label: "Pencil Icon", src: PencilIcon },
+  { id: 54, label: "Delete Icon", src: DeleteIcon },
 ];

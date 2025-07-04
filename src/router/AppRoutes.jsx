@@ -12,6 +12,10 @@ import NotFound from '../pages/NotFoundPage.jsx';
 
 // Admin Page
 import Admin from '../pages/admin/Dashboard-Admin.jsx';
+import DataSiswa from '../pages/admin/DataSiswa.jsx';
+import SiswaForm from '../pages/admin/SiswaForm.jsx';
+import DataGuru from '../pages/admin/DataGuru.jsx';
+import GuruForm from '../pages/admin/GuruForm.jsx';
 
 // Guru Page
 import Guru from '../pages/guru/Dashboard-Guru.jsx';
@@ -46,6 +50,12 @@ function AppRoutes() {
       <Route path = "/admin/ubah-password" element = {<UbahPassword />} />
       <Route path = "/admin/kontak" element = {<Kontak />} />
       <Route path = "/admin/informasi" element = {<Informasi />} />
+
+      <Route path = "/admin/data/siswa" element = {<DataSiswa />} />
+      <Route path = "/admin/data/siswa/form" element = {<SiswaForm />} />
+      
+      <Route path = "/admin/data/guru" element = {<DataGuru />} />
+      <Route path = "/admin/data/guru/form" element = {<GuruForm />} />
 
       {/* Guru Route */}
       <Route path = "/guru" element = {<Guru />} />

@@ -195,7 +195,7 @@ function PresensiForm() {
                         </div>
                         
                         {/* Wrap Button Simpan & Reset */}
-                        <div className="d-flex flex-row justify-content-end gap-4">
+                        <div className="d-flex flex-row justify-content-center justify-content-md-end gap-4">
                             {/* Tombol Reset */}
                             <div className="d-flex justify-content-end mt-4">
                                 <DangerButton

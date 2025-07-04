@@ -22,6 +22,8 @@ function DaftarPertemuan() {
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
     const presensiButtonBlack = iconList.find((i) => i.label === 'Presensi Button Black')?.src;
+    const addWhite = iconList.find((i) => i.label === 'Add White')?.src;
+    const addGreen = iconList.find((i) => i.label === 'Add Green')?.src;
 
     // Dummy data pertemuan
     const daftarPertemuan = Array(10).fill({
@@ -82,7 +84,7 @@ function DaftarPertemuan() {
                         </h3>
 
                         {/* Tombol Simpan */}
-                        <div className="d-flex justify-content-start justify-content-md-end" style={{ marginRight: '5px' }}>
+                        <div className="d-flex justify-content-end" style={{ marginRight: '5px' }}>
                             <SuccessButton
                                 className="d-flex align-items-center justify-content-center"
                                 width="200px"
@@ -100,7 +102,14 @@ function DaftarPertemuan() {
                                 onMouseEnter={() => setSuccessButtonHovering(true)}
                                 onMouseLeave={() => setSuccessButtonHovering(false)}
                             >
-                                + Tambah Presensi
+                                <img 
+                                    src={successButtonHovering ? addGreen : addWhite} 
+                                    alt="Presensi" 
+                                    width="20" 
+                                    height="20" 
+                                />
+
+                                Tambah Presensi
                             </SuccessButton>
                         </div>
 
