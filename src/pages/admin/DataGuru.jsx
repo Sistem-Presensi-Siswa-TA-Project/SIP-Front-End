@@ -35,7 +35,7 @@ function DataGuru() {
 
     return (
         <div>
-            <Header> Data Guru</Header>
+            <Header> Data Guru </Header>
 
             <main
                 className="d-flex justify-content-center flex-wrap"
@@ -84,12 +84,12 @@ function DataGuru() {
                             DATA GURU
                         </h3>
 
-                        {/* Tombol Tambah Data Siswa */}
+                        {/* Tombol Tambah Data Guru */}
                         <div className="d-flex justify-content-end" style={{ marginRight: '5px' }}>
                             <SuccessButton
                                 className="d-flex align-items-center justify-content-center"
                                 height="43px"
-                                width="187px"
+                                width="180px"
                                 style={{
                                     padding: '8px 28px',
                                     fontWeight: 'bold',
@@ -110,10 +110,10 @@ function DataGuru() {
                                     src={successButtonHovering ? addGreen : addWhite} 
                                     alt="Presensi" 
                                     width="20" 
-                                    height="20" 
+                                    height="20"
                                 />
 
-                                Tambah Siswa
+                                Tambah Data
                             </SuccessButton>
                         </div>
 

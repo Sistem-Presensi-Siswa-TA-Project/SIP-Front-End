@@ -27,6 +27,7 @@ function ScanPresensi() {
 
     const [formData, setFormData] = useState({
         waktu: '',
+        nisn: '',
         nama: '',
         kelas: '',
         ket: '',
@@ -202,13 +203,14 @@ function ScanPresensi() {
                             style={{ marginTop: '5px' }}
                         >
                             {[
-                                ['', 'Waktu', 'waktu'],
+                                ['', 'Waktu Presensi', 'waktu'],
+                                ['', 'NISN', 'nisn'],
                                 ['', 'Nama Siswa', 'nama'],
                                 ['', 'Kelas', 'kelas'],
                                 ['', 'Keterangan Presensi', 'ket'],
                             ].map(([label, placeholder, name], index) => {
     
-                                const isReadOnly = ['waktu', 'nama', 'kelas'].includes(name);
+                                const isReadOnly = ['waktu', 'nisn', 'nama', 'kelas'].includes(name);
                                 
                                 return (
                                     <div style={{ maxWidth: '650px', width: '100%' }} key={index}>

@@ -1,4 +1,4 @@
-// Filename: DataSiswa.jsx
+// Filename: DataJadwal.jsx
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
@@ -6,7 +6,7 @@ import { Header, Card } from '../../components/Molekul.jsx';
 import { SecondaryButton, SuccessButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
 
-function DataSiswa() {
+function DataJadwal() {
     // State Hovering
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
@@ -35,7 +35,7 @@ function DataSiswa() {
 
     return (
         <div>
-            <Header> Data Siswa </Header>
+            <Header> Data Jadwal </Header>
 
             <main
                 className="d-flex justify-content-center flex-wrap"
@@ -81,10 +81,10 @@ function DataSiswa() {
                     <Card style={{ width: '100%', marginTop: '45px', padding: '30px' }}>
                         {/* Title */}
                         <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '22px' }}> 
-                            DATA SISWA
+                            DATA JADWAL
                         </h3>
 
-                        {/* Tombol Tambah Data Siswa */}
+                        {/* Tombol Tambah Data Guru */}
                         <div className="d-flex justify-content-end" style={{ marginRight: '5px' }}>
                             <SuccessButton
                                 className="d-flex align-items-center justify-content-center"
@@ -101,7 +101,7 @@ function DataSiswa() {
                                     transition: 'box-shadow 0.2s ease-in-out',
                                 }}
                                 onClick={() => navigate(
-                                    `${prefix}/data/siswa/form`
+                                    `${prefix}/data/jadwal/form`
                                 )}
                                 onMouseEnter={() => setSuccessButtonHovering(true)}
                                 onMouseLeave={() => setSuccessButtonHovering(false)}
@@ -110,7 +110,7 @@ function DataSiswa() {
                                     src={successButtonHovering ? addGreen : addWhite} 
                                     alt="Presensi" 
                                     width="20" 
-                                    height="20" 
+                                    height="20"
                                 />
 
                                 Tambah Data
@@ -130,10 +130,11 @@ function DataSiswa() {
                                 <thead>
                                     <tr>
                                         <th className="border-right" style={{ padding: '16px' }}> No. </th>
-                                        <th style={{ padding: '16px' }}> NISN </th>
-                                        <th style={{ padding: '16px' }}> Nama Siswa </th>
+                                        <th style={{ padding: '16px' }}> Kode Mapel </th>
+                                        <th style={{ padding: '16px' }}> NIP </th>
+                                        <th style={{ padding: '16px' }}> Hari </th>
+                                        <th style={{ padding: '16px' }}> Waktu </th>
                                         <th style={{ padding: '16px' }}> Kelas </th>
-                                        <th style={{ padding: '16px' }}> Kelas Gabungan </th>
                                         <th style={{ padding: '16px' }}> Aksi </th>
                                     </tr>
                                 </thead>
@@ -142,10 +143,11 @@ function DataSiswa() {
                                     {[...Array(20)].map((_, i) => (
                                         <tr key={i}>
                                             <td className="border-right" style={{ padding: '14px' }}> {i+1}. </td>
-                                            <td style={{ padding: '14px' }}> 20242025 </td>
-                                            <td style={{ padding: '14px', textAlign: 'left' }}> Nama Siswa ABCDEFGH IJKLMNO </td>
-                                            <td style={{ padding: '14px' }}> 8C </td>
-                                            <td style={{ padding: '14px' }}> Al-Qur'an A </td>
+                                            <td style={{ padding: '14px' }}> BI1234 </td>
+                                            <td style={{ padding: '14px' }}> 61268993801 </td>
+                                            <td style={{ padding: '14px' }}> Senin </td>
+                                            <td style={{ padding: '14px' }}> 07:00-09:00 </td>
+                                            <td style={{ padding: '14px' }}> 7A </td>
                                             <td style={{ padding: '14px' }}>
                                                 <div 
                                                     className="d-flex flex-row justify-content-center align-items-center"
@@ -157,7 +159,7 @@ function DataSiswa() {
                                                         title="Ubah Data"
                                                         onClick={
                                                             // Fungsi edit, bisa dikirim ID data sebenarnya
-                                                            () => navigate('/admin/data/siswa/form', { state: { index: i } })
+                                                            () => navigate('/admin/data/jadwal/form', { state: { index: i } })
                                                         }
                                                         style={{
                                                             background: 'transparent',
@@ -219,4 +221,4 @@ function DataSiswa() {
     );
 }
 
-export default DataSiswa;
+export default DataJadwal;

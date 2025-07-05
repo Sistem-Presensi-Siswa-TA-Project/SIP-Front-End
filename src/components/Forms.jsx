@@ -33,7 +33,7 @@ export const FormInput = (props) => {
 
     const isPhoneField = name === 'hp';
     const isPassword = type === 'password';
-    const isTextarea = as === 'textarea';
+    const isTextarea = type === 'textarea';
     const isSelect = options.length > 0;
     const [showPassword, setShowPassword] = useState(false);
 

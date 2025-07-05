@@ -113,7 +113,7 @@ function Kontak() {
                             <FormInput
                                 label="Pesan"
                                 name="pesan"
-                                as="textarea"
+                                type="textarea"
                                 rows={5}
                                 value={formData.pesan}
                                 onChange={handleChange}

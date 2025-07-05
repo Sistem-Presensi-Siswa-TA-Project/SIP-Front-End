@@ -16,6 +16,10 @@ import DataSiswa from '../pages/admin/DataSiswa.jsx';
 import SiswaForm from '../pages/admin/SiswaForm.jsx';
 import DataGuru from '../pages/admin/DataGuru.jsx';
 import GuruForm from '../pages/admin/GuruForm.jsx';
+import DataMapel from '../pages/admin/DataMapel.jsx';
+import MapelForm from '../pages/admin/MapelForm.jsx';
+import DataJadwal from '../pages/admin/DataJadwal.jsx';
+import JadwalForm from '../pages/admin/JadwalForm.jsx';
 
 // Guru Page
 import Guru from '../pages/guru/Dashboard-Guru.jsx';
@@ -56,6 +60,12 @@ function AppRoutes() {
       
       <Route path = "/admin/data/guru" element = {<DataGuru />} />
       <Route path = "/admin/data/guru/form" element = {<GuruForm />} />
+
+      <Route path = "/admin/data/mapel" element = {<DataMapel />} />
+      <Route path = "/admin/data/mapel/form" element = {<MapelForm />} />
+      
+      <Route path = "/admin/data/jadwal" element = {<DataJadwal />} />
+      <Route path = "/admin/data/jadwal/form" element = {<JadwalForm />} />
 
       {/* Guru Route */}
       <Route path = "/guru" element = {<Guru />} />

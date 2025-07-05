@@ -360,7 +360,7 @@ function DashboardAdmin() {
                     height="20px" 
                     style={{ marginRight: '6px' }} 
                   />
-                  <span> smpplus@babussalam.ac.id </span>
+                  <span> smpplusbabussalamdago@gmail.com </span>
                 </div>
 
                 {/* Telepon */}
