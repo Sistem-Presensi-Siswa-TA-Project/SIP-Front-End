@@ -40,7 +40,7 @@ function ProfileForm() {
 
     return (
         <div>
-        <Header> Form Presensi </Header>
+        <Header> Profil Form </Header>
 
         <main
             className="d-flex justify-content-center flex-wrap"

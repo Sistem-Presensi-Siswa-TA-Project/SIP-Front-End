@@ -101,7 +101,7 @@ function DataGuru() {
                                     transition: 'box-shadow 0.2s ease-in-out',
                                 }}
                                 onClick={() => navigate(
-                                    `${prefix}/data/siswa/form`
+                                    `${prefix}/data/guru/form`
                                 )}
                                 onMouseEnter={() => setSuccessButtonHovering(true)}
                                 onMouseLeave={() => setSuccessButtonHovering(false)}

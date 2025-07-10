@@ -35,7 +35,7 @@ function HakAksesPiket() {
 
     return (
         <div>
-            <Header> Data Guru </Header>
+            <Header> Data Piket </Header>
 
             <main
                 className="d-flex justify-content-center flex-wrap"

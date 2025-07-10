@@ -18,22 +18,7 @@ function GuruForm() {
         nip: '',
         nama: '',
         mapel: '',
-        email: '',
         jenisKelamin: '',
-        tempatLahir: '',
-        tanggalLahir: '',
-        agama: '',
-        nik: '',
-        hp: '',
-        pendidikan: '',
-        alamatDomisili: '',
-        rt: '',
-        rw: '',
-        desa: '',
-        kecamatan: '',
-        kabupaten: '',
-        provinsi: '',
-        kodePos: '',
     });
 
     return (
@@ -98,44 +83,21 @@ function GuruForm() {
                                 ['NIP/NUPTK', 'nomorInduk'],
                                 ['Nama Lengkap', 'nama'],
                                 ['Mata Pelajaran', 'mapel'],
-                                ['Email', 'email'],
                                 ['Jenis Kelamin', 'jenisKelamin'],
-                                ['Tempat Lahir', 'tempatLahir'],
-                                ['Tanggal Lahir', 'tanggalLahir'],
-                                ['Agama', 'agama'],
-                                ['Nomor Induk Kependudukan (NIK)', 'nik'],
-                                ['Nomor Handphone', 'hp'],
-                                ['Pendidikan', 'pendidikan'],
-                                ['Alamat Lengkap', 'alamat'],
-                                ['RT', 'rt'],
-                                ['RW', 'rw'],
-                                ['Desa/Kelurahan', 'desa'],
-                                ['Kecamatan', 'kecamatan'],
-                                ['Kabupaten/Kota', 'kabupaten'],
-                                ['Provinsi', 'provinsi'],
-                                ['Kode Pos', 'kodePos'],
                             ].map(([label, name], index) => {
                                 const isRequired = [
                                     'nama', 
                                     'nomorInduk', 
-                                    'jenisKelamin',
                                     'mapel',
+                                    'jenisKelamin',
                                 ].includes(name);
                                 
                                 return (
-                                    <div className="col-md-4 col-sm-12" key={index}>
+                                    <div className="col-md-6 col-sm-12" key={index}>
                                         <FormInput
                                             label={label}
                                             name={name}
-                                            type={
-                                                name === 'email'
-                                                    ? 'email'
-                                                    : name === 'tanggalLahir'
-                                                    ? 'date'
-                                                    : name === 'hp'
-                                                    ? 'tel'
-                                                    : 'text'
-                                            }
+                                            type='text'
                                             value={formData[name]}
                                             required={isRequired}
                                             placeholder={label}
