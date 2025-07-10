@@ -18,7 +18,8 @@ import CancelIconB from "../assets/cancelIconB.svg";
 import CetakIcon from "../assets/cetak-black.svg";
 import DashboardIcon from "../assets/home-black.svg";
 import DeleteIcon from "../assets/delete-icon.svg";
-import EmailIcon from "../assets/EmailIcon.svg";
+import EmailIcon from "../assets/emailIcon.svg";
+import Guru from "../assets/guru.svg";
 import HadirIcon from "../assets/hadir-icon.svg";
 import IconEye from "../assets/visibility.svg";
 import IconEyeOff from "../assets/visibility-off.svg";
@@ -42,6 +43,8 @@ import MenuIconWhite from "../assets/menu-white.svg";
 import MenuOpenBlack from "../assets/menuOpen-black.svg";
 import MenuOpenWhite from "../assets/menuOpen-white.svg";
 import PencilIcon from "../assets/pencil-icon.svg";
+import People from "../assets/people.svg";
+import PeopleFill from "../assets/people-fill.svg";
 import PhoneIcon from "../assets/phoneIcon.svg";
 import PresensiButtonBlack from "../assets/presensiButton-black.svg";
 import PresensiButtonWhite from "../assets/presensiButton-white.svg";
@@ -52,6 +55,7 @@ import ProfileIcon from "../assets/profile-black.svg";
 import RightArrowWhite from "../assets/rightArrow-white.svg";
 import SakitIcon from "../assets/sakit-icon.svg";
 import ScanPresensi from "../assets/scan-presensi.svg";
+import Siswa from "../assets/siswa.svg";
 import SwapCamera from "../assets/swap-camera.svg";
 import UserIcon from "../assets/userIcon.svg";
 import QRCode from "../assets/qrcode-icon.png";
@@ -111,4 +115,8 @@ export const iconList = [
   { id: 52, label: "Add Green", src: AddGreen },
   { id: 53, label: "Pencil Icon", src: PencilIcon },
   { id: 54, label: "Delete Icon", src: DeleteIcon },
+  { id: 55, label: "Siswa Icon", src: Siswa },
+  { id: 56, label: "Guru Icon", src: Guru },
+  { id: 57, label: "People", src: People },
+  { id: 58, label: "People Fill", src: PeopleFill },
 ];

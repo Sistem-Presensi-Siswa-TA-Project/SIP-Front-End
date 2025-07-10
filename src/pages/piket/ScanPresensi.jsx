@@ -30,6 +30,7 @@ function ScanPresensi() {
         nisn: '',
         nama: '',
         kelas: '',
+        jenis: '',
         ket: '',
     });
 
@@ -203,24 +204,29 @@ function ScanPresensi() {
                             style={{ marginTop: '5px' }}
                         >
                             {[
-                                ['', 'Waktu Presensi', 'waktu'],
-                                ['', 'NISN', 'nisn'],
-                                ['', 'Nama Siswa', 'nama'],
-                                ['', 'Kelas', 'kelas'],
-                                ['', 'Keterangan Presensi', 'ket'],
+                                ['Waktu', 'Waktu Presensi', 'waktu'],
+                                ['NISN', 'Nomor Induk Siswa Nasional', 'nisn'],
+                                ['Nama Siswa', 'Nama Siswa', 'nama'],
+                                ['Kelas', 'Kelas', 'kelas'],
+                                ['Jenis Presensi', 'Jenis Presensi', 'jenis'],
+                                ['Keterangan', 'Keterangan', 'ket'],
                             ].map(([label, placeholder, name], index) => {
-    
-                                const isReadOnly = ['waktu', 'nisn', 'nama', 'kelas'].includes(name);
+                                const isRequired = [
+                                    'waktu', 
+                                    'nisn', 
+                                    'nama', 
+                                    'kelas', 
+                                    'jenis', 
+                                ].includes(name);
                                 
                                 return (
                                     <div style={{ maxWidth: '650px', width: '100%' }} key={index}>
-                                        {name === 'ket' ? (
+                                        {name === 'jenis' ? (
                                             <FormInput
                                                 label={label}
                                                 name={name}
                                                 value={formData[name]}
-                                                // required
-                                                readOnly={isReadOnly}
+                                                required= {isRequired}
                                                 placeholder={placeholder}
                                                 onChange={handleChange}
                                                 options={['Presensi Masuk', 'Presensi Pulang']}
@@ -230,8 +236,7 @@ function ScanPresensi() {
                                                 label={label}
                                                 name={name}
                                                 value={formData[name]}
-                                                // required
-                                                readOnly={isReadOnly}
+                                                required= {isRequired}
                                                 placeholder={placeholder}
                                                 onChange={handleChange}
                                             />

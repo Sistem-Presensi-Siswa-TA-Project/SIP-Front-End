@@ -65,7 +65,7 @@
   background-color: #DB0004 !important;
   border-color: #DB0004 !important;
   color: white !important;
-  border-radius: 10px !important;
+  border-radius: 10px;
   font-weight: bold !important;
 }
 
@@ -73,7 +73,7 @@
   background-color: #FFFFFF !important;
   border-color: #DB0004 !important;
   color: #DB0004 !important;
-  border-radius: 15px !important;
+  border-radius: 15px;
   border-width: 2px !important;
   border-style: solid !important;
   font-weight: bold !important;

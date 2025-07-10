@@ -1,4 +1,4 @@
-// Filename: SiswaForm.jsx
+// Filename: GuruForm.jsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header, Card } from '../../components/Molekul.jsx';
@@ -6,7 +6,7 @@ import { SuccessButton, SecondaryButton } from '../../components/Button.jsx';
 import { FormInput } from '../../components/Forms.jsx'
 import { iconList } from '../../data/iconData.js';
 
-function SiswaForm() {
+function GuruForm() {
     const navigate = useNavigate();
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
@@ -183,4 +183,4 @@ function SiswaForm() {
     );
 }
 
-export default SiswaForm;
+export default GuruForm;

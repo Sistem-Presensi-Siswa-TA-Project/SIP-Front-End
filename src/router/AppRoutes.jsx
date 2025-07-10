@@ -12,12 +12,20 @@ import NotFound from '../pages/NotFoundPage.jsx';
 
 // Admin Page
 import Admin from '../pages/admin/Dashboard-Admin.jsx';
+import HakAkses from '../pages/admin/HakAksesPage.jsx';
+import HakAksesGuru from '../pages/admin/HakAksesGuru.jsx';
+import HakAksesFormGuru from '../pages/admin/HakAksesForm-Guru.jsx';
+import HakAksesPiket from '../pages/admin/HakAksesPiket.jsx';
+import HakAksesFormPiket from '../pages/admin/HakAksesForm-Piket.jsx';
 import DataSiswa from '../pages/admin/DataSiswa.jsx';
 import SiswaForm from '../pages/admin/SiswaForm.jsx';
 import DataGuru from '../pages/admin/DataGuru.jsx';
 import GuruForm from '../pages/admin/GuruForm.jsx';
 import DataMapel from '../pages/admin/DataMapel.jsx';
 import MapelForm from '../pages/admin/MapelForm.jsx';
+import DataPresensi from '../pages/admin/DaftarKelas-Admin.jsx';
+import DaftarGuruAdmin from '../pages/admin/DaftarGuru-Admin.jsx';
+import DaftarPertemuanAdmin from '../pages/admin/DaftarPertemuan-Admin.jsx';
 import DataJadwal from '../pages/admin/DataJadwal.jsx';
 import JadwalForm from '../pages/admin/JadwalForm.jsx';
 
@@ -55,6 +63,12 @@ function AppRoutes() {
       <Route path = "/admin/kontak" element = {<Kontak />} />
       <Route path = "/admin/informasi" element = {<Informasi />} />
 
+      <Route path = "/admin/user" element = {<HakAkses />} />
+      <Route path = "/admin/user/guru" element = {<HakAksesGuru />} />
+      <Route path = "/admin/user/guru/form" element = {<HakAksesFormGuru />} />
+      <Route path = "/admin/user/piket" element = {<HakAksesPiket />} />
+      <Route path = "/admin/user/piket/form" element = {<HakAksesFormPiket />} />
+
       <Route path = "/admin/data/siswa" element = {<DataSiswa />} />
       <Route path = "/admin/data/siswa/form" element = {<SiswaForm />} />
       
@@ -63,6 +77,10 @@ function AppRoutes() {
 
       <Route path = "/admin/data/mapel" element = {<DataMapel />} />
       <Route path = "/admin/data/mapel/form" element = {<MapelForm />} />
+      
+      <Route path = "/admin/data/kelas" element = {<DataPresensi />} />
+      <Route path = "/admin/data/kelas/:kelasId" element = {<DaftarGuruAdmin />} />
+      <Route path = "/admin/data/kelas/:kelasId/pertemuan" element = {<DaftarPertemuanAdmin />} />
       
       <Route path = "/admin/data/jadwal" element = {<DataJadwal />} />
       <Route path = "/admin/data/jadwal/form" element = {<JadwalForm />} />

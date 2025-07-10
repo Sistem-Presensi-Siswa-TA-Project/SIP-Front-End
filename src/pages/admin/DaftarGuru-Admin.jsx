@@ -1,39 +1,30 @@
-// Filename: DaftarPertemuan.jsx
+// Filename: DaftarGuru-Admin.jsx
 import React, { useState } from 'react';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card } from '../../components/Molekul.jsx';
-import { SecondaryButton, InfoButton, SuccessButton } from '../../components/Button.jsx';
+import { SecondaryButton, InfoButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
 
-function DaftarPertemuan() {
-    // State Hovering
-    const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
-    const [successButtonHovering, setSuccessButtonHovering] = useState(false);
-    const [hoveredId, setHoveredId] = useState(null);
-    
-    // Navigasi Page
+function DaftarGuruAdmin() {
     const navigate = useNavigate();
+    const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
+    const [hoveredId, setHoveredId] = useState(null);
     const { kelasId } = useParams();
-    const location = useLocation();
-    const prefix = location.pathname.startsWith('/piket') ? '/piket' : '/guru';
 
-    // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
     const presensiButtonBlack = iconList.find((i) => i.label === 'Presensi Button Black')?.src;
-    const addWhite = iconList.find((i) => i.label === 'Add White')?.src;
-    const addGreen = iconList.find((i) => i.label === 'Add Green')?.src;
 
-    // Dummy data pertemuan
-    const daftarPertemuan = Array(10).fill({
-        label: 'Pertemuan ke-',
-        tanggal: 'Tanggal Pertemuan',
+    // Dummy data guru
+    const daftarGuru = Array(8).fill({
+        nama: 'Nama Guru',
+        mapel: 'Mata Pelajaran',
     });
 
     return (
         <div>
-            <Header> Daftar Pertemuan </Header>
+            <Header> Daftar Guru </Header>
 
             <main
                 className="d-flex justify-content-center flex-wrap"
@@ -79,52 +70,22 @@ function DaftarPertemuan() {
                     {/* Daftar Guru/Mapel */}
                     <Card style={{ width: '100%', marginTop: '45px', padding: '30px' }}>
                         {/* Title */}
-                        <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '20px' }}> 
-                            Daftar Pertemuan Kelas {kelasId?.toUpperCase()}
-                        </h3>
-
-                        {/* Tombol Tambah Presensi */}
-                        <div className="d-flex justify-content-end" style={{ marginRight: '5px' }}>
-                            <SuccessButton
-                                className="d-flex align-items-center justify-content-center"
-                                width="200px"
-                                height="43px"
-                                style={{
-                                    padding: '20px',
-                                    fontWeight: 'bold',
-                                    fontSize: '16px',
-                                    borderRadius: '6px',
-                                    boxShadow: successButtonHovering
-                                        ? '4px 4px 8px rgba(0, 0, 0, 0.5)'
-                                        : '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                    transition: 'box-shadow 0.2s ease-in-out',
-                                }}
-                                onMouseEnter={() => setSuccessButtonHovering(true)}
-                                onMouseLeave={() => setSuccessButtonHovering(false)}
-                            >
-                                <img 
-                                    src={successButtonHovering ? addGreen : addWhite} 
-                                    alt="Presensi" 
-                                    width="20" 
-                                    height="20" 
-                                />
-
-                                Tambah Presensi
-                            </SuccessButton>
-                        </div>
+                        <h4 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '22px' }}> 
+                            Kelas {kelasId?.toUpperCase()}
+                        </h4>
 
                         {/* Wrapper Tabel */}
-                        <div className="table-responsive" style={{ marginTop: '20px', borderRadius: '10px', border: '2px solid #D6D6D6' }}>
+                        <div className="table-responsive" style={{ marginTop: '25px', borderRadius: '10px', border: '2px solid #D6D6D6' }}>
                             <Table className="custom-table">
                                 <thead>
                                     <tr>
-                                        <th style={{ textAlign: 'left', padding: '16px 16px 16px 50px', fontSize: '18px' }}> Daftar Pertemuan </th>
+                                        <th style={{ textAlign: 'left', padding: '16px 16px 16px 50px', fontSize: '18px' }}> Daftar Guru </th>
                                         <th style={{ textAlign: 'right', padding: '16px 55px 16px 16px', fontSize: '18px' }}> Aksi </th>
                                     </tr>
                                 </thead>
 
                                 <tbody>
-                                    {daftarPertemuan.map((pertemuan, i) => (
+                                    {daftarGuru.map((guru, i) => (
                                         <tr key={i}>
                                             <td style={{ padding: '14px 14px 14px 25px' }}>
                                                 <div className="d-flex align-items-start gap-3">
@@ -142,17 +103,14 @@ function DaftarPertemuan() {
 
                                                     {/* Nama Guru dan Mapel */}
                                                     <div className="d-flex flex-column">
-                                                        <span style={{ fontWeight: 'bold', textAlign: 'left', marginBottom: '4px' }}> {pertemuan.label}{i+1} </span>
-                                                        <span style={{ color: '#666', fontSize: '14px', textAlign: 'left' }}> {pertemuan.tanggal} </span>
+                                                        <span style={{ fontWeight: 'bold', textAlign: 'left', marginBottom: '4px' }}> {guru.nama} </span>
+                                                        <span style={{ color: '#666', fontSize: '14px', textAlign: 'left' }}> {guru.mapel} </span>
                                                     </div>
                                                 </div>
                                             </td>
 
-                                            <td 
-                                                className="d-flex justify-content-end align-items-center" 
-                                                style={{ textAlign: 'right', padding: '20px 20px 14px 14px' }}
-                                            >
-                                                {/* Tombol Lihat */}
+                                            <td className="d-flex justify-content-end align-items-center" style={{ textAlign: 'right', padding: '20px 20px 14px 14px' }}>
+                                                {/* Tombol Presensi */}
                                                 <InfoButton
                                                     height="35px"
                                                     width="105px"
@@ -164,9 +122,7 @@ function DaftarPertemuan() {
                                                         boxShadow: hoveredId === i ? 'inset 2px 2px 10px rgba(0, 0, 0, 0.45)' : 'none',
                                                         transition: 'box-shadow 0.2s ease-in-out',
                                                     }}
-                                                    onClick={() => navigate(
-                                                        `${prefix}/kelas/${kelasId?.toUpperCase()}/pertemuan/lihat-presensi`
-                                                    )}
+                                                    onClick={() => navigate(`/admin/data/kelas/${kelasId.toUpperCase()}/pertemuan`)}
                                                     onMouseEnter={() => setHoveredId(i)}
                                                     onMouseLeave={() => setHoveredId(null)}
                                                 >
@@ -176,9 +132,7 @@ function DaftarPertemuan() {
                                                         width="20"
                                                         height="20"
                                                     />
-                                                    <span style={{ fontWeight: 'bold', fontSize: '13px' }}> 
-                                                        Lihat 
-                                                    </span>
+                                                    <span style={{ fontWeight: 'bold', fontSize: '13px' }}> Presensi </span>
                                                 </InfoButton>
                                             </td>
                                         </tr>
@@ -199,4 +153,4 @@ function DaftarPertemuan() {
     );
 }
 
-export default DaftarPertemuan;
+export default DaftarGuruAdmin;

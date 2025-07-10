@@ -17,8 +17,8 @@ function DashboardAdmin() {
   const userIcon = iconList.find((i) => i.label === 'User Icon')?.src;
   const emailIcon = iconList.find((i) => i.label === 'Email Icon')?.src;
   const phoneIcon = iconList.find((i) => i.label === 'Phone Icon')?.src;
-  const presensiMapel = iconList.find((i) => i.label === 'Presensi Mapel')?.src;
-  const scanPresensi = iconList.find((i) => i.label === 'Scan Presensi')?.src;
+  const siswaIcon = iconList.find((i) => i.label === 'Siswa Icon')?.src;
+  const guruIcon = iconList.find((i) => i.label === 'Guru Icon')?.src;
   const menuOpenBlack = iconList.find((i) => i.label === 'Menu Open Black')?.src;
   const menuOpenWhite = iconList.find((i) => i.label === 'Menu Open White')?.src;
   const arrowRightBlack = iconList.find((i) => i.label === 'Arrow Right Black')?.src;
@@ -77,11 +77,14 @@ function DashboardAdmin() {
                 }}
 
                 pathMap={{
-                  Beranda: '/piket',
-                  Profil: '/piket/profile',
-                  'Cari Presensi': '/piket/cari-presensi',
-                  Kontak: '/piket/kontak',
-                  Informasi: '/piket/informasi',
+                  Beranda: '/admin',
+                  Profil: '/admin/profile',
+                  'Hak Akses Pengguna': '/admin/user',
+                  'Data Siswa': '/admin/data/siswa',
+                  'Data Guru': '/admin/data/guru',
+                  'Data Mata Pelajaran': '/admin/data/mapel',
+                  'Data Presensi': '/admin/data/presensi',
+                  'Jadwal': '/admin/data/jadwal',
                 }}
               />
             </div>
@@ -115,11 +118,11 @@ function DashboardAdmin() {
               pathMap={{
                 Beranda: '/admin',
                 Profil: '/admin/profile',
-                'Hak Akses Pengguna': '/admin/data/pengguna',
+                'Hak Akses Pengguna': '/admin/user',
                 'Data Siswa': '/admin/data/siswa',
                 'Data Guru': '/admin/data/guru',
                 'Data Mata Pelajaran': '/admin/data/mapel',
-                'Data Presensi': '/admin/data/presensi',
+                'Data Presensi': '/admin/data/kelas',
                 'Jadwal': '/admin/data/jadwal',
               }}
             />
@@ -231,7 +234,7 @@ function DashboardAdmin() {
 
             {/* Kolom Kanan Bawah tengah */}
             <div className="custom-container d-flex flex-column align-items-center justify-content-center" style={{ gap: '50px', width: '700px' }}>
-              {/* Scan Presensi */}
+              {/* Kelola Data Siswa */}
               <Card 
                 className="w-100 card-kecil" 
                 style={{ height: '160px', position: 'relative' }} 
@@ -248,8 +251,8 @@ function DashboardAdmin() {
                   }
                 >
                   <img 
-                    src={scanPresensi} 
-                    alt="scan presensi" 
+                    src={siswaIcon} 
+                    alt="siswa icon" 
                     width="80px" 
                     height="80px"
                     style={{ marginRight: '15px' }} 
@@ -271,7 +274,7 @@ function DashboardAdmin() {
                 />
               </Card>
 
-              {/* Presensi Mata Pelajaran */}
+              {/* Kelola Data Guru */}
               <Card 
                 className="w-100 card-kecil" 
                 style={{ height: '180px', position: 'relative' }}
@@ -286,8 +289,8 @@ function DashboardAdmin() {
                   alignItems: 'center'
                 }}>
                   <img 
-                    src={presensiMapel} 
-                    alt="presensi mapel" 
+                    src={guruIcon} 
+                    alt="guru icon" 
                     width="80px" 
                     height="80px"
                     style={{ marginRight: '15px' }} 
