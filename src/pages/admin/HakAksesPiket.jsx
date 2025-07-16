@@ -35,7 +35,7 @@ function HakAksesPiket() {
 
     return (
         <div>
-            <Header> Data Piket </Header>
+            <Header> Data Akses Piket </Header>
 
             <main
                 className="d-flex justify-content-center flex-wrap"
@@ -81,7 +81,7 @@ function HakAksesPiket() {
                     <Card style={{ width: '100%', marginTop: '45px', padding: '30px' }}>
                         {/* Title */}
                         <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '22px' }}> 
-                            DATA PETUGAS PIKET
+                            DATA AKSES PETUGAS PIKET
                         </h3>
 
                         {/* Tombol Tambah Data Guru */}

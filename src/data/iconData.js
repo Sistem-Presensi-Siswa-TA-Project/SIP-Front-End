@@ -34,6 +34,7 @@ import LeftArrowYellow from "../assets/leftArrow-yellow.svg";
 import LainnyaIconBlack from "../assets/another-black.svg";
 import LainnyaIconWhite from "../assets/another-white.svg";
 import LoginImg from "../assets/bg-login.png";
+import LoginImg2 from "../assets/bg-login2.png";
 import LokasiBlack from "../assets/lokasi-black.svg";
 import Logo from "../assets/babussalam.png";
 import LogoutIcon from "../assets/logout.svg";
@@ -119,4 +120,5 @@ export const iconList = [
   { id: 56, label: "Guru Icon", src: Guru },
   { id: 57, label: "People", src: People },
   { id: 58, label: "People Fill", src: PeopleFill },
+  { id: 59, label: "Login Image 2", src: LoginImg2 },
 ];

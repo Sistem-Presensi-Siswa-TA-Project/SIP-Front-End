@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { iconList } from '../data/iconData.js';
+import { logout } from '../utils/sessionTimeOut.js';
 
 export const Header = ({ children='As User' }) => {
     const logo = iconList.find((i) => i.label === 'Logo')?.src;
@@ -25,7 +26,7 @@ export const Header = ({ children='As User' }) => {
                         `${prefix}`
                     )}
                 >
-                    SMP Plus Babussalam
+                    SIPLUS BABUSSALAM
                 </h5>
 
                 {/* Elemen children di sisi kanan */}
@@ -108,6 +109,9 @@ export const Sidebar = (props) => {
                                         onClose();
                                     } else if (item.hasDropdown) {
                                         setIsDropdownOpen(!isDropdownOpen);
+                                    } else if (item.label === 'Logout') {
+                                        // Panggil logout supaya token & lastActivity dihapus dan redirect ke halaman login
+                                        logout();
                                     } else if (pathMap[item.label]) {
                                         navigate(pathMap[item.label]);
                                     }
@@ -180,7 +184,10 @@ export const Sidebar = (props) => {
                                                 key={subIndex}
                                                 className="sidebar-subitem"
                                                 onClick={() => {
-                                                    if (pathMap[sub.label]) {
+                                                    if (sub.label === 'Logout') {
+                                                        // Panggil logout supaya token & lastActivity dihapus dan redirect ke halaman login
+                                                        logout();
+                                                    } else if (pathMap[sub.label]) {
                                                         navigate(pathMap[sub.label]);
                                                     }
                                                 }}

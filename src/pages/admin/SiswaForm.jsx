@@ -102,23 +102,37 @@ function SiswaForm() {
                             
                             return (
                                 <div className="col-md-4 col-sm-12" key={index}>
-                                    <FormInput
-                                        label={label}
-                                        name={name}
-                                        type={
-                                            name === 'tanggalLahir'
-                                                ? 'date'
-                                                : name === 'hp'
-                                                ? 'tel'
-                                                : 'text'
-                                        }
-                                        value={formData[name]}
-                                        required={isRequired}
-                                        placeholder={label}
-                                        onChange={(e) =>
-                                            setFormData((prev) => ({ ...prev, [name]: e.target.value }))
-                                        }
-                                    />
+                                    {name === 'jenisKelamin' ? (
+                                        <FormInput
+                                            label={label}
+                                            name={name}
+                                            value={formData[name]}
+                                            required= {isRequired}
+                                            placeholder={label}
+                                            onChange={(e) =>
+                                                setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+                                            }
+                                            options={['Laki-Laki', 'Perempuan']}
+                                        />
+                                    ) : (
+                                        <FormInput
+                                            label={label}
+                                            name={name}
+                                            type={
+                                                name === 'tanggalLahir'
+                                                    ? 'date'
+                                                    : name === 'hp'
+                                                    ? 'tel'
+                                                    : 'text'
+                                            }
+                                            value={formData[name]}
+                                            required={isRequired}
+                                            placeholder={label}
+                                            onChange={(e) =>
+                                                setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+                                            }
+                                        />
+                                    )}
                                 </div>
                             );
                         })}

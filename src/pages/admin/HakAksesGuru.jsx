@@ -35,7 +35,7 @@ function HakAksesGuru() {
 
     return (
         <div>
-            <Header> Data Guru </Header>
+            <Header> Data Akses Guru </Header>
 
             <main
                 className="d-flex justify-content-center flex-wrap"
@@ -81,7 +81,7 @@ function HakAksesGuru() {
                     <Card style={{ width: '100%', marginTop: '45px', padding: '30px' }}>
                         {/* Title */}
                         <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '22px' }}> 
-                            DATA GURU
+                            DATA AKSES GURU
                         </h3>
 
                         {/* Tombol Tambah Data Guru */}

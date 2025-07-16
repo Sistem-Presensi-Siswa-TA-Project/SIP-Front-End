@@ -84,27 +84,43 @@ function GuruForm() {
                                 ['Nama Lengkap', 'nama'],
                                 ['Mata Pelajaran', 'mapel'],
                                 ['Jenis Kelamin', 'jenisKelamin'],
+                                ['Jabatan', 'jabatan'],
                             ].map(([label, name], index) => {
                                 const isRequired = [
                                     'nama', 
                                     'nomorInduk', 
                                     'mapel',
                                     'jenisKelamin',
+                                    'jabatan',
                                 ].includes(name);
                                 
                                 return (
                                     <div className="col-md-6 col-sm-12" key={index}>
-                                        <FormInput
-                                            label={label}
-                                            name={name}
-                                            type='text'
-                                            value={formData[name]}
-                                            required={isRequired}
-                                            placeholder={label}
-                                            onChange={(e) =>
-                                                setFormData((prev) => ({ ...prev, [name]: e.target.value }))
-                                            }
-                                        />
+                                        {name === 'jenisKelamin' ? (
+                                            <FormInput
+                                                label={label}
+                                                name={name}
+                                                value={formData[name]}
+                                                required= {isRequired}
+                                                placeholder={label}
+                                                onChange={(e) =>
+                                                    setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+                                                }
+                                                options={['Laki-Laki', 'Perempuan']}
+                                            />
+                                        ) : (
+                                            <FormInput
+                                                label={label}
+                                                name={name}
+                                                type='text'
+                                                value={formData[name]}
+                                                required={isRequired}
+                                                placeholder={label}
+                                                onChange={(e) =>
+                                                    setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+                                                }
+                                            />
+                                        )}
                                     </div>
                                 );
                             })}

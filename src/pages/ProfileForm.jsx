@@ -95,33 +95,36 @@ function ProfileForm() {
 
                     <div className="row" style={{ rowGap: '16px' }}>
                         {[
+                            // Data Diri
                             ['Nama Lengkap', 'namaLengkap'],
+                            ['Jenis Kelamin', 'jenisKelamin'],
+                            ['Tempat Lahir', 'tempatLahir'],
+                            ['Tanggal Lahir', 'tanggalLahir'],
+                            ['Agama', 'agama'],
+                            ['Nomor Induk Kependudukan (NIK)', 'nik'],
+                            ['Nomor Handphone', 'hp'],
                             ['Email', 'email'],
+
+                            // Data Akademik
+                            ['NIP/NISN', 'nomorInduk'],
+                            ['Mata Pelajaran', 'mapel'],
+                            ['Jabatan', 'jabatan'],
+                            ['Pendidikan', 'pendidikan'],
+
+                            // Alamat
                             ['Alamat Lengkap', 'alamat'],
                             ['RT', 'rt'],
                             ['RW', 'rw'],
-                            ['Jenis Kelamin', 'jenisKelamin'],
-                            ['Kewarganegaraan', 'kewarganegaraan'],
                             ['Desa/Kelurahan', 'desa'],
-                            ['Tempat Lahir', 'tempatLahir'],
-                            ['Tanggal Lahir', 'tanggalLahir'],
-                            ['NIP/NISN', 'nomorInduk'],
                             ['Kecamatan', 'kecamatan'],
-                            ['Agama', 'agama'],
-                            ['Mata Pelajaran', 'mapel'],
                             ['Kabupaten/Kota', 'kabupaten'],
-                            ['Nomor Induk Kependudukan (NIK)', 'nik'],
-                            ['Status', 'status'],
                             ['Provinsi', 'provinsi'],
-                            ['Nomor Handphone', 'hp'],
-                            ['Pendidikan', 'pendidikan'],
                             ['Kode Pos', 'kodePos'],
                         ].map(([label, name], index) => {
                             const isRequired = [
                                 'namaLengkap', 
                                 'agama', 
                                 'nomorInduk', 
-                                'kewarganegaraan', 
                                 'alamat', 
                                 'email', 
                                 'jenisKelamin', 
@@ -135,30 +138,44 @@ function ProfileForm() {
                                 'provinsi',
                             ].includes(name);
 
-                            const isReadOnly = ['mapel', 'nomorInduk', 'namaLengkap'].includes(name);
+                            const isReadOnly = ['mapel', 'nomorInduk', 'namaLengkap', 'jabatan'].includes(name);
                             
                             return (
                                 <div className="col-md-4 col-sm-12" key={index}>
-                                    <FormInput
-                                        label={label}
-                                        name={name}
-                                        type={
-                                            name === 'email'
-                                                ? 'email'
-                                                : name === 'tanggalLahir'
-                                                ? 'date'
-                                                : name === 'hp'
-                                                ? 'tel'
-                                                : 'text'
-                                        }
-                                        value={formData[name]}
-                                        required={isRequired}
-                                        readOnly={isReadOnly}
-                                        placeholder={label}
-                                        onChange={(e) =>
-                                            setFormData((prev) => ({ ...prev, [name]: e.target.value }))
-                                        }
-                                    />
+                                    {name === 'jenisKelamin' ? (
+                                        <FormInput
+                                            label={label}
+                                            name={name}
+                                            value={formData[name]}
+                                            required= {isRequired}
+                                            placeholder={label}
+                                            onChange={(e) =>
+                                                setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+                                            }
+                                            options={['Laki-Laki', 'Perempuan']}
+                                        />
+                                    ) : (
+                                        <FormInput
+                                            label={label}
+                                            name={name}
+                                            type={
+                                                name === 'email'
+                                                    ? 'email'
+                                                    : name === 'tanggalLahir'
+                                                    ? 'date'
+                                                    : name === 'hp'
+                                                    ? 'tel'
+                                                    : 'text'
+                                            }
+                                            value={formData[name]}
+                                            required={isRequired}
+                                            readOnly={isReadOnly}
+                                            placeholder={label}
+                                            onChange={(e) =>
+                                                setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+                                            }
+                                        />
+                                    )}
                                 </div>
                             );
                         })}

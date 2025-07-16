@@ -1,16 +1,23 @@
 // Filename: Dashboard-Guru.jsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Header, Sidebar, Card } from '../../components/Molekul.jsx';
 import { LightButton, InfoButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
 import { mapelList } from '../../data/mapelData.js';
 
 function DashboardGuru() {
+  // State Hovering
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [hoveredId, setHoveredId] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+
+  // Navigasi Page
+  const location = useLocation();
+  const prefix = location.pathname.startsWith('/admin') 
+  ? '/admin' : (location.pathname.startsWith('/guru') 
+  ? '/guru' : '/piket');
   const navigate = useNavigate();
 
   // Mengambil icon dari iconData.js
@@ -261,7 +268,7 @@ function DashboardGuru() {
 
                           onMouseEnter={() => setHoveredId(item.id)}
                           onMouseLeave={() => setHoveredId(null)}
-                          onClick={() => navigate('/pertemuan')}
+                          onClick={() => navigate(`${prefix}/kelas/${item.kelas}/pertemuan`)}
                         >
                           <img
                             src={presensiButtonBlack}

@@ -1,12 +1,11 @@
 //Filename: LoginPage.jsx
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import { PrimaryButton } from '../components/Button.jsx';
 import { iconList } from '../data/iconData.js';
 import { TextInput } from '../components/Forms.jsx';
-import { users } from '../data/userData.js';
 import { loginUser } from '../handlers/AuthHandler';
 import { getLoginErrorMessage } from '../handlers/ErrorHandler';
 
@@ -17,25 +16,59 @@ function Login() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const loginBg = iconList.find((i) => i.label === 'Login Image')?.src;
+  const loginBg = iconList.find((i) => i.label === 'Login Image 2')?.src;
   const logo = iconList.find((i) => i.label === 'Logo')?.src;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const user = loginUser(username, password, users);
+  // Cek jika user sudah login (punya token & session masih aktif)
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    const role = localStorage.getItem('role');
+    if (token && role) {
+      // Redirect sesuai role
+      navigate(`/${role}`, { replace: true });
+    }
+  }, [navigate]);
 
-    if (!user) {
-      setError(getLoginErrorMessage(username, password));
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Reset error
+    setError([]);
+
+    // Validasi kosong
+    if (!username && !password) {
+      setError(getLoginErrorMessage('FIELD_REQUIRED'));
+      return;
+    } else if (!username) {
+      setError(getLoginErrorMessage('USERNAME_REQUIRED'));
+      return;
+    } else if (!password) {
+      setError(getLoginErrorMessage('PASSWORD_REQUIRED'));
       return;
     }
 
-    // Routing berdasarkan role
-    if (user.role === 'Guru') {
-      navigate('/guru');
-    } else if (user.role === 'Admin') {
-      navigate('/admin');
-    } else if (user.role === 'Piket') {
-      navigate('/piket');
+    try {
+      const data = await loginUser(username, password);
+      // Simpan token ke localStorage/sessionStorage kalau ingin digunakan (opsional)
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('role', data.role.toLowerCase());
+
+      // Routing berdasarkan role dari backend
+      if (data.role?.toLowerCase() === 'guru') {
+        navigate('/guru', { replace: true }); // Ganti history
+      } else if (data.role?.toLowerCase() === 'admin') {
+        navigate('/admin', { replace: true });
+      } else if (data.role?.toLowerCase() === 'piket') {
+        navigate('/piket', { replace: true });
+      } else {
+        setError(['Role tidak dikenali!!']);
+      }
+    } catch (err) {
+      if (err.code === 'FIELD_REQUIRED') {
+        setError(getLoginErrorMessage('FIELD_REQUIRED'));
+      } else {
+        setError(getLoginErrorMessage('AUTH_FAILED'));
+      }
     }
   };
 
@@ -65,14 +98,13 @@ function Login() {
             className="mb-3 d-block mx-auto"
           />
           <h1 className="fw-bold" style={{ fontSize: '26px' }}>
-            SMP Plus Babussalam
+            SIPLUS BABUSSALAM
           </h1>
         </div>
 
         <Form
           className="d-flex flex-column mx-auto"
           style={{ width: '100%', maxWidth: '300px' }}
-          onSubmit={handleSubmit}
         >
           <div className="mb-4">
             <TextInput
@@ -119,7 +151,7 @@ function Login() {
           </div>
 
 
-          <div className="d-flex mt-3">
+          <div className="d-flex mt-3" onClick={handleSubmit}>
             <PrimaryButton
               variant="primary"
               type="submit"
@@ -127,6 +159,7 @@ function Login() {
               width="125px"
               height="38px"
               className="ms-auto"
+              onClick={handleSubmit}
             >
               Login
             </PrimaryButton>
