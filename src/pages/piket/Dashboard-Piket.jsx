@@ -63,7 +63,7 @@ function DashboardPiket() {
                     { label: 'Minimize', icon: 'Back Icon Black' },
                     { label: 'Beranda', icon: 'Dashboard Icon' },
                     { label: 'Profil', icon: 'Profile Icon' },
-                    { label: 'Cari Presensi', icon: 'Presensi Icon' },
+                    { label: 'Cari Presensi', icon: 'Cari Presensi Icon' },
                     { label: 'Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
                   ],
                   dropdownItems: [
@@ -96,7 +96,7 @@ function DashboardPiket() {
                   { label: 'Minimize', icon: 'Back Icon Black' },
                   { label: 'Beranda', icon: 'Dashboard Icon' },
                   { label: 'Profil', icon: 'Profile Icon' },
-                  { label: 'Cari Presensi', icon: 'Presensi Icon' },
+                  { label: 'Cari Presensi', icon: 'Cari Presensi Icon' },
                   { label: 'Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
                 ],
                 dropdownItems: [

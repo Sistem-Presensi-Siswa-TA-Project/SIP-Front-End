@@ -1,15 +1,20 @@
 // Filename: DataSiswa.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
-import { Header, Card } from '../../components/Molekul.jsx';
+import { Header, Card, CardPopUp } from '../../components/Molekul.jsx';
 import { SecondaryButton, SuccessButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
+import { getAllSiswa, deleteSiswaById } from '../../handlers/SiswaHandler.jsx'
 
 function DataSiswa() {
-    // State Hovering
+    // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [idSiswaToDelete, setIdSiswaToDelete] = useState(null);
+    const [siswaList, setSiswaList] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     // Navigasi Page
     const location = useLocation();
@@ -25,11 +30,38 @@ function DataSiswa() {
     const addGreen = iconList.find((i) => i.label === 'Add Green')?.src;
     const pencilIcon = iconList.find((i) => i.label === 'Pencil Icon')?.src;
     const deleteIcon = iconList.find((i) => i.label === 'Delete Icon')?.src;
+    const redWarningIcon = iconList.find(i => i.label === "Red Warning Icon")?.src;
 
-    const handleDelete = (index) => { //Sementara
-        if (window.confirm('Yakin ingin menghapus data ini?')) {
-            alert(`Data ke-${index + 1} dihapus!`);
-            // Tambahkan proses hapus data di sini
+    // Ambil data siswa saat mount
+    useEffect(() => {
+        async function fetchData() {
+            setLoading(true);
+            const data = await getAllSiswa();
+            setSiswaList(data);
+            setLoading(false);
+        }
+
+        fetchData();
+    }, []);
+
+    // Handler untuk menampilkan popup
+    const handleDelete = (id_siswa) => {
+        setIdSiswaToDelete(id_siswa);
+        setShowDeletePopup(true);
+    };
+
+    // Handler hapus data siswa (dipakai di onClick popup)
+    const handleConfirmDelete = async () => {
+        setShowDeletePopup(false);
+        try {
+            await deleteSiswaById(idSiswaToDelete);
+            setSiswaList(prev => prev.filter(item => item.id_siswa !== idSiswaToDelete));
+            setIdSiswaToDelete(null);
+            alert('Data siswa berhasil dihapus!');
+        } catch (error) {
+            setIdSiswaToDelete(null);
+            console.error("Gagal menghapus data siswa.", error);
+            alert('Gagal menghapus data! Coba lagi.');
         }
     };
 
@@ -139,76 +171,108 @@ function DataSiswa() {
                                 </thead>
 
                                 <tbody>
-                                    {[...Array(20)].map((_, i) => (
-                                        <tr key={i}>
-                                            <td className="border-right" style={{ padding: '14px' }}> {i+1}. </td>
-                                            <td style={{ padding: '14px' }}> 20242025 </td>
-                                            <td style={{ padding: '14px', textAlign: 'left' }}> Nama Siswa ABCDEFGH IJKLMNO </td>
-                                            <td style={{ padding: '14px' }}> 8C </td>
-                                            <td style={{ padding: '14px' }}> Al-Qur'an A </td>
-                                            <td style={{ padding: '14px' }}>
-                                                <div 
-                                                    className="d-flex flex-row justify-content-center align-items-center"
-                                                    style={{ gap: '4px' }}
-                                                >
-                                                    {/* Tombol Ubah Data */}
-                                                    <button
-                                                        type="button"
-                                                        title="Ubah Data"
-                                                        onClick={
-                                                            // Fungsi edit, bisa dikirim ID data sebenarnya
-                                                            () => navigate('/admin/data/siswa/form', { state: { index: i } })
-                                                        }
-                                                        style={{
-                                                            background: 'transparent',
-                                                            border: 'none',
-                                                            padding: 0,
-                                                            margin: 0,
-                                                            cursor: 'pointer'
-                                                        }}
-                                                    >
-                                                        <img
-                                                            src={pencilIcon}
-                                                            alt="Ubah Data"
-                                                            width="28"
-                                                            height="28"
-                                                            draggable={false}
-                                                            style={{ display: 'block' }}
-                                                        />
-                                                    </button>
-
-                                                    {/* Tombol Hapus Data */}
-                                                    <button
-                                                        type="button"
-                                                        title="Hapus Data"
-                                                        onClick={() => handleDelete(i)} // Fungsi delete, bisa dikirim ID data sebenarnya
-                                                        style={{
-                                                            background: 'transparent',
-                                                            border: 'none',
-                                                            padding: 0,
-                                                            margin: 0,
-                                                            cursor: 'pointer'
-                                                        }}
-                                                    >
-                                                        <img
-                                                            src={deleteIcon}
-                                                            alt="Hapus Data"
-                                                            width="28"
-                                                            height="28"
-                                                            draggable={false}
-                                                            style={{ display: 'block' }}
-                                                        />
-                                                    </button>
-                                                </div>
-                                            </td>
+                                    {loading ? (
+                                        <tr>
+                                            <td colSpan={8} style={{ textAlign: 'center' }}> Memuat Data.... </td>
                                         </tr>
-                                    ))}
+                                    ) : siswaList.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={8} style={{ textAlign: 'center' }}> Tidak ada data yang ditemukan </td>
+                                        </tr>
+                                    ) : (
+                                        siswaList.map((siswa, i) => (
+                                            <tr key={siswa.id_siswa}>
+                                                <td className="border-right" style={{ padding: '14px' }}> {i+1}. </td>
+                                                <td style={{ padding: '14px' }}>{siswa.nisn || '-'}</td>
+                                                <td style={{ padding: '14px', textAlign: 'left' }}>{siswa.nama || '-'}</td>
+                                                <td style={{ padding: '14px' }}>{siswa.kelas || '-'}</td>
+                                                <td style={{ padding: '14px' }}>{siswa.kelas_gabungan || '-'}</td>
+                                                <td style={{ padding: '14px' }}>
+                                                    <div 
+                                                        className="d-flex flex-row justify-content-center align-items-center"
+                                                        style={{ gap: '4px' }}
+                                                    >
+                                                        {/* Tombol Ubah Data */}
+                                                        <button
+                                                            type="button"
+                                                            title="Ubah Data"
+                                                            onClick={() => navigate(`/admin/data/siswa/form?id=${siswa.id_siswa}`)}
+                                                            style={{
+                                                                background: 'transparent',
+                                                                border: 'none',
+                                                                padding: 0,
+                                                                margin: 0,
+                                                                cursor: 'pointer'
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src={pencilIcon}
+                                                                alt="Ubah Data"
+                                                                width="28"
+                                                                height="28"
+                                                                draggable={false}
+                                                                style={{ display: 'block' }}
+                                                            />
+                                                        </button>
+
+                                                        {/* Tombol Hapus Data */}
+                                                        <button
+                                                            type="button"
+                                                            title="Hapus Data"
+                                                            onClick={() => handleDelete(siswa.id_siswa)}
+                                                            style={{
+                                                                background: 'transparent',
+                                                                border: 'none',
+                                                                padding: 0,
+                                                                margin: 0,
+                                                                cursor: 'pointer'
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src={deleteIcon}
+                                                                alt="Hapus Data"
+                                                                width="28"
+                                                                height="28"
+                                                                draggable={false}
+                                                                style={{ display: 'block' }}
+                                                            />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </Table>
                         </div>
                     </Card>
                 </div>
             </main>
+
+            {/* Popup konfirmasi hapus data siswa */}
+            <CardPopUp
+                open={showDeletePopup}
+                image={redWarningIcon}
+                borderColor="#DB4437"
+                buttons={[
+                    {
+                        label: "Kembali",
+                        bgColor: "#FFFFFF",
+                        textColor: "#DB4437",
+                        borderColor: "#DB4437",
+                        onClick: () => setShowDeletePopup(false),
+                    },
+                    {
+                        label: "Hapus Data",
+                        bgColor: "#DB4437",
+                        textColor: "#FFFFFF",
+                        borderColor: "#DB4437",
+                        onClick: handleConfirmDelete,
+                    }
+                ]}
+            >
+                Apakah Anda yakin ingin menghapus data siswa ini?
+            </CardPopUp>
 
             <footer>
                 <small style={{ fontSize: '14px', color: '#808080' }}>

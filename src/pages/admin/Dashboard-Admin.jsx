@@ -63,15 +63,15 @@ function DashboardAdmin() {
                     { label: 'Minimize', icon: 'Back Icon Black' },
                     { label: 'Beranda', icon: 'Dashboard Icon' },
                     { label: 'Profil', icon: 'Profile Icon' },
-                    { label: 'Hak Akses Pengguna', icon: 'Presensi Icon' },
+                    { label: 'Hak Akses Pengguna', icon: 'Hak Akses Icon' },
                     { label: 'Kelola Data Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
                     { label: 'Logout', icon: 'Logout Icon Black' },
                   ],
                   dropdownItems: [
-                    { label: 'Data Siswa', icon: 'Kontak Icon' },
-                    { label: 'Data Guru', icon: 'Informasi Icon' },
-                    { label: 'Data Mata Pelajaran', icon: 'Informasi Icon' },
-                    { label: 'Data Presensi', icon: 'Informasi Icon' },
+                    { label: 'Data Siswa', icon: 'Siswa Grey Icon' },
+                    { label: 'Data Guru', icon: 'Guru Grey Icon' },
+                    { label: 'Data Mata Pelajaran', icon: 'Data Mapel Icon' },
+                    { label: 'Data Presensi', icon: 'Data Presensi Icon' },
                     { label: 'Jadwal', icon: 'Jadwal Icon Gray' },
                   ]
                 }}
@@ -99,20 +99,20 @@ function DashboardAdmin() {
 
               sidebarCustomMenu={{
                 sidebarMenu: [
-                    { label: 'Minimize', icon: 'Back Icon Black' },
-                    { label: 'Beranda', icon: 'Dashboard Icon' },
-                    { label: 'Profil', icon: 'Profile Icon' },
-                    { label: 'Hak Akses Pengguna', icon: 'Presensi Icon' },
-                    { label: 'Kelola Data Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
-                    { label: 'Logout', icon: 'Logout Icon Black' },
-                  ],
-                  dropdownItems: [
-                    { label: 'Data Siswa', icon: 'Kontak Icon' },
-                    { label: 'Data Guru', icon: 'Informasi Icon' },
-                    { label: 'Data Mata Pelajaran', icon: 'Informasi Icon' },
-                    { label: 'Data Presensi', icon: 'Informasi Icon' },
-                    { label: 'Jadwal', icon: 'Jadwal Icon Gray' },
-                  ]
+                  { label: 'Minimize', icon: 'Back Icon Black' },
+                  { label: 'Beranda', icon: 'Dashboard Icon' },
+                  { label: 'Profil', icon: 'Profile Icon' },
+                  { label: 'Hak Akses Pengguna', icon: 'Hak Akses Icon' },
+                  { label: 'Kelola Data Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
+                  { label: 'Logout', icon: 'Logout Icon Black' },
+                ],
+                dropdownItems: [
+                  { label: 'Data Siswa', icon: 'Siswa Grey Icon' },
+                  { label: 'Data Guru', icon: 'Guru Grey Icon' },
+                  { label: 'Data Mata Pelajaran', icon: 'Data Mapel Icon' },
+                  { label: 'Data Presensi', icon: 'Data Presensi Icon' },
+                  { label: 'Jadwal', icon: 'Jadwal Icon Gray' },
+                ]
               }}
               
               pathMap={{

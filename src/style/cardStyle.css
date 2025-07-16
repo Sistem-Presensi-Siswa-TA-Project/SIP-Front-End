@@ -68,3 +68,43 @@
 .card-presensi-footer span:hover {
   text-decoration: underline !important;
 }
+
+.popup-overlay {
+  position: fixed;
+  top: 0; 
+  left: 0; 
+  width: 100vw; 
+  height: 100vh;
+  background-color: rgba(90, 90, 90, 0.6) !important; /* abu abu transparan */
+  z-index: 9999 !important;
+  display: flex !important; 
+  align-items: center !important; 
+  justify-content: center !important;
+}
+
+.popup-card {
+  background: #FFF !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+  padding: 32px 28px 24px 28px !important;
+  width: 450px !important;
+  height: 300px !important;
+  text-align: center !important;
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important; 
+  justify-content: center !important;
+  position: relative;
+  color: #000 !important;
+  border-width: 2px !important;
+}
+
+.popup-button {
+  min-width: 90px !important;
+  padding: 10px 20px !important;
+  border-radius: 12px !important;
+  font-weight: bold !important;
+  font-size: 16px !important;
+  cursor: pointer !important;
+  border-width: 2px !important;
+}

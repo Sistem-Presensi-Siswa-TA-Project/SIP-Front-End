@@ -210,6 +210,15 @@ footer {
   .custom-clock {
     font-size: 70px !important;
   }
+
+  .popup-card {
+    width: 340px !important;
+    height: 300px !important;
+  }
+
+  .popup-button {
+    font-size: 12px !important;
+  }
 }
 
 /* ~~~ Animasi Transisi ~~~ */

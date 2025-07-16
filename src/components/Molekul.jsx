@@ -56,6 +56,7 @@ export const Sidebar = (props) => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [hoveredItem, setHoveredItem] = useState(null);
     const [hoveredSubitem, setHoveredSubitem] = useState(null);
+    const [showLogoutPopup, setShowLogoutPopup] = useState(false);
     const navigate = useNavigate();
 
     const sidebarMenu = sidebarCustomMenu.sidebarMenu || [
@@ -91,140 +92,170 @@ export const Sidebar = (props) => {
     const leftArrow = iconList.find((i) => i.label === 'Left Arrow White')?.src;
     const arrowDownWhite = iconList.find((i) => i.label === 'Arrow Down White')?.src;
     const arrowDownBlack = iconList.find((i) => i.label === 'Arrow Down Black')?.src;
+    const redWarningIcon = iconList.find(i => i.label === "Red Warning Icon")?.src;
 
     return (
-        <aside className='sidebar animate-sidebar'>
-            <ul className="sidebar-menu">
-                {sidebarMenu.map((item, index) => {
-                    const isHovered = hoveredItem === item.label;
-                    const icon = iconList.find((i) => i.label === item.icon)?.src;
+        <>
+            <aside className='sidebar animate-sidebar'>
+                <ul className="sidebar-menu">
+                    {sidebarMenu.map((item, index) => {
+                        const isHovered = hoveredItem === item.label;
+                        const icon = iconList.find((i) => i.label === item.icon)?.src;
 
-                    return (
-                        <React.Fragment key={index}>
-                            <li
-                                className="sidebar-item"
-                                onClick={() => {
-                                    // Jika item "Minimize", jalankan fungsi tutup sidebar
-                                    if (item.label === 'Minimize' && onClose) {
-                                        onClose();
-                                    } else if (item.hasDropdown) {
-                                        setIsDropdownOpen(!isDropdownOpen);
-                                    } else if (item.label === 'Logout') {
-                                        // Panggil logout supaya token & lastActivity dihapus dan redirect ke halaman login
-                                        logout();
-                                    } else if (pathMap[item.label]) {
-                                        navigate(pathMap[item.label]);
+                        return (
+                            <React.Fragment key={index}>
+                                <li
+                                    className="sidebar-item"
+                                    onClick={() => {
+                                        // Jika item "Minimize", jalankan fungsi tutup sidebar
+                                        if (item.label === 'Minimize' && onClose) {
+                                            onClose();
+                                        } else if (item.hasDropdown) {
+                                            setIsDropdownOpen(!isDropdownOpen);
+                                        } else if (item.label === 'Logout') {                                    
+                                            setShowLogoutPopup(true);
+                                        } else if (pathMap[item.label]) {
+                                            navigate(pathMap[item.label]);
+                                        }
+                                    }}
+                                    onMouseEnter={() => setHoveredItem(item.label)}
+                                    onMouseLeave={() => setHoveredItem(null)}
+                                >
+                                    {/* Icon Kiri */}
+                                    {item.label === 'Minimize' ? (
+                                            isHovered ? (
+                                                <img 
+                                                    src={leftArrow} 
+                                                    width="8"
+                                                    height="8" 
+                                                    alt="Minimize"
+                                                    style={{ marginLeft: '5px', marginRight: '20px' }} 
+                                                />
+                                            ) : (
+                                                <img src={icon} alt="Minimize" className="sidebar-icon" />
+                                            )
+                                        ) : item.hasDropdown ? (
+                                            isHovered ? (
+                                                <span className="sidebar-icon-placeholder" />
+                                            ) : (
+                                                <img src={icon} alt={item.label} className="sidebar-icon" />
+                                            )
+                                        ) : (
+                                            isHovered ? (
+                                                <span className="sidebar-icon-placeholder" />
+                                            ) : (
+                                                <img src={icon} alt={item.label} className="sidebar-icon" />
+                                            )
+                                        )
                                     }
-                                }}
-                                onMouseEnter={() => setHoveredItem(item.label)}
-                                onMouseLeave={() => setHoveredItem(null)}
-                            >
-                                {/* Icon Kiri */}
-                                {item.label === 'Minimize' ? (
-                                        isHovered ? (
-                                            <img 
-                                                src={leftArrow} 
-                                                width="8"
-                                                height="8" 
-                                                alt="Minimize"
-                                                style={{ marginLeft: '5px', marginRight: '20px' }} 
-                                            />
-                                        ) : (
-                                            <img src={icon} alt="Minimize" className="sidebar-icon" />
-                                        )
-                                    ) : item.hasDropdown ? (
-                                        isHovered ? (
-                                            <span className="sidebar-icon-placeholder" />
-                                        ) : (
-                                            <img src={icon} alt={item.label} className="sidebar-icon" />
-                                        )
-                                    ) : (
-                                        isHovered ? (
-                                            <span className="sidebar-icon-placeholder" />
-                                        ) : (
-                                            <img src={icon} alt={item.label} className="sidebar-icon" />
-                                        )
-                                    )
-                                }
 
-                                {/* Label */}
-                                <span className="sidebar-label"> {item.label} </span>
+                                    {/* Label */}
+                                    <span className="sidebar-label"> {item.label} </span>
 
-                                {/* Icon Kanan */}
-                                {item.hasDropdown && (
-                                    <img
-                                        src={isHovered ? arrowDownWhite : arrowDownBlack}
-                                        alt="Dropdown"
-                                        width="18"
-                                        height="18"
-                                        style={{ marginLeft: 'auto' }}
-                                    />
-                                )}
+                                    {/* Icon Kanan */}
+                                    {item.hasDropdown && (
+                                        <img
+                                            src={isHovered ? arrowDownWhite : arrowDownBlack}
+                                            alt="Dropdown"
+                                            width="18"
+                                            height="18"
+                                            style={{ marginLeft: 'auto' }}
+                                        />
+                                    )}
 
-                                {!item.hasDropdown && item.label !== 'Minimize' && isHovered && (
-                                    <img
-                                        src={rightArrow}
-                                        alt="Hover Arrow"
-                                        width="18"
-                                        height="18"
-                                        style={{ marginLeft: 'auto' }}
-                                    />
-                                )}
-                            </li>
+                                    {!item.hasDropdown && item.label !== 'Minimize' && isHovered && (
+                                        <img
+                                            src={rightArrow}
+                                            alt="Hover Arrow"
+                                            width="18"
+                                            height="18"
+                                            style={{ marginLeft: 'auto' }}
+                                        />
+                                    )}
+                                </li>
 
-                            {/* Submenu Dropdown */}
-                            {item.hasDropdown && isDropdownOpen && (
-                                <ul className="sidebar-submenu">
-                                    {dropdownItems.map((sub, subIndex) => {
-                                        const isSubHovered = hoveredSubitem === sub.label;
-                                        const subIcon = iconList.find((i) => i.label === sub.icon)?.src;
+                                {/* Submenu Dropdown */}
+                                {item.hasDropdown && isDropdownOpen && (
+                                    <ul className="sidebar-submenu">
+                                        {dropdownItems.map((sub, subIndex) => {
+                                            const isSubHovered = hoveredSubitem === sub.label;
+                                            const subIcon = iconList.find((i) => i.label === sub.icon)?.src;
 
-                                        return (
-                                            <li
-                                                key={subIndex}
-                                                className="sidebar-subitem"
-                                                onClick={() => {
-                                                    if (sub.label === 'Logout') {
-                                                        // Panggil logout supaya token & lastActivity dihapus dan redirect ke halaman login
-                                                        logout();
-                                                    } else if (pathMap[sub.label]) {
-                                                        navigate(pathMap[sub.label]);
+                                            return (
+                                                <li
+                                                    key={subIndex}
+                                                    className="sidebar-subitem"
+                                                    onClick={() => {
+                                                        if (sub.label === 'Logout') {
+                                                            // Panggil logout supaya token & lastActivity dihapus dan redirect ke halaman login
+                                                            logout();
+                                                        } else if (pathMap[sub.label]) {
+                                                            navigate(pathMap[sub.label]);
+                                                        }
+                                                    }}
+                                                    onMouseEnter={() => setHoveredSubitem(sub.label)}
+                                                    onMouseLeave={() => setHoveredSubitem(null)}
+                                                >
+                                                    {/* Icon Kiri Submenu */}
+                                                    {isSubHovered ? (
+                                                            <span className="sidebar-icon-placeholder" />
+                                                        ) : (
+                                                            <img src={subIcon} alt={sub.label} className="sidebar-icon" />
+                                                        )
                                                     }
-                                                }}
-                                                onMouseEnter={() => setHoveredSubitem(sub.label)}
-                                                onMouseLeave={() => setHoveredSubitem(null)}
-                                            >
-                                                {/* Icon Kiri Submenu */}
-                                                {isSubHovered ? (
-                                                        <span className="sidebar-icon-placeholder" />
-                                                    ) : (
-                                                        <img src={subIcon} alt={sub.label} className="sidebar-icon" />
-                                                    )
-                                                }
 
-                                                {/* Label */}
-                                                <span className="sidebar-label"> {sub.label} </span>
+                                                    {/* Label */}
+                                                    <span className="sidebar-label"> {sub.label} </span>
 
-                                                {/* Icon Kanan Submenu */}
-                                                {isSubHovered && (
-                                                    <img
-                                                        src={rightArrow}
-                                                        alt="Sub Arrow"
-                                                        width="16"
-                                                        height="16"
-                                                        style={{ marginLeft: 'auto' }}
-                                                    />
-                                                )}
-                                            </li>
-                                        );
-                                    })}
-                                </ul>
-                            )}
-                        </React.Fragment>
-                    );
-                })}
-            </ul>
-        </aside>
+                                                    {/* Icon Kanan Submenu */}
+                                                    {isSubHovered && (
+                                                        <img
+                                                            src={rightArrow}
+                                                            alt="Sub Arrow"
+                                                            width="16"
+                                                            height="16"
+                                                            style={{ marginLeft: 'auto' }}
+                                                        />
+                                                    )}
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                )}
+                            </React.Fragment>
+                        );
+                    })}
+                </ul>
+            </aside>
+
+            {/* POPUP LOGOUT */}
+            <CardPopUp
+                open={showLogoutPopup}
+                image={redWarningIcon}
+                borderColor="#DB4437"
+                buttons={[
+                    {
+                        label: "Kembali ke Beranda",
+                        bgColor: "#FFFFFF",
+                        textColor: "#DB4437",
+                        borderColor: "#DB4437",
+                        onClick: () => setShowLogoutPopup(false),
+                    },
+                    {
+                        label: "Ya, Saya Yakin",
+                        bgColor: "#DB4437",
+                        textColor: "#FFFFFF",
+                        borderColor: "#DB4437",
+                        onClick: () => {
+                            logout();
+                            setShowLogoutPopup(false);
+                        },
+                    }
+                ]}
+            >
+                Apakah Anda yakin ingin keluar?
+            </CardPopUp>
+        </>
     );
 };
 
@@ -349,3 +380,57 @@ export const Camera = forwardRef((props, ref) => {
         </div>
     );
 });
+
+export const CardPopUp = (props) => {
+    const {
+        open = false,
+        image,
+        children = "",
+        borderColor,
+        buttons = [],
+    } = props;
+
+    if (!open) return null; // Tidak tampil kalau tidak dibuka
+
+    return (
+        <div className="popup-overlay">
+            <div className="popup-card" style={{ borderColor: borderColor }}>
+                {/* Gambar */}
+                {image && (
+                    <img
+                        src={image}
+                        alt="popup-img"
+                        style={{
+                            width: 95, height: 95,
+                            margin: "0 auto 24px auto", display: "block"
+                        }}
+                    />
+                )}
+
+                {/* Teks */}
+                <div style={{ marginTop: 5,marginBottom: 30, fontSize: 18, color: "#000", fontWeight: "bold" }}>
+                    {children}
+                </div>
+
+                {/* Tombol */}
+                <div style={{ display: "flex", gap: 16, justifyContent: "center" }}>
+                    {buttons.map((btn, idx) => (
+                        <button
+                            key={idx}
+                            className="popup-button"
+                            style={{
+                                background: btn.bgColor || '#000',
+                                color: btn.textColor || '#FFF',
+                                borderColor: btn.borderColor || '#FFF',
+                            }}
+                            onClick={btn.onClick}
+                            autoFocus={btn.autoFocus}
+                        >
+                            {btn.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};

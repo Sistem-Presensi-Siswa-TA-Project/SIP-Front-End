@@ -1,29 +1,108 @@
 // Filename: SiswaForm.jsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Header, Card } from '../../components/Molekul.jsx';
 import { SuccessButton, SecondaryButton } from '../../components/Button.jsx';
 import { FormInput } from '../../components/Forms.jsx'
 import { iconList } from '../../data/iconData.js';
+import { getSiswaById, createSiswa } from '../../handlers/SiswaHandler.jsx';
+
+// Default kosong
+const defaultForm = {
+    nisn: '',
+    nama: '',
+    kelas: '',
+    jenisKelamin: '',
+    tempatLahir: '',
+    tanggalLahir: '',
+    hp: '',
+    kelasGabungan: '',
+};
 
 function SiswaForm() {
     const navigate = useNavigate();
+    const location = useLocation();
+    const params = new URLSearchParams(location.search);
+    const idSiswa = params.get('id');
+
+    // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [errorMsg, setErrorMsg] = useState("");
 
+    // Icon
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
 
-    const [formData, setFormData] = useState({
-        nisn: '',
-        nama: '',
-        kelas: '',
-        jenisKelamin: '',
-        tempatLahir: '',
-        tanggalLahir: '',
-        hp: '',
-        kelasGabungan: '',
-    });
+    const [formData, setFormData] = useState(defaultForm);
+
+    useEffect(() => {
+        if (idSiswa) {
+            setLoading(true);
+            getSiswaById(idSiswa)
+                .then((data) => {
+                    if (data) {
+                        setFormData({
+                            nisn: data.nisn || '',
+                            nama: data.nama || '',
+                            kelas: data.kelas || '',
+                            jenisKelamin: data.jenis_kelamin || '', // perhatikan nama field backend
+                            tempatLahir: data.tempat_lahir || '',
+                            tanggalLahir: data.tanggal_lahir ? data.tanggal_lahir.substr(0, 10) : '', // Format YYYY-MM-DD
+                            hp: data.nomor_hp || '',
+                            kelasGabungan: data.kelas_gabungan || '',
+                        });
+                    }
+
+                    setLoading(false);
+                });
+        } else {
+            // Jika tambah data, form kosong
+            setFormData(defaultForm);
+        }
+    }, [idSiswa]);
+
+    //Fungsi Simpan Data
+    const handleSimpan = async () => {
+        // VALIDASI
+        const requiredFields = [
+            { name: "nisn", label: "NISN" },
+            { name: "nama", label: "Nama Lengkap" },
+            { name: "kelas", label: "Kelas" },
+            { name: "jenisKelamin", label: "Jenis Kelamin" },
+        ];
+
+        for (let field of requiredFields) {
+            if (!formData[field.name] || !formData[field.name].trim()) {
+                setErrorMsg(`Kolom ${field.label} wajib diisi!`);
+                return;
+            }
+        }
+
+        setErrorMsg(""); // clear jika lolos validasi
+
+        // PERSIAPKAN data POST, sesuaikan nama field backend!
+        const dataToSend = {
+            nisn: formData.nisn,
+            nama: formData.nama,
+            kelas: formData.kelas,
+            jenis_kelamin: formData.jenisKelamin,
+            tempat_lahir: formData.tempatLahir,
+            tanggal_lahir: formData.tanggalLahir,
+            nomor_hp: formData.hp,
+            kelas_gabungan: formData.kelasGabungan,
+        };
+
+        try {
+            await createSiswa(dataToSend);
+            alert("Data siswa berhasil ditambahkan!");
+            navigate('/admin/data/siswa');
+        } catch (error) {
+            console.error("Gagal menyimpan data siswa!", error);
+            setErrorMsg("Gagal menambah data siswa. Coba lagi.");
+        }
+    };
 
     return (
         <div>
@@ -70,99 +149,111 @@ function SiswaForm() {
 
                 </SecondaryButton>
                 
+                {/* Jika data yang bersifat required kosong */}
+                {errorMsg && (
+                    <div style={{ color: "red", fontWeight: 600, marginBottom: 18 }}>
+                        {errorMsg}
+                    </div>
+                )}
+                
                 {/* Form Profile */}
-                <Card
-                    style={{
-                        width: '100%',
-                        marginTop: '35px',
-                        padding: '30px',
-                    }}
-                >
-                    <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '25px' }}> 
-                        DATA SISWA 
-                    </h3>
-
-                    <div className="row" style={{ rowGap: '16px' }}>
-                        {[
-                            ['Nomor Induk Siswa Nasional (NISN)', 'nisn'],
-                            ['Nama Lengkap', 'nama'],
-                            ['Kelas', 'kelas'],
-                            ['Jenis Kelamin', 'jenisKelamin'],
-                            ['Tempat Lahir', 'tempatLahir'],
-                            ['Tanggal Lahir', 'tanggalLahir'],
-                            ['Nomor Handphone', 'hp'],
-                            ['Kelas Gabungan', 'kelasGabungan'],
-                        ].map(([label, name], index) => {
-                            const isRequired = [
-                                'nisn', 
-                                'nama', 
-                                'kelas', 
-                                'jenisKelamin', 
-                            ].includes(name);
-                            
-                            return (
-                                <div className="col-md-4 col-sm-12" key={index}>
-                                    {name === 'jenisKelamin' ? (
-                                        <FormInput
-                                            label={label}
-                                            name={name}
-                                            value={formData[name]}
-                                            required= {isRequired}
-                                            placeholder={label}
-                                            onChange={(e) =>
-                                                setFormData((prev) => ({ ...prev, [name]: e.target.value }))
-                                            }
-                                            options={['Laki-Laki', 'Perempuan']}
-                                        />
-                                    ) : (
-                                        <FormInput
-                                            label={label}
-                                            name={name}
-                                            type={
-                                                name === 'tanggalLahir'
-                                                    ? 'date'
-                                                    : name === 'hp'
-                                                    ? 'tel'
-                                                    : 'text'
-                                            }
-                                            value={formData[name]}
-                                            required={isRequired}
-                                            placeholder={label}
-                                            onChange={(e) =>
-                                                setFormData((prev) => ({ ...prev, [name]: e.target.value }))
-                                            }
-                                        />
-                                    )}
-                                </div>
-                            );
-                        })}
+                {loading ? (
+                    <div style={{ textAlign: 'center', width: '100%', margin: '40px 0' }}>
+                        <span> Memuat data siswa... </span>
                     </div>
+                ) : (
+                    <Card
+                        style={{
+                            width: '100%',
+                            marginTop: '35px',
+                            padding: '30px',
+                        }}
+                    >
+                        <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '25px' }}> 
+                            DATA SISWA 
+                        </h3>
 
-                    {/* Tombol Simpan */}
-                    <div className="d-flex justify-content-end justify-content-md-center mt-4">
-                        <SuccessButton
-                            className="d-flex align-items-center justify-content-center"
-                            width="150px"
-                            height="45px"
-                            style={{
-                                padding: '8px 28px',
-                                fontWeight: 'bold',
-                                fontSize: '16px',
-                                borderRadius: successButtonHovering ? '14px' : '12px',
-                                boxShadow: successButtonHovering
-                                    ? '4px 4px 8px rgba(0, 0, 0, 0.5)'
-                                    : '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                                transition: 'box-shadow 0.2s ease-in-out',
-                            }}
-                            onMouseEnter={() => setSuccessButtonHovering(true)}
-                            onMouseLeave={() => setSuccessButtonHovering(false)}
-                        >
-                            SIMPAN
-                        </SuccessButton>
-                    </div>
-                </Card>
+                        <div className="row" style={{ rowGap: '16px' }}>
+                            {[
+                                ['Nomor Induk Siswa Nasional (NISN)', 'nisn'],
+                                ['Nama Lengkap', 'nama'],
+                                ['Kelas', 'kelas'],
+                                ['Jenis Kelamin', 'jenisKelamin'],
+                                ['Tempat Lahir', 'tempatLahir'],
+                                ['Tanggal Lahir', 'tanggalLahir'],
+                                ['Nomor Handphone', 'hp'],
+                                ['Kelas Gabungan', 'kelasGabungan'],
+                            ].map(([label, name], index) => {
+                                const isRequired = [
+                                    'nisn', 
+                                    'nama', 
+                                    'kelas', 
+                                    'jenisKelamin', 
+                                ].includes(name);
+                                
+                                return (
+                                    <div className="col-md-4 col-sm-12" key={index}>
+                                        {name === 'jenisKelamin' ? (
+                                            <FormInput
+                                                label={label}
+                                                name={name}
+                                                value={formData[name]}
+                                                required= {isRequired}
+                                                placeholder={label}
+                                                onChange={(e) =>
+                                                    setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+                                                }
+                                                options={['Laki-Laki', 'Perempuan']}
+                                            />
+                                        ) : (
+                                            <FormInput
+                                                label={label}
+                                                name={name}
+                                                type={
+                                                    name === 'tanggalLahir'
+                                                        ? 'date'
+                                                        : name === 'hp'
+                                                        ? 'tel'
+                                                        : 'text'
+                                                }
+                                                value={formData[name]}
+                                                required={isRequired}
+                                                placeholder={label}
+                                                onChange={(e) =>
+                                                    setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+                                                }
+                                            />
+                                        )}
+                                    </div>
+                                );
+                            })}
+                        </div>
 
-            
+                        {/* Tombol Simpan */}
+                        <div className="d-flex justify-content-end justify-content-md-center mt-4">
+                            <SuccessButton
+                                className="d-flex align-items-center justify-content-center"
+                                width="150px"
+                                height="45px"
+                                style={{
+                                    padding: '8px 28px',
+                                    fontWeight: 'bold',
+                                    fontSize: '16px',
+                                    borderRadius: successButtonHovering ? '14px' : '12px',
+                                    boxShadow: successButtonHovering
+                                        ? '4px 4px 8px rgba(0, 0, 0, 0.5)'
+                                        : '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                    transition: 'box-shadow 0.2s ease-in-out',
+                                }}
+                                onMouseEnter={() => setSuccessButtonHovering(true)}
+                                onMouseLeave={() => setSuccessButtonHovering(false)}
+                                onClick={handleSimpan}
+                            >
+                                SIMPAN
+                            </SuccessButton>
+                        </div>
+                    </Card>
+                )}
             </div>
         </main>
 

@@ -15,7 +15,7 @@ import BackIconBlack from "../assets/iconBack-black.svg";
 import BackIconWhite from "../assets/iconBack-white.svg";
 import CancelIconA from "../assets/cancelIconA.svg";
 import CancelIconB from "../assets/cancelIconB.svg";
-import CetakIcon from "../assets/cetak-black.svg";
+import CetakIcon from "../assets/print-icon.svg";
 import DashboardIcon from "../assets/home-black.svg";
 import DeleteIcon from "../assets/delete-icon.svg";
 import EmailIcon from "../assets/emailIcon.svg";
@@ -60,6 +60,15 @@ import Siswa from "../assets/siswa.svg";
 import SwapCamera from "../assets/swap-camera.svg";
 import UserIcon from "../assets/userIcon.svg";
 import QRCode from "../assets/qrcode-icon.png";
+import HakAkses from "../assets/hakAkses-icon.svg";
+import DataPresensi from "../assets/dataPresensi-icon.svg";
+import DataMapel from "../assets/dataMapel-icon.svg";
+import CariPresensi from "../assets/cariPresensi-icon.svg";
+import SiswaGrey from "../assets/siswaIcon-grey.svg";
+import GuruGrey from "../assets/guruIcon-grey.svg";
+import RedWarning from "../assets/redWarning-icon.svg";
+import YellowWarning from "../assets/yellowWarning-icon.svg";
+import BlueWarning from "../assets/blueWarning-icon.svg";
 
 export const iconList = [
   { id: 1, label: "Add Profile", src: AddProfile },
@@ -121,4 +130,13 @@ export const iconList = [
   { id: 57, label: "People", src: People },
   { id: 58, label: "People Fill", src: PeopleFill },
   { id: 59, label: "Login Image 2", src: LoginImg2 },
+  { id: 60, label: "Hak Akses Icon", src: HakAkses },
+  { id: 61, label: "Data Presensi Icon", src: DataPresensi },
+  { id: 62, label: "Data Mapel Icon", src: DataMapel },
+  { id: 63, label: "Cari Presensi Icon", src: CariPresensi },
+  { id: 64, label: "Siswa Grey Icon", src: SiswaGrey },
+  { id: 65, label: "Guru Grey Icon", src: GuruGrey },
+  { id: 66, label: "Red Warning Icon", src: RedWarning },
+  { id: 67, label: "Yellow Warning Icon", src: YellowWarning },
+  { id: 68, label: "Blue Warning Icon", src: BlueWarning },
 ];
