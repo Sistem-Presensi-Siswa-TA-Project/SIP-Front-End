@@ -63,8 +63,7 @@ function DataSiswa() {
             window.location.reload();
         } catch (error) {
             setIdSiswaToDelete(null);
-            console.error("Gagal menghapus data siswa.", error);
-            alert('Gagal menghapus data! Coba lagi.');
+            alert("Gagal menghapus data siswa.", error);
         }
     };
 
@@ -288,7 +287,7 @@ function DataSiswa() {
 
             <footer>
                 <small style={{ fontSize: '14px', color: '#808080' }}>
-                Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
+                    Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
                 </small>
             </footer>
         </div>

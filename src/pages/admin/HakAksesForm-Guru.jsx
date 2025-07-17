@@ -13,6 +13,7 @@ const defaultForm = {
 };
 
 function HakAksesFormGuru() {
+    // Navigasi
     const navigate = useNavigate();
     const location = useLocation();
     const params = new URLSearchParams(location.search);
@@ -97,8 +98,7 @@ function HakAksesFormGuru() {
             }
             navigate('/admin/user/guru');
         } catch (error) {
-            console.error("Gagal menyimpan data user:", error);
-            setErrorMsg("Username telah terdaftar!");
+            setErrorMsg("Gagal menyimpan data user:", error);
         }
     };
 

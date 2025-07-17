@@ -1,6 +1,6 @@
 // Filename: DataGuru.jsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation, replace } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card, CardPopUp } from '../../components/Molekul.jsx';
 import { SecondaryButton, SuccessButton } from '../../components/Button.jsx';
@@ -42,8 +42,7 @@ function DataGuru() {
                 setGuruList(data);
             } catch (e) {
                 setGuruList([]);
-                console.error("Gagal mengambil data guru.", e);
-                alert('Gagal mengambil data guru');
+                alert("Gagal mengambil data guru.", e);
             }
             setLoading(false);
         }
@@ -279,7 +278,7 @@ function DataGuru() {
                             const guruToDelete = guruList.find(g => g.id_guru === idGuruToDelete);
 
                             return (
-                                <> Apakah Anda yakin ingin menghapus data " <b> {guruToDelete?.nama || 'guru ini'} </b> "? </>
+                                <> Apakah Anda yakin ingin menghapus data "<b>{guruToDelete?.nama || 'guru ini'}</b>"? </>
                             );
                         }
                     )()
@@ -288,7 +287,7 @@ function DataGuru() {
 
             <footer>
                 <small style={{ fontSize: '14px', color: '#808080' }}>
-                Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
+                    Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
                 </small>
             </footer>
         </div>

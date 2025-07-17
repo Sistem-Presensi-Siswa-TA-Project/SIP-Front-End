@@ -117,8 +117,7 @@ function SiswaForm() {
             }
             navigate('/admin/data/siswa');
         } catch (error) {
-            setErrorMsg("Gagal menyimpan data siswa. Coba lagi.");
-            console.error(error);
+            setErrorMsg("Gagal menyimpan data siswa: ", error);
         }
     };
 
@@ -306,7 +305,7 @@ function SiswaForm() {
 
         <footer>
             <small style={{ fontSize: '14px', color: '#808080' }}>
-            Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
+                Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
             </small>
         </footer>
         </div>

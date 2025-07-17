@@ -109,8 +109,7 @@ function GuruForm() {
             }
             navigate('/admin/data/guru');
         } catch (error) {
-            console.error("Gagal menyimpan data guru:", error);
-            setErrorMsg("Gagal menyimpan data guru. Coba lagi!");
+            setErrorMsg("Gagal menyimpan data guru:", error);
         }
     };
 

@@ -1,15 +1,23 @@
 // Filename: HakAksesPiket.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
-import { Header, Card } from '../../components/Molekul.jsx';
+import { Header, Card, CardPopUp } from '../../components/Molekul.jsx';
 import { SecondaryButton, SuccessButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
+import { getAllPiket, deletePiketById } from '../../handlers/PiketHandler.jsx';
+import { getGuruByNomorInduk } from '../../handlers/GuruHandler.jsx';
+import { getSiswaByNISN } from '../../handlers/SiswaHandler.jsx';
+import { deleteUserByUsername } from '../../handlers/UserHandler.jsx';
 
 function HakAksesPiket() {
     // State Hovering
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [idPiketToDelete, setIdPiketToDelete] = useState(null);
+    const [piketList, setPiketList] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     // Navigasi Page
     const location = useLocation();
@@ -25,11 +33,77 @@ function HakAksesPiket() {
     const addGreen = iconList.find((i) => i.label === 'Add Green')?.src;
     const pencilIcon = iconList.find((i) => i.label === 'Pencil Icon')?.src;
     const deleteIcon = iconList.find((i) => i.label === 'Delete Icon')?.src;
+    const redWarningIcon = iconList.find(i => i.label === "Red Warning Icon")?.src;
 
-    const handleDelete = (index) => { //Sementara
-        if (window.confirm('Yakin ingin menghapus data ini?')) {
-            alert(`Data ke-${index + 1} dihapus!`);
-            // Tambahkan proses hapus data di sini
+    // Mengambil data dari PiketHandler.jsx
+    useEffect(() => {
+        async function fetchData() {
+            setLoading(true);
+            try {
+                const data = await getAllPiket();
+
+                // Map nama petugas dari guru/siswa
+                const withNama = await Promise.all(
+                    (data || []).map(async (piket) => {
+                        let nama = "-";
+                        // Cek guru dulu
+                        const guru = await getGuruByNomorInduk(piket.nomor_induk);
+
+                        if (guru && guru.nama) {
+                            nama = guru.nama;
+                        } else {
+                            // Jika tidak ada di guru, cek siswa
+                            const siswa = await getSiswaByNISN(piket.nomor_induk);
+
+                            if (siswa && siswa.nama) {
+                                nama = siswa.nama;
+                            }
+                        }
+                        return { ...piket, nama };
+                    })
+                );
+
+                setPiketList(withNama);
+            } catch (e) {
+                setPiketList([]);
+                alert('Gagal mengambil data piket: ', e);
+            }
+            setLoading(false);
+        }
+        fetchData();
+    }, []);
+
+    // Handler untuk menampilkan popup delete
+    const handleDelete = (id_piket) => {
+        setIdPiketToDelete(id_piket);
+        setShowDeletePopup(true);
+    };
+
+    // Handler hapus data guru (dipakai di onClick popup)
+    const handleConfirmDelete = async () => {
+        setShowDeletePopup(false);
+
+        try {
+            // 1. Mengambil username dari piket yang mau dihapus
+            const piketToDelete = piketList.find(p => p.id_piket === idPiketToDelete);
+            const username = piketToDelete?.kode_piket;
+
+            // 2. Hapus data piket
+            await deletePiketById(idPiketToDelete);
+
+            // 3. Hapus user berdasarkan username
+            if (username) {
+                await deleteUserByUsername(username);
+            }
+
+            // 4. Refresh data piket
+            setPiketList(prev => prev.filter(item => item.id_piket !== idPiketToDelete));
+            setIdPiketToDelete(null);
+            alert('Data piket & user berhasil dihapus!');
+            window.location.reload();
+        } catch (error) {
+            setIdPiketToDelete(null);
+            alert('Gagal menghapus data piket atau user:', error);
         }
     };
 
@@ -47,7 +121,7 @@ function HakAksesPiket() {
                         className="animate-button d-flex flex-row gap-2"
                         width="125px"
                         height="45px"
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate(`/admin/user`)}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
                         style={{ 
@@ -139,70 +213,77 @@ function HakAksesPiket() {
                                 </thead>
 
                                 <tbody>
-                                    {[...Array(20)].map((_, i) => (
-                                        <tr key={i}>
-                                            <td className="border-right" style={{ padding: '14px' }}> {i+1}. </td>
-                                            <td style={{ padding: '14px' }}> P123 </td>
-                                            <td style={{ padding: '14px' }}> 54543543 </td>
-                                            <td style={{ padding: '14px', textAlign: 'left' }}> Nama Guru ABCDEFGH IJKLMNO </td>
-                                            <td style={{ padding: '14px' }}> OSIS </td>
-                                            <td style={{ padding: '14px' }}>
-                                                <div 
-                                                    className="d-flex flex-row justify-content-center align-items-center"
-                                                    style={{ gap: '4px' }}
-                                                >
-                                                    {/* Tombol Ubah Data */}
-                                                    <button
-                                                        type="button"
-                                                        title="Ubah Data"
-                                                        onClick={
-                                                            // Fungsi edit, bisa dikirim ID data sebenarnya
-                                                            () => navigate(`${prefix}/user/piket/form`, { state: { index: i } })
-                                                        }
-                                                        style={{
-                                                            background: 'transparent',
-                                                            border: 'none',
-                                                            padding: 0,
-                                                            margin: 0,
-                                                            cursor: 'pointer'
-                                                        }}
-                                                    >
-                                                        <img
-                                                            src={pencilIcon}
-                                                            alt="Ubah Data"
-                                                            width="28"
-                                                            height="28"
-                                                            draggable={false}
-                                                            style={{ display: 'block' }}
-                                                        />
-                                                    </button>
-
-                                                    {/* Tombol Hapus Data */}
-                                                    <button
-                                                        type="button"
-                                                        title="Hapus Data"
-                                                        onClick={() => handleDelete(i)} // Fungsi delete, bisa dikirim ID data sebenarnya
-                                                        style={{
-                                                            background: 'transparent',
-                                                            border: 'none',
-                                                            padding: 0,
-                                                            margin: 0,
-                                                            cursor: 'pointer'
-                                                        }}
-                                                    >
-                                                        <img
-                                                            src={deleteIcon}
-                                                            alt="Hapus Data"
-                                                            width="28"
-                                                            height="28"
-                                                            draggable={false}
-                                                            style={{ display: 'block' }}
-                                                        />
-                                                    </button>
-                                                </div>
-                                            </td>
+                                    {loading ? (
+                                        <tr>
+                                            <td colSpan={8} style={{ textAlign: 'center' }}> Memuat data piket.... </td>
                                         </tr>
-                                    ))}
+                                    ) : piketList.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={8} style={{ textAlign: 'center' }}> Tidak ada data piket! </td>
+                                        </tr>
+                                    ) : (
+                                        piketList.map((piket, i) => (
+                                            <tr key={piket.id_piket || i}>
+                                                <td className="border-right" style={{ padding: '14px' }}> {i+1}. </td>
+                                                <td style={{ padding: '14px' }}> {piket.kode_piket || '-'} </td>
+                                                <td style={{ padding: '14px' }}> {piket.nomor_induk || '-'} </td>
+                                                <td style={{ padding: '14px', textAlign: 'left' }}> {piket.nama || '-'} </td>
+                                                <td style={{ padding: '14px' }}> {piket.status || '-'} </td>
+                                                <td style={{ padding: '14px' }}>
+                                                    <div 
+                                                        className="d-flex flex-row justify-content-center align-items-center"
+                                                        style={{ gap: '4px' }}
+                                                    >
+                                                        {/* Tombol Ubah Data */}
+                                                        <button
+                                                            type="button"
+                                                            title="Ubah Data"
+                                                            onClick={() => navigate(`${prefix}/user/piket/form?id=${piket.id_piket}`)}
+                                                            style={{
+                                                                background: 'transparent',
+                                                                border: 'none',
+                                                                padding: 0,
+                                                                margin: 0,
+                                                                cursor: 'pointer'
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src={pencilIcon}
+                                                                alt="Ubah Data"
+                                                                width="28"
+                                                                height="28"
+                                                                draggable={false}
+                                                                style={{ display: 'block' }}
+                                                            />
+                                                        </button>
+
+                                                        {/* Tombol Hapus Data */}
+                                                        <button
+                                                            type="button"
+                                                            title="Hapus Data"
+                                                            onClick={() => handleDelete(piket.id_piket)} // Fungsi delete, bisa dikirim ID data sebenarnya
+                                                            style={{
+                                                                background: 'transparent',
+                                                                border: 'none',
+                                                                padding: 0,
+                                                                margin: 0,
+                                                                cursor: 'pointer'
+                                                            }}
+                                                        >
+                                                            <img
+                                                                src={deleteIcon}
+                                                                alt="Hapus Data"
+                                                                width="28"
+                                                                height="28"
+                                                                draggable={false}
+                                                                style={{ display: 'block' }}
+                                                            />
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </Table>
                         </div>
@@ -210,9 +291,43 @@ function HakAksesPiket() {
                 </div>
             </main>
 
+            {/* Popup konfirmasi hapus data guru*/}
+            <CardPopUp
+                open={showDeletePopup}
+                image={redWarningIcon}
+                borderColor="#DB4437"
+                buttons={[
+                    {
+                        label: "Kembali",
+                        bgColor: "#FFFFFF",
+                        textColor: "#DB4437",
+                        borderColor: "#DB4437",
+                        onClick: () => setShowDeletePopup(false),
+                    },
+                    {
+                        label: "Hapus Data",
+                        bgColor: "#DB4437",
+                        textColor: "#FFFFFF",
+                        borderColor: "#DB4437",
+                        onClick: handleConfirmDelete,
+                    }
+                ]}
+            >
+                {
+                    (() => {
+                            const piketToDelete = piketList.find(p => p.id_piket === idPiketToDelete);
+
+                            return (
+                                <> Apakah Anda yakin ingin menghapus data "<b>{piketToDelete?.nama || 'piket ini'}</b>"? </>
+                            );
+                        }
+                    )()
+                }
+            </CardPopUp>
+
             <footer>
                 <small style={{ fontSize: '14px', color: '#808080' }}>
-                Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
+                    Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
                 </small>
             </footer>
         </div>

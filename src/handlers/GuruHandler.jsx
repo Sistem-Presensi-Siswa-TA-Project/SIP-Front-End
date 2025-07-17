@@ -35,9 +35,9 @@ export async function getGuruById(idGuru) {
 export async function getGuruByNomorInduk(nomorInduk) {
     const response = await fetch(`${API}/api/guru/nomor-induk/${nomorInduk}`);
     const data = await response.json();
-
+    
     if (!response.ok) {
-        throw { code: 'GET_GURU_NOMOR_INDUK_FAILED', message: data.message || 'Gagal mengambil data guru' };
+        return null;
     }
 
     // Return detail guru, contoh: { nama: "...", ... }

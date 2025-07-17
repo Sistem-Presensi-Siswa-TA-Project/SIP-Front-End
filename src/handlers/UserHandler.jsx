@@ -4,9 +4,9 @@ import axios from 'axios';
 
 const API = 'https://backend.ajwan.my.id';
 
-export async function getUserById(IdUser) {
+export async function getUserById(idUser) {
     try {
-        const response = await axios.get(`${API}/api/users/${IdUser}`);
+        const response = await axios.get(`${API}/api/users/${idUser}`);
 
         // Jika data adalah array, ambil elemen pertama
         if (Array.isArray(response.data.data)) {
@@ -31,6 +31,22 @@ export async function getUserByRole(role) {
     return response.data.data || [];
 }
 
+export async function getUserByUsername(username) {
+    const response = await axios.get(`${API}/api/users/username/${username}`);
+
+    if (response.status !== 200) {
+        throw { code: 'GET_USER_USERNAME_FAILED', message: response.data?.message || 'Gagal mengambil user by username' };
+    }
+
+    // Return data user
+    const data = response.data.data;
+    if (Array.isArray(data)) {
+        // Kalau array, ambil index ke 0
+        return data[0] || null;
+    }
+    return data || null;
+}
+
 export async function createUser(userData) {
     const response = await axios.post(
         `${API}/api/users/`,
@@ -45,10 +61,10 @@ export async function createUser(userData) {
     return response.data.data || [];
 }
 
-export async function updateUserById(IdUser, userData) {
+export async function updateUserById(idUser, userData) {
     try {
         const response = await axios.put(
-            `${API}/api/users/${IdUser}`,
+            `${API}/api/users/${idUser}`,
             userData
         );
 
@@ -65,10 +81,10 @@ export async function updateUserById(IdUser, userData) {
     }
 }
 
-export async function resetPasswordById(IdUser) {
+export async function resetPasswordById(idUser) {
     try {
         const response = await axios.put(
-            `${API}/api/users/reset-password/${IdUser}`
+            `${API}/api/users/reset-password/${idUser}`
         );
 
         if (response.status !== 200) {
@@ -83,8 +99,19 @@ export async function resetPasswordById(IdUser) {
     }
 }
 
-export async function deleteUserById(IdUser) {
-    const response = await axios.delete(`${API}/api/users/${IdUser}`);
+export async function deleteUserById(idUser) {
+    const response = await axios.delete(`${API}/api/users/${idUser}`);
+
+    if (response.status !== 200) {
+        throw { code: 'GET_USER_ROLE_FAILED', message: response.data?.message || 'Gagal mengambil user by role' };
+    }
+
+    // return { message, data: [...] }
+    return response.data.data || [];
+}
+
+export async function deleteUserByUsername(username) {
+    const response = await axios.delete(`${API}/api/users/username/${username}`);
 
     if (response.status !== 200) {
         throw { code: 'GET_USER_ROLE_FAILED', message: response.data?.message || 'Gagal mengambil user by role' };
