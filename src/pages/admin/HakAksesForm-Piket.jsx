@@ -310,7 +310,7 @@ function HakAksesFormPiket() {
 
                             {/* Jika data yang bersifat required kosong */}
                             {errorMsg && (
-                                <div style={{ color: "red", fontWeight: 600, marginBottom: 18 }}>
+                                <div style={{ color: "red", fontWeight: "bold", marginBottom: 18 }}>
                                     {errorMsg}
                                 </div>
                             )}

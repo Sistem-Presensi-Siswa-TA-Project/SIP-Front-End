@@ -17,6 +17,7 @@ const defaultForm = {
 };
 
 function GuruForm() {
+    // Navigasi
     const navigate = useNavigate();
     const location = useLocation();
     const params = new URLSearchParams(location.search);
@@ -109,7 +110,10 @@ function GuruForm() {
             }
             navigate('/admin/data/guru');
         } catch (error) {
-            setErrorMsg("Gagal menyimpan data guru:", error);
+            setErrorMsg(
+                "ERROR: " +
+                (error?.response?.data?.message || error?.message || JSON.stringify(error))
+            );
         }
     };
 
@@ -225,7 +229,7 @@ function GuruForm() {
     
                             {/* Jika data yang bersifat required kosong */}
                             {errorMsg && (
-                                <div style={{ color: "red", fontWeight: 600, marginBottom: 18 }}>
+                                <div style={{ color: "red", fontWeight: "bold", marginBottom: 18 }}>
                                     {errorMsg}
                                 </div>
                             )}
@@ -281,9 +285,9 @@ function GuruForm() {
                 ]}
             >
                 {idGuru ? (
-                    <>Apakah Anda yakin ingin <b> memperbarui </b> data "<b>{formData.nama || 'siswa ini'}</b>"? </>
+                    <>Apakah Anda yakin ingin <b> memperbarui </b> data "<b>{formData.nama || 'guru ini'}</b>"? </>
                 ) : (
-                    <>Apakah Anda yakin ingin <b> menyimpan </b> data siswa baru dengan nama "<b>{formData.nama || 'siswa ini'}</b>"? </>
+                    <>Apakah Anda yakin ingin <b> menyimpan </b> data guru baru dengan nama "<b>{formData.nama || 'guru ini'}</b>"? </>
                 )}
             </CardPopUp>
 

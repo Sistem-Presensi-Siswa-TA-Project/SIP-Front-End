@@ -198,7 +198,7 @@ function DataSiswa() {
                                                         <button
                                                             type="button"
                                                             title="Ubah Data"
-                                                            onClick={() => navigate(`/admin/data/siswa/form?id=${siswa.id_siswa}`)}
+                                                            onClick={() => navigate(`/admin/data/mapel/form?id=${siswa.id_siswa}`)}
                                                             style={{
                                                                 background: 'transparent',
                                                                 border: 'none',
