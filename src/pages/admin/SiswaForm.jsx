@@ -1,11 +1,11 @@
 // Filename: SiswaForm.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Header, Card } from '../../components/Molekul.jsx';
+import { Header, Card, CardPopUp } from '../../components/Molekul.jsx';
 import { SuccessButton, SecondaryButton } from '../../components/Button.jsx';
 import { FormInput } from '../../components/Forms.jsx'
 import { iconList } from '../../data/iconData.js';
-import { getSiswaById, createSiswa } from '../../handlers/SiswaHandler.jsx';
+import { getSiswaById, createSiswa, updateSiswa } from '../../handlers/SiswaHandler.jsx';
 
 // Default kosong
 const defaultForm = {
@@ -28,15 +28,19 @@ function SiswaForm() {
     // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
+    const [showSimpanPopup, setShowSimpanPopup] = useState(false);
+    const [pendingData, setPendingData] = useState(null);
+    const [formData, setFormData] = useState(defaultForm);
     const [loading, setLoading] = useState(false);
     const [errorMsg, setErrorMsg] = useState("");
 
     // Icon
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
+    const blueWarningIcon = iconList.find(i => i.label === "Blue Warning Icon")?.src;
+    const greenWarningIcon = iconList.find(i => i.label === "Green Warning Icon")?.src;
 
-    const [formData, setFormData] = useState(defaultForm);
-
+    // Proses mengambil data dari SiswaHandler.jsx
     useEffect(() => {
         if (idSiswa) {
             setLoading(true);
@@ -47,7 +51,7 @@ function SiswaForm() {
                             nisn: data.nisn || '',
                             nama: data.nama || '',
                             kelas: data.kelas || '',
-                            jenisKelamin: data.jenis_kelamin || '', // perhatikan nama field backend
+                            jenisKelamin: data.jenis_kelamin || '',
                             tempatLahir: data.tempat_lahir || '',
                             tanggalLahir: data.tanggal_lahir ? data.tanggal_lahir.substr(0, 10) : '', // Format YYYY-MM-DD
                             hp: data.nomor_hp || '',
@@ -82,7 +86,7 @@ function SiswaForm() {
 
         setErrorMsg(""); // clear jika lolos validasi
 
-        // PERSIAPKAN data POST, sesuaikan nama field backend!
+        // PERSIAPKAN data POST!
         const dataToSend = {
             nisn: formData.nisn,
             nama: formData.nama,
@@ -94,13 +98,27 @@ function SiswaForm() {
             kelas_gabungan: formData.kelasGabungan,
         };
 
+        setPendingData(dataToSend);
+        setShowSimpanPopup(true);
+    };
+
+    const handleConfirmSimpan = async () => {
+        setShowSimpanPopup(false);
+
         try {
-            await createSiswa(dataToSend);
-            alert("Data siswa berhasil ditambahkan!");
+            if (idSiswa) {
+                // UPDATE (PUT)
+                await updateSiswa(idSiswa, pendingData);
+                alert("Data siswa berhasil diupdate!");
+            } else {
+                // CREATE (POST)
+                await createSiswa(pendingData);
+                alert("Data siswa berhasil ditambahkan!");
+            }
             navigate('/admin/data/siswa');
         } catch (error) {
-            console.error("Gagal menyimpan data siswa!", error);
-            setErrorMsg("Gagal menambah data siswa. Coba lagi.");
+            setErrorMsg("Gagal menyimpan data siswa. Coba lagi.");
+            console.error(error);
         }
     };
 
@@ -148,13 +166,6 @@ function SiswaForm() {
                     </span>
 
                 </SecondaryButton>
-                
-                {/* Jika data yang bersifat required kosong */}
-                {errorMsg && (
-                    <div style={{ color: "red", fontWeight: 600, marginBottom: 18 }}>
-                        {errorMsg}
-                    </div>
-                )}
                 
                 {/* Form Profile */}
                 {loading ? (
@@ -229,6 +240,13 @@ function SiswaForm() {
                             })}
                         </div>
 
+                        {/* Jika data yang bersifat required kosong */}
+                        {errorMsg && (
+                            <div style={{ color: "red", fontWeight: 600, marginBottom: 18 }}>
+                                {errorMsg}
+                            </div>
+                        )}
+
                         {/* Tombol Simpan */}
                         <div className="d-flex justify-content-end justify-content-md-center mt-4">
                             <SuccessButton
@@ -256,6 +274,35 @@ function SiswaForm() {
                 )}
             </div>
         </main>
+
+        {/* Popup konfirmasi simpan data siswa */}
+        <CardPopUp
+            open={showSimpanPopup}
+            image={idSiswa ? blueWarningIcon : greenWarningIcon}
+            borderColor={idSiswa ? "#1976D2" : "#33DB00"}
+            buttons={[
+                {
+                    label: "Kembali",
+                    bgColor: "#FFFFFF",
+                    textColor: idSiswa ? "#1976D2" : "#33DB00",
+                    borderColor: idSiswa ? "#1976D2" : "#33DB00",
+                    onClick: () => setShowSimpanPopup(false),
+                },
+                {
+                    label: idSiswa ? "Perbarui Data" : "Simpan Data",
+                    bgColor: idSiswa ? "#1976D2" : "#33DB00",
+                    textColor: "#FFFFFF",
+                    borderColor: idSiswa ? "#1976D2" : "#33DB00",
+                    onClick: handleConfirmSimpan,
+                }
+            ]}
+        >
+            {idSiswa ? (
+                <>Apakah Anda yakin ingin <b> memperbarui </b> data "<b>{formData.nama || 'siswa ini'}</b>"? </>
+            ) : (
+                <>Apakah Anda yakin ingin <b> menyimpan </b> data siswa baru dengan nama "<b>{formData.nama || 'siswa ini'}</b>"? </>
+            )}
+        </CardPopUp>
 
         <footer>
             <small style={{ fontSize: '14px', color: '#808080' }}>

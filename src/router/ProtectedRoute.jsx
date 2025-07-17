@@ -2,14 +2,15 @@
 
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { isSessionActive } from '../utils/sessionTimeOut.js';
+import { isSessionActive, logout } from '../utils/sessionTimeOut.js';
 
 const ProtectedRoute = ({ allowedRole, children }) => {
     const token = localStorage.getItem('token');
     const userRole = localStorage.getItem('role')?.toLowerCase();
 
-    if (!token || !isSessionActive()) {
-    return <Navigate to="/" replace />;
+    if (!token || !isSessionActive() || !userRole) {
+        logout();
+        return <Navigate to="/" replace />;
     }
 
     // Jika role user tidak sesuai, redirect ke halaman default role-nya

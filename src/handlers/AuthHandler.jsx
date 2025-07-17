@@ -1,8 +1,10 @@
 //Filename: AuthHandler.jsx
 
+const API = 'https://backend.ajwan.my.id';
+
 export async function loginUser(username, password) {
 
-  const response = await fetch('https://backend.ajwan.my.id/api/auth/login', {
+  const response = await fetch(`${API}/api/auth/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',

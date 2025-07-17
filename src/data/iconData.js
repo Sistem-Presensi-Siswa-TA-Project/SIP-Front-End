@@ -69,6 +69,7 @@ import GuruGrey from "../assets/guruIcon-grey.svg";
 import RedWarning from "../assets/redWarning-icon.svg";
 import YellowWarning from "../assets/yellowWarning-icon.svg";
 import BlueWarning from "../assets/blueWarning-icon.svg";
+import GreenWarning from "../assets/greenWarning-icon.svg";
 
 export const iconList = [
   { id: 1, label: "Add Profile", src: AddProfile },
@@ -139,4 +140,5 @@ export const iconList = [
   { id: 66, label: "Red Warning Icon", src: RedWarning },
   { id: 67, label: "Yellow Warning Icon", src: YellowWarning },
   { id: 68, label: "Blue Warning Icon", src: BlueWarning },
+  { id: 69, label: "Green Warning Icon", src: GreenWarning },
 ];

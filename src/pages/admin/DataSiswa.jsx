@@ -44,7 +44,7 @@ function DataSiswa() {
         fetchData();
     }, []);
 
-    // Handler untuk menampilkan popup
+    // Handler untuk menampilkan popup delete
     const handleDelete = (id_siswa) => {
         setIdSiswaToDelete(id_siswa);
         setShowDeletePopup(true);
@@ -58,6 +58,9 @@ function DataSiswa() {
             setSiswaList(prev => prev.filter(item => item.id_siswa !== idSiswaToDelete));
             setIdSiswaToDelete(null);
             alert('Data siswa berhasil dihapus!');
+            
+            // Refresh halaman:
+            window.location.reload();
         } catch (error) {
             setIdSiswaToDelete(null);
             console.error("Gagal menghapus data siswa.", error);
@@ -79,7 +82,7 @@ function DataSiswa() {
                         className="animate-button d-flex flex-row gap-2"
                         width="125px"
                         height="45px"
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate('/admin')}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
                         style={{ 
@@ -271,7 +274,16 @@ function DataSiswa() {
                     }
                 ]}
             >
-                Apakah Anda yakin ingin menghapus data siswa ini?
+                {
+                    (() => {
+                            const siswaToDelete = siswaList.find(s => s.id_siswa === idSiswaToDelete);
+
+                            return (
+                                <> Apakah Anda yakin ingin menghapus data "<b>{siswaToDelete?.nama || 'siswa ini'}</b>"? </>
+                            );
+                        }
+                    )()
+                }
             </CardPopUp>
 
             <footer>

@@ -1,14 +1,23 @@
 // SessionTimeOut.jsx
-const SESSION_TIMEOUT = 3 * 60 * 60 * 1000; // 3 jam dalam ms
+const SESSION_TIMEOUT = 3 * 60; // 3 jam
 
 export const setLastActivity = () => {
-  localStorage.setItem('lastActivity', Date.now());
+  // Hitung waktu sekarang dalam menit (pembulatan ke bawah)
+  const minutes = Math.floor(Date.now() / 1000 / 60);
+  localStorage.setItem('lastActivity', minutes);
 };
 
 export const isSessionActive = () => {
   const last = parseInt(localStorage.getItem('lastActivity'), 10);
-  if (!last) return false;
-  return (Date.now() - last) < SESSION_TIMEOUT;
+  const nowMinutes = Math.floor(Date.now() / 1000 / 60);
+
+  if (!last) {
+    return false;
+  } else if ((nowMinutes - last) < SESSION_TIMEOUT) {
+    return true;
+  } else {
+    return false;
+  }
 };
 
 export const logout = () => {
