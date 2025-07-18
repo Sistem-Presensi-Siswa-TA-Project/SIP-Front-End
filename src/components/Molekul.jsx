@@ -291,6 +291,7 @@ export const CardPresensi = (props) => {
 
     const navigate = useNavigate();
     const arrowRightIcon = iconList.find(i => i.label === 'Arrow Right Black')?.src;
+    const jumlahSiswa = iconList.find((i) => i.label === 'Jumlah Siswa Icon')?.src;
 
     return (
         <div className="card-presensi">
@@ -305,7 +306,16 @@ export const CardPresensi = (props) => {
 
                 <div className="d-flex justify-content-between align-items-center">
                     <span className="text-secondary"> Jumlah Siswa </span>
-                    <span className="text-dark fw-bold"> {totalSiswa} </span>
+                    <span className="text-dark fw-bold d-flex align-items-center">
+                        {totalSiswa}
+                        <img 
+                            src={jumlahSiswa} 
+                            alt="Jumlah Siswa" 
+                            width="16" 
+                            height="16" 
+                            style={{ marginLeft: "8px" }} // Atur jarak ke kiri
+                        />
+                    </span>
                 </div>
             </div>
 

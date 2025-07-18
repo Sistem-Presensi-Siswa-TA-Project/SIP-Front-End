@@ -28,12 +28,23 @@ export async function getJadwalById(idJadwal) {
     }
 
     // data = { message, data: { ...jadwal } }
-    // Kembalikan hanya object jadwal-nya
     return data.data || null;
 }
 
 export async function getJadwalByNomorInduk(nomorInduk) {
-    const response = await fetch(`${API}/api/jadwal/nomor-induk/${nomorInduk}`);
+    const response = await fetch(`${API}/api/jadwal/guru/${nomorInduk}`);
+    const data = await response.json();
+    
+    if (!response.ok) {
+        return null;
+    }
+
+    // Return detail jadwal, contoh: { nama: "...", ... }
+    return data.data || null;
+}
+
+export async function getJadwalByHaridanGuru(hari, guru) {
+    const response = await fetch(`${API}/api/jadwal/hari/${hari}/guru/${guru}`);
     const data = await response.json();
     
     if (!response.ok) {

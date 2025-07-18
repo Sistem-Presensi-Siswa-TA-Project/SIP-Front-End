@@ -119,7 +119,7 @@ function JadwalForm() {
             navigate('/admin/data/jadwal');
         } catch (error) {
             setErrorMsg(
-                "ERROR: " +
+                "Update gagal: " +
                 (error?.response?.data?.message || error?.message || JSON.stringify(error))
             );
         }
@@ -139,7 +139,7 @@ function JadwalForm() {
                         className="animate-button d-flex flex-row gap-2"
                         width="125px"
                         height="45px"
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate(`/admin/data/jadwal`)}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
                         style={{ 
@@ -159,11 +159,12 @@ function JadwalForm() {
                             }}
                         />
 
-                        <span style={{ 
-                            fontSize: '18px', 
-                            color: secondaryButtonHovering ? '#FFC107' : '#000', 
-                            marginLeft: '2px' 
-                        }}
+                        <span 
+                            style={{ 
+                                fontSize: '18px', 
+                                color: secondaryButtonHovering ? '#FFC107' : '#000', 
+                                marginLeft: '2px', 
+                            }}
                         > 
                             Kembali 
                         </span>
@@ -223,17 +224,34 @@ function JadwalForm() {
                                                     options={['Ganjil', 'Genap']}
                                                 />
                                             ) : (
-                                                <FormInput
-                                                    label={label}
-                                                    name={name}
-                                                    type='text'
-                                                    value={formData[name]}
-                                                    required={isRequired}
-                                                    placeholder={label}
-                                                    onChange={(e) =>
-                                                        setFormData((prev) => ({ ...prev, [name]: e.target.value }))
-                                                    }
-                                                />
+                                                name === 'hari' ? (
+                                                    <FormInput
+                                                        label={label}
+                                                        name={name}
+                                                        type='text'
+                                                        value={formData[name]}
+                                                        required={isRequired}
+                                                        placeholder={label}
+                                                        onChange={(e) =>
+                                                            setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+                                                        }
+                                                        options={[
+                                                            'Senin', 'Selasa', 'Rabu', 'Kamis', "Jumat", 'Sabtu', 'Minggu'
+                                                        ]}
+                                                    />
+                                                ) : (
+                                                    <FormInput
+                                                        label={label}
+                                                        name={name}
+                                                        type='text'
+                                                        value={formData[name]}
+                                                        required={isRequired}
+                                                        placeholder={label}
+                                                        onChange={(e) =>
+                                                            setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+                                                        }
+                                                    />
+                                                )
                                             )}
                                         </div>
                                     );

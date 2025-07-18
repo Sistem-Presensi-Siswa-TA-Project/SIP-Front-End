@@ -352,7 +352,7 @@ function DashboardPiket() {
                     height="20px" 
                     style={{ marginRight: '6px' }} 
                   />
-                  <span> smpplus@babussalam.ac.id </span>
+                  <span> smpplusbabussalamdago@gmail.com </span>
                 </div>
 
                 {/* Telepon */}
@@ -364,7 +364,8 @@ function DashboardPiket() {
                     height="20px" 
                     style={{ marginRight: '6px' }} 
                   />
-                  <span> +62-812-4567-8910 </span>
+                  
+                  <span> +62-858-6082-9640 </span>
                 </div>
               </div>
             </div>

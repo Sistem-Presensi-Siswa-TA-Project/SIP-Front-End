@@ -4,7 +4,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Header, Sidebar, Card } from '../../components/Molekul.jsx';
 import { LightButton, InfoButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
-import { mapelList } from '../../data/mapelData.js';
+import { getJadwalByHaridanGuru } from '../../handlers/JadwalHandler.jsx';
+import { getGuruByNomorInduk } from '../../handlers/GuruHandler.jsx';
+import { getMapelById } from '../../handlers/MapelHandler.jsx';
 
 function DashboardGuru() {
   // State Hovering
@@ -12,6 +14,9 @@ function DashboardGuru() {
   const [isHovering, setIsHovering] = useState(false);
   const [hoveredId, setHoveredId] = useState(null);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [jadwalHariIni, setJadwalHariIni] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [guru, setGuru] = useState({ nama: "", nomor_induk: "" });
 
   // Navigasi Page
   const location = useLocation();
@@ -33,8 +38,69 @@ function DashboardGuru() {
   // Mengambil nama hari ini (up-to-date)
   const hariIni = new Date().toLocaleDateString('id-ID', { weekday: 'long' });
 
-  // Melakukan filter jadwal pelajaran sesuai hari ini
-  const mapelHariIni = mapelList.filter((item) => item.hari === hariIni);
+  // Mengambil nomor induk guru
+  const nomorIndukGuru = localStorage.getItem("username");
+
+  // Mengambil data guru
+  useEffect(() => {
+    let isMounted = true;
+
+    async function fetchGuru() {
+      if (!nomorIndukGuru) return;
+      try {
+        const dataGuru = await getGuruByNomorInduk(nomorIndukGuru);
+        if (isMounted && dataGuru) {
+          setGuru({
+            nama: dataGuru.nama || "",
+            nomor_induk: dataGuru.nomor_induk || nomorIndukGuru
+          });
+        }
+      } catch (err) {
+        console.error('ERROR: ', err);
+        setGuru({
+          nama: "Nama User",
+          nomor_induk: nomorIndukGuru
+        });
+      }
+    }
+
+    fetchGuru();
+    return () => { isMounted = false; };
+  }, [nomorIndukGuru]);
+
+  // Mengambil data dari JadwalHandler.jsx
+  useEffect(() => {
+    let isMounted = true;
+
+    async function fetchData() {
+      setLoading(true);
+
+      // 1. Ambil jadwal hari ini untuk guru ini
+      const jadwal = await getJadwalByHaridanGuru(hariIni, nomorIndukGuru) || [];
+
+      // 2. Untuk setiap jadwal, ambil nama mapel dari id_mapel
+      const jadwalLengkap = await Promise.all(
+        jadwal.map(async (item) => {
+          let namaMapel = item.id_mapel;
+
+          try {
+            const mapel = await getMapelById(item.id_mapel);
+            namaMapel = mapel?.nama || item.id_mapel;
+          } catch {
+            namaMapel = item.id_mapel;
+          }
+
+          return { ...item, namaMapel };
+        })
+      );
+
+      if (isMounted) setJadwalHariIni(jadwalLengkap);
+      setLoading(false);
+    }
+
+    if (nomorIndukGuru) fetchData();
+    return () => { isMounted = false; };
+  }, [hariIni, nomorIndukGuru]);
 
   const handleToggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -154,10 +220,9 @@ function DashboardGuru() {
               </div>
 
               {/* Identitas User */}
-              <div>
-                <strong> Nama User </strong>
-                <br />
-                <small> Nomor Induk User (NIP/NIS/NISN) </small>
+              <div className="d-flex flex-column">
+                <strong style={{ fontSize: '18px', marginBottom: '3px'}}> {guru.nama || "-"} </strong>
+                <small style={{ fontSize: '15px'}}> {guru.nomor_induk || "-"} </small>
               </div>
 
               {/* Toggle Sidebar Button */}
@@ -215,88 +280,87 @@ function DashboardGuru() {
                     }
                   }
                 > 
-                  {/* Daftar Mata Pelajaran */}
-                  {mapelHariIni.length > 0 ? (
-                    mapelHariIni.map((item) => (
+                  {/* Highlight Jadwal */}
+                  {loading ? (
+                    <div style={{ color: 'white', fontWeight: 'bold', fontSize: '20px' }}> 
+                      Memuat jadwal.... 
+                    </div>
+                  ) : (
+                    <>
+                      {jadwalHariIni.length > 0 ? (
+                        jadwalHariIni.map((item) => (
+                          <Card
+                            key={item.id_jadwal}
+                            className="d-flex align-items-center justify-content-between"
+                            style={{
+                              width: '470px',
+                              height: '115px',
+                              padding: '16px',
+                              borderRadius: '20px',
+                              display: 'flex',
+                              boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
+                            }}
+                          >
 
-                      <Card
-                        key={item.id}
-                        className="d-flex align-items-center justify-content-between"
-                        style={{
-                          width: '470px',
-                          height: '115px',
-                          padding: '16px',
-                          borderRadius: '20px',
-                          display: 'flex',
-                          boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
-                        }}
-                      >
-                        {/* Placeholder Icon */}
+                            {/* Icon placeholder */}
+                            <div
+                              style={{
+                                width: '60px',
+                                height: '60px',
+                                backgroundColor: '#fff',
+                                borderRadius: '16px',
+                                marginLeft: '5px',
+                                marginRight: '15px',
+                                flexShrink: 0,
+                                boxShadow: 'inset 2px 2px 10px rgba(0,0,0,0.45)'
+                              }}
+                            />
+
+                            {/* Text Info */}
+                            <div style={{ flexGrow: 1 }}>
+                              <strong style={{ display: 'block', marginBottom: '4px' }}> {item.namaMapel} </strong>
+                              <span style={{ display: 'block', marginBottom: '4px' }}> {item.waktu} </span>
+                              <span style={{ display: 'block' }}> Kelas {item.kelas} </span>
+                            </div>
+
+                            {/* Tombol Presensi */}
+                            <InfoButton
+                              variant="info"
+                              height="35px"
+                              width="105px"
+                              style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '6px',
+                                boxShadow: hoveredId === item.id_jadwal ? 'inset 2px 2px 10px rgba(0, 0, 0, 0.45)' : 'none',
+                                transition: 'box-shadow 0.2s ease-in-out',
+                              }}
+                              onMouseEnter={() => setHoveredId(item.id_jadwal)}
+                              onMouseLeave={() => setHoveredId(null)}
+                              onClick={() => navigate(`${prefix}/kelas/${item.kelas}/pertemuan`)}
+                            >
+                              <img src={presensiButtonBlack} alt="Presensi" width="20" height="20" />
+                              <span style={{ fontWeight: 'bold', fontSize: '13px' }}> Presensi </span>
+                            </InfoButton>
+                          </Card>
+                        ))
+                      ) : (
                         <div
                           style={{
-                            width: '60px',
-                            height: '60px',
-                            backgroundColor: '#fff',
-                            borderRadius: '16px',
-                            marginLeft: '5px',
-                            marginRight: '15px',
-                            flexShrink: 0,
-                            boxShadow: 'inset 2px 2px 10px rgba(0,0,0,0.45)'
-                          }}
-                        />
-
-                        {/* Text Info */}
-                        <div style={{ flexGrow: 1 }}>
-                          <strong style={{ display: 'block', marginBottom: '4px' }}> {item.label} </strong>
-                          <span style={{ display: 'block', marginBottom: '4px' }}> {item.waktu} </span>
-                          <span style={{ display: 'block' }}> Kelas {item.kelas} </span>
-                        </div>
-
-                        {/* Tombol Presensi */}
-                        <InfoButton
-                          variant="info"
-                          height="35px"
-                          width="105px"
-                          style={{
+                            height: '100%',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            gap: '6px',
-                            boxShadow: hoveredId === item.id ? 'inset 2px 2px 10px rgba(0, 0, 0, 0.45)' : 'none',
-                            transition: 'box-shadow 0.2s ease-in-out',
                           }}
-
-                          onMouseEnter={() => setHoveredId(item.id)}
-                          onMouseLeave={() => setHoveredId(null)}
-                          onClick={() => navigate(`${prefix}/kelas/${item.kelas}/pertemuan`)}
                         >
-                          <img
-                            src={presensiButtonBlack}
-                            alt="Presensi"
-                            width="20"
-                            height="20"
-                          />
-
-                          <span style={{ fontWeight: 'bold', fontSize: '13px' }}> Presensi </span>
-                        </InfoButton>
-                      </Card>
-                    ))
-                  ) : (
-                    // Pesan ketika jadwal kosong
-                    <div
-                      style={{
-                        height: '100%',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                      }}
-                    >
-                      <p style={{ color: 'white', fontWeight: 'bold', fontSize: '20px' }}>
-                        ~~ Tidak ada jadwal hari ini ~~
-                      </p>
-                    </div>
-                  )}
-                  
+                          <p style={{ color: 'white', fontWeight: 'bold', fontSize: '20px' }}>
+                            ~~ Tidak ada jadwal hari ini ~~
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  )}      
                 </div>
             </Card>
 
@@ -374,7 +438,7 @@ function DashboardGuru() {
                       } 
                     />
 
-                    <span> smpplus@babussalam.ac.id </span>
+                    <span> smpplusbabussalamdago@gmail.com </span>
                   </div>
                   
                   <br />
@@ -393,7 +457,7 @@ function DashboardGuru() {
                       } 
                     />
 
-                    <span> +62-812-4567-8910 </span>
+                    <span> +62-858-6082-9640 </span>
                   </div>
                 </div>
               </Card>

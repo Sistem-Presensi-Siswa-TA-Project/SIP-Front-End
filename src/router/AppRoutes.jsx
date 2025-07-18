@@ -101,7 +101,7 @@ function AppRoutes() {
       <Route path="/guru/kelas/:kelasId/pertemuan/lihat-presensi/presensi-form" element={<ProtectedRoute allowedRole="guru"> <PresensiForm /> </ProtectedRoute>} />
 
       <Route path="/guru/cetak-presensi" element={<ProtectedRoute allowedRole="guru"> <CetakPresensi /> </ProtectedRoute>} />
-      <Route path="/guru/cetak-presensi/kelas/:kelasId" element={<ProtectedRoute allowedRole="guru"> <OpsiCetakPresensi /> </ProtectedRoute>} />
+      <Route path="/guru/cetak-presensi/cetak" element={<ProtectedRoute allowedRole="guru"> <OpsiCetakPresensi /> </ProtectedRoute>} />
 
       {/* Piket Routes */}
       <Route path="/piket" element={<ProtectedRoute allowedRole="piket"> <Piket /> </ProtectedRoute>} />

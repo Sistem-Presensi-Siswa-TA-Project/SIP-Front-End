@@ -47,6 +47,23 @@ export async function getSiswaByNISN(nisn) {
     }
 }
 
+export async function getSiswaByKelas(namaKelas) {
+    try {
+        const res = await axios.get(`${API}/api/siswa/kelas/${namaKelas}`);
+
+        // Cek jika response adalah array
+        if (Array.isArray(res.data.data)) {
+            return res.data.data; // return array of siswa
+        }
+
+        // Jika tidak array, kembalikan array kosong
+        return [];
+    } catch (error) {
+        console.error("Gagal mengambil data siswa by kelas:", error);
+        return [];
+    }
+}
+
 export async function createSiswa(data) {
     const response = await axios.post(`${API}/api/siswa`, data);
     return response.data;

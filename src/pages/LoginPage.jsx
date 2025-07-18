@@ -52,6 +52,7 @@ function Login() {
       // Simpan token ke localStorage/sessionStorage kalau ingin digunakan (opsional)
       localStorage.setItem('token', data.token);
       localStorage.setItem('role', data.role.toLowerCase());
+      localStorage.setItem('username', username);
 
       // Routing berdasarkan role dari backend
       if (data.role?.toLowerCase() === 'guru') {
@@ -132,8 +133,8 @@ function Login() {
               placeholder="Masukkan Password"
               controlId="formPassword"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
               show={showPassword}
+              onChange={(e) => setPassword(e.target.value)}
               toggleIcon={() => setShowPassword(!showPassword)}
             />
 
