@@ -71,6 +71,7 @@ import YellowWarning from "../assets/yellowWarning-icon.svg";
 import BlueWarning from "../assets/blueWarning-icon.svg";
 import GreenWarning from "../assets/greenWarning-icon.svg";
 import JumlahSiswa from "../assets/jumlahSiswa-icon.svg";
+import Attendance from "../assets/attendance.svg";
 
 export const iconList = [
   { id: 1, label: "Add Profile", src: AddProfile },
@@ -143,4 +144,5 @@ export const iconList = [
   { id: 68, label: "Blue Warning Icon", src: BlueWarning },
   { id: 69, label: "Green Warning Icon", src: GreenWarning },
   { id: 70, label: "Jumlah Siswa Icon", src: JumlahSiswa },
+  { id: 71, label: "Attendance Icon", src: Attendance },
 ];

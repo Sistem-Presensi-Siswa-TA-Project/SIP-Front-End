@@ -23,6 +23,7 @@ export const isSessionActive = () => {
 export const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('lastActivity');
+  localStorage.removeItem('username');
   localStorage.removeItem('role');
   window.location.href = '/';
 };

@@ -114,6 +114,7 @@ function ScanPresensi() {
                                         width="100px"
                                         height="100px"
                                         style={{ marginBottom: '5px' }}
+                                        draggable={false}
                                     />
 
                                     <span 
@@ -168,6 +169,7 @@ function ScanPresensi() {
                                             backgroundColor: '#FFF',
                                             borderRadius: '50%',
                                         }}
+                                        draggable={false}
                                     />
 
                                     {/* Tombol Swap Camera */}
@@ -193,6 +195,7 @@ function ScanPresensi() {
                                             backgroundColor: swapButtonHovering ? '#4D4D4D' : '#808080',
                                             borderRadius: '50%',
                                         }}
+                                        draggable={false}
                                     />
                                 </div>
                             )}
@@ -204,8 +207,8 @@ function ScanPresensi() {
                             style={{ marginTop: '5px' }}
                         >
                             {[
-                                ['Waktu', 'Waktu Presensi', 'waktu'],
-                                ['NISN', 'Nomor Induk Siswa Nasional', 'nisn'],
+                                ['Waktu Presensi', 'Waktu Presensi', 'waktu'],
+                                ['Nomor Induk Siswa', 'Nomor Induk Siswa', 'nisn'],
                                 ['Nama Siswa', 'Nama Siswa', 'nama'],
                                 ['Kelas', 'Kelas', 'kelas'],
                                 ['Jenis Presensi', 'Jenis Presensi', 'jenis'],
@@ -232,14 +235,26 @@ function ScanPresensi() {
                                                 options={['Presensi Masuk', 'Presensi Pulang']}
                                             />
                                         ) : (
-                                            <FormInput
-                                                label={label}
-                                                name={name}
-                                                value={formData[name]}
-                                                required= {isRequired}
-                                                placeholder={placeholder}
-                                                onChange={handleChange}
-                                            />
+                                            name === 'waktu' ? (
+                                                <FormInput
+                                                    label={label}
+                                                    name={name}
+                                                    value={formData[name]}
+                                                    required= {isRequired}
+                                                    placeholder={placeholder}
+                                                    onChange={handleChange}
+                                                    readOnly
+                                                />
+                                            ) : (
+                                                <FormInput
+                                                    label={label}
+                                                    name={name}
+                                                    value={formData[name]}
+                                                    required= {isRequired}
+                                                    placeholder={placeholder}
+                                                    onChange={handleChange}
+                                                />
+                                            )
                                         )}
                                     </div>
                                 );

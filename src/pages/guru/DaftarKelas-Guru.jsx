@@ -8,7 +8,10 @@ import { getJadwalByNomorInduk } from '../../handlers/JadwalHandler.jsx';
 import { getSiswaByKelas } from '../../handlers/SiswaHandler.jsx';
 
 function DaftarKelasGuru() {
+    // Navigasi
     const navigate = useNavigate();
+
+    // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [jadwalList, setJadwalList] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,12 +33,12 @@ function DaftarKelasGuru() {
 
                 // Ambil jumlah siswa untuk setiap kelas
                 const jadwalWithSiswa = await Promise.all(jadwalArray.map(async (jadwal) => {
-                    let totalSiswa = "XX";
+                    let totalSiswa = "-";
                     try {
                         const siswaData = await getSiswaByKelas(jadwal.kelas);
-                        totalSiswa = Array.isArray(siswaData) ? siswaData.length : "XX";
+                        totalSiswa = Array.isArray(siswaData) ? siswaData.length : "-";
                     } catch {
-                        // totalSiswa tetap "XX"
+                        totalSiswa; // totalSiswa tetap "-"
                     }
                     return { ...jadwal, totalSiswa };
                 }));

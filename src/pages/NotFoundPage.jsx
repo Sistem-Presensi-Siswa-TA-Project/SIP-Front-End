@@ -1,12 +1,19 @@
 // Filename: NotFoundPage.jsx
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { PrimaryButton } from '../components/Button.jsx';
 import { iconList } from '../data/iconData.js';
 
 function NotFoundPage() {
+  // Navigasi Page
+  const location = useLocation();
+  const prefix = location.pathname.startsWith('/admin') 
+    ? '/admin' : (location.pathname.startsWith('/guru') 
+    ? '/guru' : '/piket');
   const navigate = useNavigate();
+
+  // Icon from iconList
   const logo = iconList.find((i) => i.label === 'Logo')?.src;
 
   return (
@@ -46,7 +53,7 @@ function NotFoundPage() {
         width="200px"
         height="45px"
         fontSize="16px"
-        onClick={() => navigate('/')}
+        onClick={() => navigate(`${prefix}`)}
       >
         Kembali ke Beranda
       </PrimaryButton>

@@ -71,7 +71,7 @@ function JadwalForm() {
         // VALIDASI
         const requiredFields = [
             { name: "kodeMapel", label: "Kode Mata Pelajaran" },
-            { name: "nip", label: "NIP/NUPTK" },
+            { name: "nip", label: "Nomor Induk Guru" },
             { name: "hari", label: "Hari" },
             { name: "waktu", label: "Waktu" },
             { name: "kelas", label: "Kelas" },
@@ -94,7 +94,7 @@ function JadwalForm() {
             nomor_induk_guru: formData.nip,
             hari: formData.hari,
             waktu: formData.waktu,
-            kelas: formData.kelas,
+            kelas: formData.kelas.toUpperCase(),
             tahun_ajaran: formData.tahunAjar,
             semester: formData.semester,
         };
@@ -119,7 +119,7 @@ function JadwalForm() {
             navigate('/admin/data/jadwal');
         } catch (error) {
             setErrorMsg(
-                "Update gagal: " +
+                "Gagal menyimpan: " +
                 (error?.response?.data?.message || error?.message || JSON.stringify(error))
             );
         }
@@ -191,7 +191,7 @@ function JadwalForm() {
                             <div className="row" style={{ rowGap: '16px' }}>
                                 {[
                                     ['Kode Mata Pelajaran', 'kodeMapel'],
-                                    ['NIP/NUPTK', 'nip'],
+                                    ['Nomor Induk Guru', 'nip'],
                                     ['Hari', 'hari'],
                                     ['Waktu', 'waktu'],
                                     ['Kelas', 'kelas'],

@@ -183,10 +183,10 @@ function DataMapel() {
                                     ) : (
                                         mapelList.map((mapel, i) => (
                                             <tr key={mapel.id_mapel || i}>
-                                                <td className="border-right" style={{ padding: '14px' }}>{i + 1}.</td>
-                                                <td style={{ padding: '14px' }}>{mapel.id_mapel || '-'}</td>
-                                                <td style={{ padding: '14px' }}>{mapel.nama || '-'}</td>
-                                                <td style={{ padding: '14px', textAlign: 'left' }}>{mapel.deskripsi || '-'}</td>
+                                                <td className="border-right" style={{ padding: '14px' }}> {i + 1}. </td>
+                                                <td style={{ padding: '14px' }}> {mapel.id_mapel || '-'} </td>
+                                                <td style={{ padding: '14px', textAlign: 'left' }}> {mapel.nama || '-'} </td>
+                                                <td style={{ padding: '14px', textAlign: 'left' }}> {mapel.deskripsi || '-'} </td>
                                                 <td style={{ padding: '14px' }}>
                                                     <div className="d-flex flex-row justify-content-center align-items-center" style={{ gap: '4px' }}>
                                                         {/* Tombol Ubah Data */}

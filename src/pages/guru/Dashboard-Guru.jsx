@@ -34,6 +34,7 @@ function DashboardGuru() {
   const presensiButtonBlack = iconList.find((i) => i.label === 'Presensi Button Black')?.src;
   const menuOpenBlack = iconList.find((i) => i.label === 'Menu Open Black')?.src;
   const menuOpenWhite = iconList.find((i) => i.label === 'Menu Open White')?.src;
+  const attendanceIcon = iconList.find((i) => i.label === 'Attendance Icon')?.src;
 
   // Mengambil nama hari ini (up-to-date)
   const hariIni = new Date().toLocaleDateString('id-ID', { weekday: 'long' });
@@ -216,6 +217,7 @@ function DashboardGuru() {
                   width="50"
                   height="50"
                   style={{ marginLeft: '10px', marginRight: '18px' }}
+                  draggable={false}
                 />
               </div>
 
@@ -312,9 +314,22 @@ function DashboardGuru() {
                                 marginLeft: '5px',
                                 marginRight: '15px',
                                 flexShrink: 0,
-                                boxShadow: 'inset 2px 2px 10px rgba(0,0,0,0.45)'
+                                boxShadow: 'inset 2px 2px 10px rgba(0,0,0,0.45)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                overflow: 'hidden',
                               }}
-                            />
+                            >
+                              <img
+                                src={attendanceIcon}
+                                alt="Attendance"
+                                width="40"
+                                height="40"
+                                style={{ objectFit: "contain" }}
+                                draggable={false}
+                              />
+                            </div>
 
                             {/* Text Info */}
                             <div style={{ flexGrow: 1 }}>

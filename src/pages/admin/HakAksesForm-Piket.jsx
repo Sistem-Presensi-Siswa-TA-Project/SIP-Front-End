@@ -73,7 +73,7 @@ function HakAksesFormPiket() {
         // VALIDASI
         const requiredFields = [
             { name: "username", label: "Username" },
-            { name: "nomorInduk", label: "NISN/NIP" },
+            { name: "nomorInduk", label: "Nomor Induk" },
             { name: "status", label: "Status" },
         ];
 
@@ -101,7 +101,7 @@ function HakAksesFormPiket() {
                 );
 
                 if (found) {
-                    setErrorMsg("NISN/NIP telah terdaftar sebagai petugas piket!");
+                    setErrorMsg("Nomor induk telah terdaftar sebagai petugas piket!");
                     return;
                 }
             }
@@ -126,12 +126,12 @@ function HakAksesFormPiket() {
                 // kalau tidak ketemu di guru, cek ke siswa
                 const siswa = await getSiswaByNISN(formData.nomorInduk);
                 if (!siswa || !siswa.nama) {
-                    alert("NISN/NIP belum terdaftar!");
+                    setErrorMsg("Nomor induk belum terdaftar!");
                     return; // STOP proses create jika tidak ditemukan
                 }
             }
         } catch (err) {
-            setErrorMsg("NISN/NIP belum terdaftar!", err);
+            setErrorMsg("Nomor induk belum terdaftar!", err);
             return;
         }
 
@@ -267,7 +267,7 @@ function HakAksesFormPiket() {
                             <div className="row" style={{ rowGap: '16px' }}>
                                 {[
                                     ['Username', 'username'],
-                                    ['NISN/NIP', 'nomorInduk'],
+                                    ['Nomor Induk', 'nomorInduk'],
                                     ['Status', 'status'],
                                 ].map(([label, name], index) => {
                                     const isRequired = [

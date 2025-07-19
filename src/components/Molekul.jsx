@@ -18,7 +18,11 @@ export const Header = ({ children='As User' }) => {
     return (
         <header className="header-bar animate-slide-down">
         <div className="header-container">
-                <img src={logo} alt="Logo" className="header-logo" />
+                <img 
+                    src={logo} alt="Logo" 
+                    className="header-logo" 
+                    draggable={false}
+                />
 
                 <h5
                     className="header-title"
@@ -129,22 +133,23 @@ export const Sidebar = (props) => {
                                                     width="8"
                                                     height="8" 
                                                     alt="Minimize"
-                                                    style={{ marginLeft: '5px', marginRight: '20px' }} 
+                                                    style={{ marginLeft: '5px', marginRight: '20px' }}
+                                                    draggable={false}
                                                 />
                                             ) : (
-                                                <img src={icon} alt="Minimize" className="sidebar-icon" />
+                                                <img src={icon} alt="Minimize" className="sidebar-icon" draggable={false} />
                                             )
                                         ) : item.hasDropdown ? (
                                             isHovered ? (
                                                 <span className="sidebar-icon-placeholder" />
                                             ) : (
-                                                <img src={icon} alt={item.label} className="sidebar-icon" />
+                                                <img src={icon} alt={item.label} className="sidebar-icon" draggable={false} />
                                             )
                                         ) : (
                                             isHovered ? (
                                                 <span className="sidebar-icon-placeholder" />
                                             ) : (
-                                                <img src={icon} alt={item.label} className="sidebar-icon" />
+                                                <img src={icon} alt={item.label} className="sidebar-icon" draggable={false} />
                                             )
                                         )
                                     }
@@ -160,6 +165,7 @@ export const Sidebar = (props) => {
                                             width="18"
                                             height="18"
                                             style={{ marginLeft: 'auto' }}
+                                            draggable={false}
                                         />
                                     )}
 
@@ -170,6 +176,7 @@ export const Sidebar = (props) => {
                                             width="18"
                                             height="18"
                                             style={{ marginLeft: 'auto' }}
+                                            draggable={false}
                                         />
                                     )}
                                 </li>
@@ -200,7 +207,7 @@ export const Sidebar = (props) => {
                                                     {isSubHovered ? (
                                                             <span className="sidebar-icon-placeholder" />
                                                         ) : (
-                                                            <img src={subIcon} alt={sub.label} className="sidebar-icon" />
+                                                            <img src={subIcon} alt={sub.label} className="sidebar-icon" draggable={false} />
                                                         )
                                                     }
 
@@ -215,6 +222,7 @@ export const Sidebar = (props) => {
                                                             width="16"
                                                             height="16"
                                                             style={{ marginLeft: 'auto' }}
+                                                            draggable={false}
                                                         />
                                                     )}
                                                 </li>
@@ -313,7 +321,8 @@ export const CardPresensi = (props) => {
                             alt="Jumlah Siswa" 
                             width="16" 
                             height="16" 
-                            style={{ marginLeft: "8px" }} // Atur jarak ke kiri
+                            style={{ marginLeft: "8px" }}
+                            draggable={false}
                         />
                     </span>
                 </div>
@@ -322,7 +331,7 @@ export const CardPresensi = (props) => {
             {/* Footer */}
             <div className="card-presensi-footer" onClick={() => navigate(to)}>
                 <span className="fw-bold"> {children} </span>
-                <img src={arrowRightIcon} alt="Lihat Detail" width="20" height="20" className="ms-2" />
+                <img src={arrowRightIcon} alt="Lihat Detail" width="20" height="20" className="ms-2" draggable={false} />
             </div>
         </div>
     );
@@ -414,6 +423,7 @@ export const CardPopUp = (props) => {
                             width: 95, height: 95,
                             margin: "0 auto 24px auto", display: "block"
                         }}
+                        draggable={false}
                     />
                 )}
 

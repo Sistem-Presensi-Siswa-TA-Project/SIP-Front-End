@@ -1,23 +1,72 @@
 // Filename: PasswordPage.jsx
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Header, Card } from '../components/Molekul.jsx';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { Header, Card, CardPopUp } from '../components/Molekul.jsx';
 import { SuccessButton, SecondaryButton } from '../components/Button.jsx';
 import { iconList } from '../data/iconData.js';
 import { FormInput } from '../components/Forms.jsx'
+import { updatePasswordById } from '../handlers/userHandler.jsx'
 
 function PasswordForm() {
+    // Navigasi Page
+    const location = useLocation();
+    const prefix = location.pathname.startsWith('/admin') 
+        ? '/admin' : (location.pathname.startsWith('/guru') 
+        ? '/guru' : '/piket');
     const navigate = useNavigate();
+    const params = new URLSearchParams(location.search);
+    const idUser = params.get('id');
+
+    // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
-
-    const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
-    const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
-
     const [formData, setFormData] = useState({
         username: '',
-        password: '',
+        passwordBaru: '',
     });
+    const [errorMsg, setErrorMsg] = useState('');
+    const [showPopup, setShowPopup] = useState(false);
+
+    // Icon
+    const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
+    const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
+    const blueWarningIcon = iconList.find((i) => i.label === 'Blue Warning Icon')?.src;
+
+    // Isi username dari localStorage saat mount
+    useEffect(() => {
+        const username = localStorage.getItem('username') || '';
+        setFormData(prev => ({ ...prev, username }));
+    }, []);
+
+    // Handle Update Password
+    const handleUpdate = () => {
+        if (!formData.passwordBaru) {
+            setErrorMsg("Kolom Password Baru wajib diisi!");
+            return;
+        }
+        setErrorMsg('');
+        setShowPopup(true);
+    };
+
+    const handleConfirmUpdate = async () => {
+        setShowPopup(false);
+
+        if (!idUser) {
+            setErrorMsg("ID User tidak ditemukan!");
+            return;
+        }
+
+        try {
+            await updatePasswordById(idUser, formData.passwordBaru);
+            alert("Password berhasil diubah!");
+            navigate(`${prefix}/profile`);
+        } catch (err) {
+            setErrorMsg(
+                "ERROR: " +
+                (err?.response?.data?.message || err?.message || JSON.stringify(err))
+            );
+        }
+    };
 
     return (
         <div>
@@ -33,7 +82,7 @@ function PasswordForm() {
                     className="animate-button d-flex flex-row gap-2"
                     width="125px"
                     height="45px"
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate(`${prefix}/profile`)}
                     onMouseEnter={() => setSecondaryButtonHovering(true)}
                     onMouseLeave={() => setSecondaryButtonHovering(false)}
                     style={{ 
@@ -82,7 +131,6 @@ function PasswordForm() {
                             const isRequired = [
                                 'username', 
                                 'passwordBaru', 
-
                             ].includes(name);
 
                             const isReadOnly = ['username'].includes(name);
@@ -110,6 +158,13 @@ function PasswordForm() {
                         })}
                     </div>
 
+                    {/* Jika data yang bersifat required kosong */}
+                    {errorMsg && (
+                        <div style={{ color: "red", fontWeight: 'bold', marginBottom: 18 }}>
+                            {errorMsg}
+                        </div>
+                    )}
+
                     {/* Tombol Simpan */}
                     <div className="d-flex justify-content-end mt-4">
                         <SuccessButton
@@ -128,15 +183,42 @@ function PasswordForm() {
                             }}
                             onMouseEnter={() => setSuccessButtonHovering(true)}
                             onMouseLeave={() => setSuccessButtonHovering(false)}
+                            onClick={handleUpdate}
                         >
                             SIMPAN
                         </SuccessButton>
                     </div>
                 </Card>
-
-            
             </div>
         </main>
+
+        {/* Popup konfirmasi simpan data siswa */}
+                <CardPopUp
+                    open={showPopup}
+                    image={blueWarningIcon}
+                    borderColor="#1976D2"
+                    buttons={[
+                        {
+                            label: "Kembali",
+                            bgColor: "#FFFFFF",
+                            textColor: "#1976D2",
+                            borderColor: "#1976D2",
+                            onClick: () => setShowPopup(false),
+                        },
+
+                        {
+                            label: "Ya, Saya Yakin",
+                            bgColor: "#1976D2",
+                            textColor: "#FFFFFF",
+                            borderColor: "#1976D2",
+                            onClick: handleConfirmUpdate,
+                        }
+                    ]}
+                >
+                    <React.Fragment>
+                        Apakah Anda yakin ingin mengubah password"? 
+                    </React.Fragment>
+                </CardPopUp>
 
         <footer>
             <small style={{ fontSize: '14px', color: '#808080' }}>

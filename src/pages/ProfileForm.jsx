@@ -1,16 +1,24 @@
 // Filename: ProfileForm.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Header, Card } from '../components/Molekul.jsx';
 import { SuccessButton, SecondaryButton } from '../components/Button.jsx';
 import { iconList } from '../data/iconData.js';
 import { FormInput } from '../components/Forms.jsx'
 
 function ProfileForm() {
+    // Navigasi Page
+    const location = useLocation();
+    const prefix = location.pathname.startsWith('/admin') 
+        ? '/admin' : (location.pathname.startsWith('/guru') 
+        ? '/guru' : '/piket');
     const navigate = useNavigate();
+
+    // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
 
+    // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
 
@@ -52,7 +60,7 @@ function ProfileForm() {
                     className="animate-button d-flex flex-row gap-2"
                     width="125px"
                     height="45px"
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate(`${prefix}/profile`)}
                     onMouseEnter={() => setSecondaryButtonHovering(true)}
                     onMouseLeave={() => setSecondaryButtonHovering(false)}
                     style={{ 

@@ -72,7 +72,7 @@ function SiswaForm() {
     const handleSimpan = async () => {
         // VALIDASI
         const requiredFields = [
-            { name: "nisn", label: "NISN" },
+            { name: "nisn", label: "Nomor Induk Siswa" },
             { name: "nama", label: "Nama Lengkap" },
             { name: "kelas", label: "Kelas" },
             { name: "jenisKelamin", label: "Jenis Kelamin" },
@@ -91,7 +91,7 @@ function SiswaForm() {
         const dataToSend = {
             nisn: formData.nisn,
             nama: formData.nama,
-            kelas: formData.kelas,
+            kelas: formData.kelas.toUpperCase(),
             jenis_kelamin: formData.jenisKelamin,
             tempat_lahir: formData.tempatLahir,
             tanggal_lahir: formData.tanggalLahir,
@@ -118,7 +118,10 @@ function SiswaForm() {
             }
             navigate('/admin/data/siswa');
         } catch (error) {
-            setErrorMsg("Gagal menyimpan data siswa: ", error);
+            setErrorMsg(
+                "Gagal menyimpan: " +
+                (error?.response?.data?.message || error?.message || JSON.stringify(error))
+            );
         }
     };
 
@@ -186,7 +189,7 @@ function SiswaForm() {
 
                         <div className="row" style={{ rowGap: '16px' }}>
                             {[
-                                ['Nomor Induk Siswa Nasional (NISN)', 'nisn'],
+                                ['Nomor Induk Siswa', 'nisn'],
                                 ['Nama Lengkap', 'nama'],
                                 ['Kelas', 'kelas'],
                                 ['Jenis Kelamin', 'jenisKelamin'],

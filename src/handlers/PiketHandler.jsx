@@ -31,6 +31,20 @@ export async function getPiketById(idPiket) {
     return data.data || null;
 }
 
+export async function getPiketByKodePiket(kodePiket) {
+    const response = await fetch(`${API}/api/piket/kode/${kodePiket}`, {
+        method: 'GET',
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw { code: 'GET_GURU_BY_ID_FAILED', message: data.message || 'Gagal mengambil data piket!' };
+    }
+
+    // data = { message, data: { ...guru } }
+    return data.data || null;
+}
+
 export async function createPiket(piketData) {
     const response = await fetch(`${API}/api/piket`, {
         method: 'POST',

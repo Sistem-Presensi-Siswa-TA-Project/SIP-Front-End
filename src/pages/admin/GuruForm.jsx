@@ -66,7 +66,7 @@ function GuruForm() {
     const handleSimpan = async () => {
         // VALIDASI
         const requiredFields = [
-            { name: "nomorInduk", label: "NIP/NUPTK" },
+            { name: "nomorInduk", label: "Nomor Induk Guru" },
             { name: "nama", label: "Nama Lengkap" },
             { name: "mapel", label: "Mata Pelajaran" },
             { name: "jenisKelamin", label: "Jenis Kelamin" },
@@ -181,7 +181,7 @@ function GuruForm() {
     
                             <div className="row" style={{ rowGap: '16px' }}>
                                 {[
-                                    ['NIP/NUPTK', 'nomorInduk'],
+                                    ['Nomor Induk Guru', 'nomorInduk'],
                                     ['Nama Lengkap', 'nama'],
                                     ['Mata Pelajaran', 'mapel'],
                                     ['Jenis Kelamin', 'jenisKelamin'],

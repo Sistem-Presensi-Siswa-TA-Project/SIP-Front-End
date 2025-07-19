@@ -145,6 +145,7 @@ function DashboardAdmin() {
                   width="50"
                   height="50"
                   style={{ marginLeft: '10px', marginRight: '18px' }}
+                  draggable={false}
                 />
               </div>
 

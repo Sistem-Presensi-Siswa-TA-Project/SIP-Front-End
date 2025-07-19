@@ -171,7 +171,7 @@ function DataJadwal() {
                                     <tr>
                                         <th className="border-right" style={{ padding: '16px' }}> No. </th>
                                         <th style={{ padding: '16px' }}> Kode Mapel </th>
-                                        <th style={{ padding: '16px' }}> NIP/NUPTK </th>
+                                        <th style={{ padding: '16px' }}> Nomor Induk Guru </th>
                                         <th style={{ padding: '16px' }}> Hari </th>
                                         <th style={{ padding: '16px' }}> Waktu </th>
                                         <th style={{ padding: '16px' }}> Kelas </th>

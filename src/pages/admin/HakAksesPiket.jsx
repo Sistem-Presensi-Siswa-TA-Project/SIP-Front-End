@@ -66,7 +66,9 @@ function HakAksesPiket() {
                 setPiketList(withNama);
             } catch (e) {
                 setPiketList([]);
-                alert('Gagal mengambil data piket: ', e);
+                alert('Gagal mengambil data piket: ' +
+                    (e?.response?.data?.message || e?.message || JSON.stringify(e))
+                );
             }
             setLoading(false);
         }
@@ -205,7 +207,7 @@ function HakAksesPiket() {
                                     <tr>
                                         <th className="border-right" style={{ padding: '16px' }}> No. </th>
                                         <th style={{ padding: '16px' }}> Username </th>
-                                        <th style={{ padding: '16px' }}> NISN/NIP </th>
+                                        <th style={{ padding: '16px' }}> Nomor Induk </th>
                                         <th style={{ padding: '16px' }}> Nama Petugas Piket </th>
                                         <th style={{ padding: '16px' }}> Status </th>
                                         <th style={{ padding: '16px' }}> Aksi </th>

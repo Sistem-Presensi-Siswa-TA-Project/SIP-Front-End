@@ -1,19 +1,26 @@
 // Filename: Kontak.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Header, Card } from '../components/Molekul.jsx';
 import { SecondaryButton, PrimaryButton } from '../components/Button.jsx';
 import { FormInput } from '../components/Forms.jsx';
 import { iconList } from '../data/iconData.js';
 
 function Kontak() {
+    // Navigasi Page
+    const location = useLocation();
+    const prefix = location.pathname.startsWith('/admin') 
+        ? '/admin' : (location.pathname.startsWith('/guru') 
+        ? '/guru' : '/piket');
     const navigate = useNavigate();
+
+    // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [primaryButtonHovering, setPrimaryButtonHovering] = useState(false);
 
+    // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
-
     const lokasiIcon = iconList.find((i) => i.label === 'Lokasi Black')?.src;
     const emailIcon = iconList.find((i) => i.label === 'Email Icon')?.src;
     const phoneIcon = iconList.find((i) => i.label === 'Phone Icon')?.src;
@@ -44,7 +51,7 @@ function Kontak() {
                         className="animate-button d-flex flex-row gap-2"
                         width="125px"
                         height="45px"
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate(`${prefix}`)}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
                         style={{ 
@@ -152,7 +159,7 @@ function Kontak() {
                                 <img src={lokasiIcon} alt="Lokasi" width="28    " height="28    " />
                                 <div>
                                     <strong> Lokasi </strong><br />
-                                    Cibural, Kecamatan Cimenyan, Kabupaten Bandung, Jawa Barat
+                                    SMP Plus Babussalam, Cibural, Kecamatan Cimenyan, Kabupaten Bandung, Jawa Barat
                                 </div>
                             </div>
 
@@ -160,7 +167,7 @@ function Kontak() {
                                 <img src={emailIcon} alt="Email" width="28  " height="28  " />
                                 <div>
                                     <strong> Email </strong><br />
-                                    smpplus@babussalam.ac.id
+                                    smpplusbabussalamdago@gmail.com
                                 </div>
                             </div>
 
@@ -168,7 +175,7 @@ function Kontak() {
                                 <img src={phoneIcon} alt="Phone" width="28  " height="28  " />
                                 <div>
                                     <strong> Telepon </strong><br />
-                                    +62-812-3456-7890
+                                    +62-858-6082-9640
                                 </div>
                             </div>
                         </div>

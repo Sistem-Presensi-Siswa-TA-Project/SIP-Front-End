@@ -81,6 +81,24 @@ export async function updateUserById(idUser, userData) {
     }
 }
 
+export async function updatePasswordById(idUser, newPassword) {
+    try {
+        const response = await axios.put(
+            `${API}/api/users/password/${idUser}`,
+            { password: newPassword }
+        );
+
+        if (response.status !== 200) {
+            throw { code: 'UPDATE_PASSWORD_FAILED', message: response.data?.message || 'Gagal mengupdate password user' };
+        }
+
+        return response.data;
+    } catch (error) {
+        console.error("Gagal mengupdate password user:", error);
+        throw { code: 'UPDATE_PASSWORD_FAILED', message: error.response?.data?.message || 'Gagal mengupdate password user' };
+    }
+}
+
 export async function resetPasswordById(idUser) {
     try {
         const response = await axios.put(

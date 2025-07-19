@@ -1,45 +1,105 @@
 // Filename: ProfilePage.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Header, Card } from '../components/Molekul.jsx';
-import { PrimaryButton, SecondaryButton} from '../components/Button.jsx';
+import { PrimaryButton, SecondaryButton } from '../components/Button.jsx';
 import { iconList } from '../data/iconData.js';
+import { getGuruByNomorInduk } from '../handlers/GuruHandler.jsx';
+import { getPiketByKodePiket } from '../handlers/PiketHandler.jsx';
 
 function Profile() {
-    // State Hovering
-    const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
-    const [primaryButtonHovering, setPrimaryButtonHovering] = useState(false);
-    
     // Navigasi Page
     const location = useLocation();
     const prefix = location.pathname.startsWith('/admin') 
-        ? '/admin' : (location.pathname.startsWith('/guru') 
-        ? '/guru' : '/piket');
+    ? '/admin' : (location.pathname.startsWith('/guru') 
+    ? '/guru' : '/piket');
     const navigate = useNavigate();
+    
+    // State
+    const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
+    const [primaryButtonHovering, setPrimaryButtonHovering] = useState(false);
+    const [guru, setGuru] = useState(null);
+    const [idUser, setIdUser] = useState(""); 
 
     // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
 
+    // Mengambil data guru ketika mount
+    useEffect(() => {
+        async function fetchGuru() {
+            const role = localStorage.getItem("role");
+            const username = localStorage.getItem("username");
+            
+            if (!role || !username) return;
+
+            try {
+                let nomorInduk = username;
+                let userId = "";
+
+                // Jika role adalah piket, dapatkan nomor_induk dari data piket
+                if (role === "piket") {
+                    const dataPiket = await getPiketByKodePiket(username);
+
+                    if (dataPiket && dataPiket.id_piket) {
+                        userId = dataPiket.id_piket;
+                    } else {
+                        setGuru(null);
+                        setIdUser("");
+                        return;
+                    }
+
+                    if (dataPiket && dataPiket.nomor_induk) {
+                        nomorInduk = dataPiket.nomor_induk;
+                    } else {
+                        setGuru(null);
+                        setIdUser("");
+                        return;
+                    }
+
+                    // Fetch data piket
+                    const dataGuru = await getGuruByNomorInduk(nomorInduk);
+                    setGuru(dataGuru || null);
+                    setIdUser(userId);
+                } else {
+                    // Fetch data guru
+                    const dataGuru = await getGuruByNomorInduk(nomorInduk);
+
+                    if (dataGuru && dataGuru.id_guru) {
+                        userId = dataGuru.id_guru;
+                    } else {
+                        setGuru(null);
+                        setIdUser("");
+                        return;
+                    }
+                    
+                    setGuru(dataGuru || null);
+                    setIdUser(userId);
+                }
+            } catch (err) {
+                setGuru(null);
+                console.error('Gagal mengambil data guru', err);
+            }
+        }
+        fetchGuru();
+    }, []);
+
+    // Helper agar lebih aman, fallback ke "-" jika null/undefined
+    function safe(val) { return val ?? "-"; }
+
     return (
         <div>
             <Header> Profile User </Header>
 
-            <main
-                className="d-flex justify-content-center flex-wrap"
-                style={{ gap: '20px' }}
-            >
-                <div 
-                    className="d-flex flex-column align-items-center w-100 mx-auto px-4" 
-                    style={{ maxWidth: '1100px', paddingTop: '40px' }}
-                >
+            <main className="d-flex justify-content-center flex-wrap" style={{ gap: '20px' }}>
+                <div className="d-flex flex-column align-items-center w-100 mx-auto px-4" style={{ maxWidth: '1100px', paddingTop: '40px' }}>
                     <div className="d-flex flex-column align-items-start w-100 mx-auto">
                         {/* Button Back */}
                         <SecondaryButton
                             className="animate-button d-flex flex-row gap-2"
                             width="125px"
                             height="45px"
-                            onClick={() => navigate(-1)}
+                            onClick={() => navigate(`${prefix}`)}
                             onMouseEnter={() => setSecondaryButtonHovering(true)}
                             onMouseLeave={() => setSecondaryButtonHovering(false)}
                             style={{ 
@@ -54,41 +114,24 @@ function Profile() {
                                 alt="Back"
                                 width="15"
                                 height="15"
-                                style={{ 
-                                    marginLeft: '4px',
-                                }}
+                                style={{ marginLeft: '4px' }}
                             />
 
-                            <span style={{ 
-                                    fontSize: '18px', 
-                                    color: secondaryButtonHovering ? '#FFC107' : '#000', 
-                                    marginLeft: '2px' 
-                                }}
-                            > 
+                            <span style={{ fontSize: '18px', color: secondaryButtonHovering ? '#FFC107' : '#000', marginLeft: '2px' }}> 
                                 Kembali 
                             </span>
-
                         </SecondaryButton>
                     
                         {/* Main Card */}
-                        <div 
-                            className="d-flex flex-column flex-lg-row custom-container" 
-                            style={{ marginTop: '30px', gap: '30px' }}
-                        >
+                        <div className="d-flex flex-column flex-lg-row custom-container" style={{ marginTop: '30px', gap: '30px' }}>
                             {/* Data Diri */}
-                            <Card 
-                                className="w-100 d-flex justify-content-center align-items-start" 
-                                height="calc(100% + 10px)" 
-                                style={{ padding: '30px' }}
-                            >
+                            <Card className="w-100 d-flex justify-content-center align-items-start" height="calc(100% + 10px)" style={{ padding: '30px' }}>
                                 <div className="w-100 d-flex flex-column">
+
                                     <h3 style={{ fontWeight: 'bold', marginBottom: '30px' }}> Data Diri </h3>
 
                                     {/* Image Profile & Button */}
-                                    <div 
-                                        className="d-flex flex-column flex-sm-row gap-5 justify-content-start align-items-center"
-                                        style={{ marginBottom: '40px' }}
-                                    >
+                                    <div className="d-flex flex-column flex-sm-row gap-5 justify-content-start align-items-center" style={{ marginBottom: '40px' }}>
                                         {/* Image Profile */}
                                         <div style={{ position: 'relative', width: '95px', height: '95px' }}>
                                             <img
@@ -123,7 +166,7 @@ function Profile() {
                                                 className="width-button-mobile"
                                                 onMouseEnter={() => setPrimaryButtonHovering(true)}
                                                 onMouseLeave={() => setPrimaryButtonHovering(false)}
-                                                onClick={() => navigate(`${prefix}/ubah-password`)}
+                                                onClick={() => navigate(`${prefix}/ubah-password?id=${idUser}`)}
                                                 style={{ 
                                                     justifyContent: 'center', 
                                                     alignItems: 'center',
@@ -158,31 +201,123 @@ function Profile() {
 
                                     {/* Grid Data */}
                                     <div className="d-flex flex-column" style={{ fontSize: '16px', gap: '26px' }}>
-                                        {[
-                                            ['Nama Lengkap', 'Nama Lengkap'],
-                                            ['Jenis Kelamin', 'Jenis kelamin'],
-                                            ['Tempat, Tanggal Lahir', 'Tempat, Tanggal Lahir'],
-                                            ['Agama', 'Agama'],
-                                            ['Nomor Induk Kependudukan (NIK)', 'Nomor Induk Kependudukan (NIK)'],
-                                            ['Nomor Handphone', 'Nomor Handphone'],
-                                            ['Email', 'Email'],
-                                        ].map(([label, value], i) => (
-                                            <div key={i} className="d-flex flex-row">
-                                                <div className="d-flex flex-row gap-4"> 
-                                                    <div className="custom-width-form-besar"> {label} </div>
-                                                    <div style={{ width: '15px' }}> : </div>
+                                        {guru ? (
+                                            <React.Fragment>
+                                                <div className="d-flex flex-row">
+                                                    <div className="d-flex flex-row gap-4">
+                                                        <div className="custom-width-form-besar"> Nama Lengkap </div>
+                                                        <div style={{ width: '15px' }}> : </div>
+                                                    </div>
+
+                                                    <div style={{
+                                                            wordBreak: 'break-word',
+                                                            whiteSpace: 'pre-line',
+                                                            maxWidth: '100%'
+                                                        }}
+                                                    > 
+                                                        {safe(guru?.nama)} 
+                                                    </div>
                                                 </div>
 
-                                                <div 
-                                                    style={{ 
-                                                        wordBreak: 'break-word', 
-                                                        overflowWrap: 'break-word', 
-                                                    }}
-                                                > 
-                                                    {value} 
+                                                <div className="d-flex flex-row">
+                                                    <div className="d-flex flex-row gap-4">
+                                                        <div className="custom-width-form-besar"> Jenis Kelamin </div>
+                                                        <div style={{ width: '15px' }}> : </div>
+                                                    </div>
+
+                                                    <div style={{
+                                                            wordBreak: 'break-word',
+                                                            whiteSpace: 'pre-line',
+                                                            maxWidth: '100%'
+                                                        }}
+                                                    > 
+                                                        {safe(guru?.jenis_kelamin)} 
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))}
+
+                                                <div className="d-flex flex-row">
+                                                    <div className="d-flex flex-row gap-4">
+                                                        <div className="custom-width-form-besar"> Tempat, Tanggal Lahir </div>
+                                                        <div style={{ width: '15px' }}> : </div>
+                                                    </div>
+
+                                                    <div style={{
+                                                            wordBreak: 'break-word',
+                                                            whiteSpace: 'pre-line',
+                                                            maxWidth: '100%'
+                                                        }}
+                                                    > 
+                                                        {`${safe(guru?.tempat_lahir)}, ${safe(guru?.tanggal_lahir)}`} 
+                                                    </div>
+                                                </div>
+
+                                                <div className="d-flex flex-row">
+                                                    <div className="d-flex flex-row gap-4">
+                                                        <div className="custom-width-form-besar"> Agama </div>
+                                                        <div style={{ width: '15px' }}> : </div>
+                                                    </div>
+
+                                                    <div style={{
+                                                            wordBreak: 'break-word',
+                                                            whiteSpace: 'pre-line',
+                                                            maxWidth: '100%'
+                                                        }}
+                                                    > 
+                                                        {safe(guru?.agama)} 
+                                                    </div>
+                                                </div>
+
+                                                <div className="d-flex flex-row">
+                                                    <div className="d-flex flex-row gap-4">
+                                                        <div className="custom-width-form-besar"> Nomor Induk Kependudukan (NIK) </div>
+                                                        <div style={{ width: '15px' }}> : </div>
+                                                    </div>
+
+                                                    <div style={{
+                                                            wordBreak: 'break-word',
+                                                            whiteSpace: 'pre-line',
+                                                            maxWidth: '100%'
+                                                        }}
+                                                    > 
+                                                        {safe(guru?.NIK)} 
+                                                    </div>
+                                                </div>
+
+                                                <div className="d-flex flex-row">
+                                                    <div className="d-flex flex-row gap-4">
+                                                        <div className="custom-width-form-besar"> Nomor Handphone </div>
+                                                        <div style={{ width: '15px' }}> : </div>
+                                                    </div>
+
+                                                    <div style={{
+                                                            wordBreak: 'break-word',
+                                                            whiteSpace: 'pre-line',
+                                                            maxWidth: '100%'
+                                                        }}
+                                                    > 
+                                                        {safe(guru?.nomor_hp)} 
+                                                    </div>
+                                                </div>
+
+                                                <div className="d-flex flex-row">
+                                                    <div className="d-flex flex-row gap-4">
+                                                        <div className="custom-width-form-besar"> Email </div>
+                                                        <div style={{ width: '15px' }}> : </div>
+                                                    </div>
+
+                                                    <div style={{
+                                                            wordBreak: 'break-word',
+                                                            whiteSpace: 'pre-line',
+                                                            maxWidth: '100%'
+                                                        }}
+                                                    > 
+                                                        {safe(guru?.email)} 
+                                                    </div>
+                                                </div>
+                                            </React.Fragment>
+                                        ) : (
+                                            <div> Memuat data ... </div>
+                                        )}
                                     </div>
                                 </div>
                             </Card>
@@ -192,31 +327,73 @@ function Profile() {
                                 {/* Data Akademik */}
                                 <Card className="w-100 card-kecil" height="calc(100% + 10px)" style={{ padding: '20px' }}>
                                     <div className="w-100 d-flex flex-column px-2 py-1">
+
                                         <h4 style={{ fontWeight: 'bold', marginBottom: '20px' }}> Data Akademik </h4>
 
                                         <div className="d-flex flex-column" style={{ fontSize: '16px', gap: '20px' }}>
-                                            {[
-                                                ['NIP/NISN', 'NIP/NISN'],
-                                                ['Mata Pelajaran', 'Mata Pelajaran'],
-                                                ['Status', 'Wali Kelas'],
-                                                ['Pendidikan', 'Pendidikan'],
-                                            ].map(([label, value], i) => (
-                                                <div key={i} className="d-flex flex-row">
-                                                    <div className="d-flex flex-row gap-3"> 
-                                                        <div className="custom-width-form-kecil"> {label} </div>
-                                                        <div style={{ width: '12px' }}> : </div>
-                                                    </div>
-
-                                                    <div 
-                                                        style={{ 
-                                                            wordBreak: 'break-word', 
-                                                            overflowWrap: 'break-word', 
-                                                        }}
-                                                    > 
-                                                        {value} 
-                                                    </div>
+                                            <div className="d-flex flex-row">
+                                                <div className="d-flex flex-row gap-3">
+                                                    <div className="custom-width-form-kecil"> Nomor Induk </div>
+                                                    <div style={{ width: '12px' }}> : </div>
                                                 </div>
-                                            ))}
+
+                                                <div style={{
+                                                        wordBreak: 'break-word',
+                                                        whiteSpace: 'pre-line',
+                                                        maxWidth: '100%'
+                                                    }}
+                                                > 
+                                                    {safe(guru?.nomor_induk)} 
+                                                </div>
+                                            </div>
+
+                                            <div className="d-flex flex-row">
+                                                <div className="d-flex flex-row gap-3">
+                                                    <div className="custom-width-form-kecil"> Mata Pelajaran </div>
+                                                    <div style={{ width: '12px' }}> : </div>
+                                                </div>
+
+                                                <div style={{
+                                                        wordBreak: 'break-word',
+                                                        whiteSpace: 'pre-line',
+                                                        maxWidth: '100%'
+                                                    }}
+                                                > 
+                                                    {safe(guru?.mapel)} 
+                                                </div>
+                                            </div>
+
+                                            <div className="d-flex flex-row">
+                                                <div className="d-flex flex-row gap-3">
+                                                    <div className="custom-width-form-kecil"> Jabatan </div>
+                                                    <div style={{ width: '12px' }}> : </div>
+                                                </div>
+
+                                                <div style={{
+                                                        wordBreak: 'break-word',
+                                                        whiteSpace: 'pre-line',
+                                                        maxWidth: '100%'
+                                                    }}
+                                                > 
+                                                    {safe(guru?.jabatan)} 
+                                                </div>
+                                            </div>
+
+                                            <div className="d-flex flex-row">
+                                                <div className="d-flex flex-row gap-3">
+                                                    <div className="custom-width-form-kecil"> Pendidikan </div>
+                                                    <div style={{ width: '12px' }}> : </div>
+                                                </div>
+
+                                                <div style={{
+                                                        wordBreak: 'break-word',
+                                                        whiteSpace: 'pre-line',
+                                                        maxWidth: '100%'
+                                                    }}
+                                                > 
+                                                    {safe(guru?.pendidikan)} 
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </Card>
@@ -224,33 +401,105 @@ function Profile() {
                                 {/* Alamat */}
                                 <Card className="w-100 card-kecil" height="calc(100% + 10px)" style={{ padding: '20px' }}>
                                     <div className="w-100 d-flex flex-column px-2 py-1">
+
                                         <h4 style={{ fontWeight: 'bold', marginBottom: '20px' }}> Alamat </h4>
 
                                         <div className="d-flex flex-column" style={{ fontSize: '16px', gap: '20px' }}>
-                                            {[
-                                                ['Alamat Domisili', 'Alamat Domisili'],
-                                                ['Desa/Kelurahan', 'Desa/Kelurahan'],
-                                                ['Kecamatan', 'Kecamatan'],
-                                                ['Kab/Kota', 'Kab/Kota'],
-                                                ['Provinsi', 'Provinsi'],
-                                                ['Kode Pos', 'Kode Pos'],
-                                            ].map(([label, value], i) => (
-                                                <div key={i} className="d-flex flex-row">
-                                                    <div className="d-flex flex-row gap-3"> 
-                                                        <div className="custom-width-form-kecil"> {label} </div>
-                                                        <div style={{ width: '12px' }}> : </div>
-                                                    </div>
-
-                                                    <div 
-                                                        style={{ 
-                                                            wordBreak: 'break-word', 
-                                                            overflowWrap: 'break-word', 
-                                                        }}
-                                                    > 
-                                                        {value} 
-                                                    </div>
+                                            <div className="d-flex flex-row">
+                                                <div className="d-flex flex-row gap-3">
+                                                    <div className="custom-width-form-kecil"> Alamat </div>
+                                                    <div style={{ width: '12px' }}> : </div>
                                                 </div>
-                                            ))}
+
+                                                <div style={{
+                                                        wordBreak: 'break-word',
+                                                        whiteSpace: 'pre-line',
+                                                        maxWidth: '100%'
+                                                    }}
+                                                > 
+                                                    {`${safe(guru?.alamat)} RT ${safe(guru?.rt)}/RW ${safe(guru?.rw)}`} 
+                                                </div>
+                                            </div>
+
+                                            <div className="d-flex flex-row">
+                                                <div className="d-flex flex-row gap-3">
+                                                    <div className="custom-width-form-kecil"> Desa/Kelurahan </div>
+                                                    <div style={{ width: '12px' }}> : </div>
+                                                </div>
+
+                                                <div style={{
+                                                        wordBreak: 'break-word',
+                                                        whiteSpace: 'pre-line',
+                                                        maxWidth: '100%'
+                                                    }}
+                                                > 
+                                                    {safe(guru?.kelurahan)} 
+                                                </div>
+                                            </div>
+
+                                            <div className="d-flex flex-row">
+                                                <div className="d-flex flex-row gap-3">
+                                                    <div className="custom-width-form-kecil"> Kecamatan </div>
+                                                    <div style={{ width: '12px' }}> : </div>
+                                                </div>
+
+                                                <div style={{
+                                                        wordBreak: 'break-word',
+                                                        whiteSpace: 'pre-line',
+                                                        maxWidth: '100%'
+                                                    }}
+                                                > 
+                                                    {safe(guru?.kecamatan)} 
+                                                </div>
+                                            </div>
+
+                                            <div className="d-flex flex-row">
+                                                <div className="d-flex flex-row gap-3">
+                                                    <div className="custom-width-form-kecil"> Kab/Kota </div>
+                                                    <div style={{ width: '12px' }}> : </div>
+                                                </div>
+
+                                                <div style={{
+                                                        wordBreak: 'break-word',
+                                                        whiteSpace: 'pre-line',
+                                                        maxWidth: '100%'
+                                                    }}
+                                                > 
+                                                    {safe(guru?.kabupaten_kota)} 
+                                                </div>
+                                            </div>
+
+                                            <div className="d-flex flex-row">
+                                                <div className="d-flex flex-row gap-3">
+                                                    <div className="custom-width-form-kecil"> Provinsi </div>
+                                                    <div style={{ width: '12px' }}> : </div>
+                                                </div>
+
+                                                <div style={{
+                                                        wordBreak: 'break-word',
+                                                        whiteSpace: 'pre-line',
+                                                        maxWidth: '100%'
+                                                    }}
+                                                > 
+                                                    {safe(guru?.provinsi)} 
+                                                </div>
+                                            </div>
+
+                                            <div className="d-flex flex-row">
+                                                <div className="d-flex flex-row gap-3">
+                                                    <div className="custom-width-form-kecil"> Kode Pos </div>
+                                                    <div style={{ width: '12px' }}> : </div>
+                                                </div>
+
+                                                <div style={{
+                                                        wordBreak: 'break-word',
+                                                        whiteSpace: 'pre-line',
+                                                        maxWidth: '100%'
+                                                    }}
+                                                > 
+                                                    {safe(guru?.kode_pos)} 
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </Card>

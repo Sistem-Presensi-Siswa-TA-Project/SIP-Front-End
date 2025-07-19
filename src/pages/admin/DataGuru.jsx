@@ -170,7 +170,7 @@ function DataGuru() {
                                 <thead>
                                     <tr>
                                         <th className="border-right" style={{ padding: '16px' }}> No. </th>
-                                        <th style={{ padding: '16px' }}> NIP/NUPTK </th>
+                                        <th style={{ padding: '16px' }}> Nomor Induk </th>
                                         <th style={{ padding: '16px' }}> Nama Guru </th>
                                         <th style={{ padding: '16px' }}> Mata Pelajaran </th>
                                         <th style={{ padding: '16px' }}> Aksi </th>

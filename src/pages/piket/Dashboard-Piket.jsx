@@ -1,15 +1,27 @@
 // Filename: Dashboard-Piket.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Header, Sidebar, Card } from '../../components/Molekul.jsx';
+import { Header, Sidebar, Card, CardPopUp } from '../../components/Molekul.jsx';
 import { LightButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
+import { getPiketByKodePiket } from '../../handlers/PiketHandler.jsx';
+import { getGuruByNomorInduk } from '../../handlers/GuruHandler.jsx';
+import { getSiswaByNISN } from '../../handlers/SiswaHandler.jsx';
 
 function DashboardPiket() {
+  // Navigasi
   const navigate = useNavigate();
+
+  // State
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [petugasPiket, setPetugasPiket] = useState({
+    nama: 'Nama User',
+    nomor_induk: 'Nomor Induk User'
+  });
+  const [showPopup, setShowPopup] = useState(false);
+  const [statusPiket, setStatusPiket] = useState('');
 
   // Mengambil icon dari iconData.js
   const menuIconBlack = iconList.find((i) => i.label === 'Menu Icon Black')?.src;
@@ -22,7 +34,48 @@ function DashboardPiket() {
   const menuOpenBlack = iconList.find((i) => i.label === 'Menu Open Black')?.src;
   const menuOpenWhite = iconList.find((i) => i.label === 'Menu Open White')?.src;
   const arrowRightBlack = iconList.find((i) => i.label === 'Arrow Right Black')?.src;
+  const yellowWarning = iconList.find(i => i.label === "Yellow Warning Icon")?.src;
 
+  // Proses fetch data
+  useEffect(() => {
+    async function fetchPetugasPiket() {
+      try {
+        // 1. Ambil kode piket dari localStorage
+        const kodePiket = localStorage.getItem('username');
+        if (!kodePiket) return;
+
+        // 2. Ambil data piket untuk dapatkan nomor_induk
+        const dataPiket = await getPiketByKodePiket(kodePiket);
+        const nomorInduk = dataPiket?.nomor_induk;
+        setStatusPiket(dataPiket?.status || '')
+        if (!nomorInduk) return;
+
+        // 3. Cari nama lewat tabel guru
+        const dataGuru = await getGuruByNomorInduk(nomorInduk);
+        if (dataGuru && dataGuru.nama) {
+          setPetugasPiket({ nama: dataGuru.nama, nomor_induk: nomorInduk });
+          return;
+        }
+
+        // 4. Jika bukan di tabel guru, coba cari di tabel siswa
+        const dataSiswa = await getSiswaByNISN(nomorInduk);
+        if (dataSiswa && dataSiswa.nama) {
+          setPetugasPiket({ nama: dataSiswa.nama, nomor_induk: nomorInduk });
+          return;
+        }
+
+        // 5. Jika tidak ditemukan, pakai default
+        setPetugasPiket({ nama: 'Nama User', nomor_induk: nomorInduk });
+      } catch (err) {
+        console.error(err);
+        setStatusPiket('');
+        setPetugasPiket({ nama: 'Nama User', nomor_induk: 'Nomor Induk User' });
+      }
+    }
+    fetchPetugasPiket();
+  }, []);
+
+  // Handler toggle button buat sidebar
   const handleToggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -75,7 +128,7 @@ function DashboardPiket() {
 
                 pathMap={{
                   Beranda: '/piket',
-                  Profil: '/piket/profile',
+                  Profil: statusPiket === 'OSIS' ? '/piket/profile/osis' : '/piket/profile',
                   'Cari Presensi': '/piket/cari-presensi',
                   Kontak: '/piket/kontak',
                   Informasi: '/piket/informasi',
@@ -108,7 +161,7 @@ function DashboardPiket() {
 
               pathMap={{
                 Beranda: '/piket',
-                Profil: '/piket/profile',
+                Profil: statusPiket === 'OSIS' ? '/piket/profile/osis' : '/piket/profile',
                 'Cari Presensi': '/piket/cari-presensi',
                 Kontak: '/piket/kontak',
                 Informasi: '/piket/informasi',
@@ -133,14 +186,14 @@ function DashboardPiket() {
                   width="50"
                   height="50"
                   style={{ marginLeft: '10px', marginRight: '18px' }}
+                  draggable={false}
                 />
               </div>
 
               {/* Identitas User */}
-              <div>
-                <strong> Nama User </strong>
-                <br />
-                <small> Nomor Induk User (NIP/NIS/NISN) </small>
+              <div className="d-flex flex-column">
+                <strong style={{ fontSize: '18px', marginBottom: '3px'}}> {petugasPiket.nama || "-"} </strong>
+                <small style={{ fontSize: '15px'}}> {petugasPiket.nomor_induk || "-"} </small>
               </div>
 
               {/* Toggle Sidebar Button */}
@@ -243,7 +296,8 @@ function DashboardPiket() {
                     alt="scan presensi" 
                     width="80px" 
                     height="80px"
-                    style={{ marginRight: '15px' }} 
+                    style={{ marginRight: '15px' }}
+                    draggable={false} 
                   />
                   <span style={{ fontSize: '25px', fontWeight: 'bold', color: "#000" }}> Scan Presensi </span>
                 </div>
@@ -259,6 +313,7 @@ function DashboardPiket() {
                     bottom: '10px',
                     right: '20px'
                   }}
+                  draggable={false}
                 />
               </Card>
 
@@ -266,7 +321,13 @@ function DashboardPiket() {
               <Card 
                 className="w-100 card-kecil" 
                 style={{ height: '180px', position: 'relative' }}
-                onClick={() => navigate('/piket/kelas')}
+                onClick={() => {
+                  if (statusPiket === 'OSIS') {
+                    setShowPopup(true);
+                  } else {
+                    navigate('/piket/kelas');
+                  }
+                }}
               >
                 <div style={{
                   height: '100%',
@@ -281,7 +342,8 @@ function DashboardPiket() {
                     alt="presensi mapel" 
                     width="80px" 
                     height="80px"
-                    style={{ marginRight: '15px' }} 
+                    style={{ marginRight: '15px' }}
+                    draggable={false}
                   />
 
                   <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'start', gap: '4px' }}>
@@ -301,6 +363,7 @@ function DashboardPiket() {
                     bottom: '10px',
                     right: '20px'
                   }}
+                  draggable={false}
                 />
               </Card>
             </div>
@@ -372,6 +435,23 @@ function DashboardPiket() {
           </Card>
         </div>
       </main>
+
+      <CardPopUp
+        open={showPopup}
+        image={yellowWarning}
+        borderColor="#FFC107"
+        buttons={[
+          {
+            label: "Kembali ke Beranda",
+            bgColor: "#FFC107",
+            textColor: "#FFFFFF",
+            borderColor: "#FFFFFF",
+            onClick: () => setShowPopup(false),
+          }
+        ]}
+      >
+        PERHATIAN: Siswa OSIS tidak dapat melakukan presensi mata pelajaran!!
+      </CardPopUp>
 
       <footer>
         <small style={{ fontSize: '14px', color: '#808080' }}>

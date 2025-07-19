@@ -164,7 +164,7 @@ function DataSiswa() {
                                 <thead>
                                     <tr>
                                         <th className="border-right" style={{ padding: '16px' }}> No. </th>
-                                        <th style={{ padding: '16px' }}> NISN </th>
+                                        <th style={{ padding: '16px' }}> Nomor Induk </th>
                                         <th style={{ padding: '16px' }}> Nama Siswa </th>
                                         <th style={{ padding: '16px' }}> Kelas </th>
                                         <th style={{ padding: '16px' }}> Kelas Gabungan </th>
@@ -198,7 +198,7 @@ function DataSiswa() {
                                                         <button
                                                             type="button"
                                                             title="Ubah Data"
-                                                            onClick={() => navigate(`/admin/data/mapel/form?id=${siswa.id_siswa}`)}
+                                                            onClick={() => navigate(`/admin/data/siswa/form?id=${siswa.id_siswa}`)}
                                                             style={{
                                                                 background: 'transparent',
                                                                 border: 'none',
