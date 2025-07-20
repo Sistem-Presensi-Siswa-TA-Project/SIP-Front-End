@@ -11,6 +11,6 @@ export default defineConfig({
       host: 'siplus.smpplusbabussalam.my.id',
       protocol: 'ws',
     },
-    allowedHosts: ['siplus.smpplusbabussalam.my.id','ajwan.xyz'],
+    allowedHosts: ['siplus.smpplusbabussalam.my.id', 'ajwan.xyz'],
   },
 })
