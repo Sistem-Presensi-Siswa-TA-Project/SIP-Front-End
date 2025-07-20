@@ -110,11 +110,9 @@ function JadwalForm() {
             if (idJadwal) {
                 // UPDATE (PUT)
                 await putJadwalById(idJadwal, pendingData);
-                alert("Data jadwal berhasil diupdate!");
             } else {
                 // CREATE (POST)
                 await createJadwal(pendingData);
-                alert("Data jadwal berhasil ditambahkan!");
             }
             navigate('/admin/data/jadwal');
         } catch (error) {

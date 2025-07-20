@@ -49,7 +49,6 @@ function MapelForm() {
                             deskripsi: data.deskripsi || '',
                         });
                     }
-
                     setLoading(false);
                 });
         } else {
@@ -93,11 +92,9 @@ function MapelForm() {
             if (idMapel) {
                 // UPDATE (PUT)
                 await updateMapel(idMapel, pendingData);
-                alert("Data mapel berhasil diupdate!");
             } else {
                 // CREATE (POST)
                 await createMapel(pendingData);
-                alert("Data mapel berhasil ditambahkan!");
             }
             navigate('/admin/data/mapel');
         } catch (error) {

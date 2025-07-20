@@ -90,11 +90,9 @@ function HakAksesFormGuru() {
             if (idUser) {
                 // UPDATE (PUT)
                 await updateUserById(idUser, pendingData);
-                alert("Data user berhasil diupdate!");
             } else {
                 // CREATE (POST)
                 await createUser(pendingData);
-                alert("Data user berhasil ditambahkan!");
             }
             navigate('/admin/user/guru');
         } catch (error) {

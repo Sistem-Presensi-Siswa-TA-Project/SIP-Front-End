@@ -110,11 +110,9 @@ function SiswaForm() {
             if (idSiswa) {
                 // UPDATE (PUT)
                 await updateSiswaById(idSiswa, pendingData);
-                alert("Data siswa berhasil diupdate!");
             } else {
                 // CREATE (POST)
                 await createSiswa(pendingData);
-                alert("Data siswa berhasil ditambahkan!");
             }
             navigate('/admin/data/siswa');
         } catch (error) {

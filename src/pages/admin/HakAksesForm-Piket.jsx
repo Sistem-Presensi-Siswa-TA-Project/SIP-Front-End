@@ -153,8 +153,6 @@ function HakAksesFormPiket() {
 
                 // PUT: Update data User
                 await updateUserById(formData.idUser, { username: formData.username, role: 'piket' });
-
-                alert("Data piket berhasil diperbarui!");
             } else {
                 // CREATE (POST) USER lebih dulu
                 await createUser({ username: formData.username, role: 'piket' });
@@ -165,8 +163,6 @@ function HakAksesFormPiket() {
                     nomor_induk: formData.nomorInduk,
                     status: formData.status,
                 });
-
-                alert("Data piket berhasil ditambahkan!");
             }
             navigate('/admin/user/piket');
         } catch (error) {

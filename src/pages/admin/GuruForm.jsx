@@ -102,11 +102,9 @@ function GuruForm() {
             if (idGuru) {
                 // UPDATE (PUT)
                 await putGuruById(idGuru, pendingData);
-                alert("Data guru berhasil diupdate!");
             } else {
                 // CREATE (POST)
                 await createGuru(pendingData);
-                alert("Data guru berhasil ditambahkan!");
             }
             navigate('/admin/data/guru');
         } catch (error) {
