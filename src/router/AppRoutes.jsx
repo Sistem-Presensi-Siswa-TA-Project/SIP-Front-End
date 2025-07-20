@@ -8,6 +8,7 @@ import Login from '../pages/LoginPage.jsx';
 import Profile from '../pages/ProfilePage.jsx';
 import ProfileOsis from '../pages/ProfilePage-Osis.jsx';
 import ProfileForm from '../pages/ProfileForm.jsx';
+import ProfileFormOsis from '../pages/ProfileForm-Osis.jsx';
 import UbahPassword from '../pages/UbahPasswordPage.jsx';
 import Kontak from '../pages/KontakPage.jsx';
 import Informasi from '../pages/InformasiPage.jsx';
@@ -109,6 +110,7 @@ function AppRoutes() {
       <Route path="/piket/profile" element={<ProtectedRoute allowedRole="piket"> <Profile /> </ProtectedRoute>} />
       <Route path="/piket/profile/osis" element={<ProtectedRoute allowedRole="piket"> <ProfileOsis /> </ProtectedRoute>} />
       <Route path="/piket/profile-form" element={<ProtectedRoute allowedRole="piket"> <ProfileForm /> </ProtectedRoute>} />
+      <Route path="/piket/profile-form/osis" element={<ProtectedRoute allowedRole="piket"> <ProfileFormOsis /> </ProtectedRoute>} />
       <Route path="/piket/ubah-password" element={<ProtectedRoute allowedRole="piket"> <UbahPassword /> </ProtectedRoute>} />
       <Route path="/piket/kontak" element={<ProtectedRoute allowedRole="piket"> <Kontak /> </ProtectedRoute>} />
       <Route path="/piket/informasi" element={<ProtectedRoute allowedRole="piket"> <Informasi /> </ProtectedRoute>} />

@@ -6,6 +6,7 @@ import { PrimaryButton, SecondaryButton } from '../components/Button.jsx';
 import { iconList } from '../data/iconData.js';
 import { getSiswaByNISN } from '../handlers/SiswaHandler.jsx';
 import { getPiketByKodePiket } from '../handlers/PiketHandler.jsx';
+import { getUserByUsername } from '../handlers/UserHandler.jsx';
 
 function ProfileOsis() {
     // Navigasi Page
@@ -19,10 +20,42 @@ function ProfileOsis() {
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [primaryButtonHovering, setPrimaryButtonHovering] = useState(false);
     const [siswa, setSiswa] = useState(null);
+    const [idUser, setIdUser] = useState(""); 
 
     // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
+
+    // Mengubah format tanggal lahir
+    function formatTanggalIndo(dateString) {
+        if (!dateString) return "-";
+
+        // Handle jika dalam bentuk string ISO (2003-05-18T17:00:00.000Z)
+        let date = dateString;
+
+        if (typeof dateString === "string" && dateString.includes("T")) {
+            date = new Date(dateString);
+        } else if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+            // Jika hanya YYYY-MM-DD
+            date = new Date(dateString + "T00:00:00");
+        } else {
+            // Fallback
+            date = new Date(dateString);
+        }
+
+        if (isNaN(date.getTime())) return "-";
+
+        const bulan = [
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
+
+        const tgl = date.getDate();
+        const bln = bulan[date.getMonth()];
+        const thn = date.getFullYear();
+
+        return `${tgl} ${bln} ${thn}`;
+    }
 
     // Mengambil data siswa ketika mount
     useEffect(() => {
@@ -34,6 +67,18 @@ function ProfileOsis() {
 
             try {
                 let nomorInduk = username;
+                let userId = "";
+
+                // Mengambil ID user dari tabel User
+                const dataUser = await getUserByUsername(username)
+
+                if (dataUser && dataUser.id_user) {
+                    userId = dataUser.id_user;
+                    setIdUser(userId);
+                } else {
+                    setIdUser("");
+                    return;
+                }
 
                 // Jika role adalah piket, dapatkan nomor_induk dari data piket
                 const dataPiket = await getPiketByKodePiket(username);
@@ -154,7 +199,7 @@ function ProfileOsis() {
                                             className="width-button-mobile"
                                             onMouseEnter={() => setPrimaryButtonHovering(true)}
                                             onMouseLeave={() => setPrimaryButtonHovering(false)}
-                                            onClick={() => navigate(`${prefix}/ubah-password?id=${siswa.id_siswa}`)}
+                                            onClick={() => navigate(`${prefix}/ubah-password?id=${idUser}`)}
                                             style={{ 
                                                 justifyContent: 'center', 
                                                 alignItems: 'center',
@@ -173,7 +218,7 @@ function ProfileOsis() {
                                             className="width-button-mobile"
                                             onMouseEnter={() => setPrimaryButtonHovering(true)}
                                             onMouseLeave={() => setPrimaryButtonHovering(false)}
-                                            onClick={() => navigate(`${prefix}/profile-form`)}
+                                            onClick={() => navigate(`${prefix}/profile-form/osis?id=${siswa.id_siswa}`)}
                                             style={{ 
                                                 justifyContent: 'center', 
                                                 alignItems: 'center',
@@ -209,7 +254,7 @@ function ProfileOsis() {
 
                                             <div className="d-flex flex-row">
                                                 <div className="d-flex flex-row gap-4">
-                                                    <div className="custom-width-form-besar"> Jenis Kelamin </div>
+                                                    <div className="custom-width-form-besar"> Nomor Induk </div>
                                                     <div style={{ width: '15px' }}> : </div>
                                                 </div>
 
@@ -218,11 +263,11 @@ function ProfileOsis() {
                                                         whiteSpace: 'pre-line',
                                                         maxWidth: '100%'
                                                     }}
-                                                >
-                                                    {safe(siswa?.jenis_kelamin)} 
+                                                > 
+                                                    {safe(siswa?.nisn)} 
                                                 </div>
                                             </div>
-
+                                            
                                             <div className="d-flex flex-row">
                                                 <div className="d-flex flex-row gap-4">
                                                     <div className="custom-width-form-besar"> Kelas </div>
@@ -239,6 +284,23 @@ function ProfileOsis() {
                                                 </div>
                                             </div>
 
+
+                                            <div className="d-flex flex-row">
+                                                <div className="d-flex flex-row gap-4">
+                                                    <div className="custom-width-form-besar"> Jenis Kelamin </div>
+                                                    <div style={{ width: '15px' }}> : </div>
+                                                </div>
+
+                                                <div style={{
+                                                        wordBreak: 'break-word',
+                                                        whiteSpace: 'pre-line',
+                                                        maxWidth: '100%'
+                                                    }}
+                                                >
+                                                    {safe(siswa?.jenis_kelamin)} 
+                                                </div>
+                                            </div>
+
                                             <div className="d-flex flex-row">
                                                 <div className="d-flex flex-row gap-4">
                                                     <div className="custom-width-form-besar"> Tempat, Tanggal Lahir </div>
@@ -251,7 +313,7 @@ function ProfileOsis() {
                                                         maxWidth: '100%'
                                                     }}
                                                 > 
-                                                    {`${safe(siswa?.tempat_lahir)}, ${safe(siswa?.tanggal_lahir)}`} 
+                                                    {`${safe(siswa?.tempat_lahir)}${siswa?.tanggal_lahir ? ', ' + formatTanggalIndo(siswa.tanggal_lahir) : ''}`}
                                                 </div>
                                             </div>
 

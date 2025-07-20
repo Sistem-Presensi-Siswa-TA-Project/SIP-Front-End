@@ -224,7 +224,7 @@ function DashboardGuru() {
               {/* Identitas User */}
               <div className="d-flex flex-column">
                 <strong style={{ fontSize: '18px', marginBottom: '3px'}}> {guru.nama || "-"} </strong>
-                <small style={{ fontSize: '15px'}}> {guru.nomor_induk || "-"} </small>
+                <small style={{ fontSize: '15px'}}> Guru </small>
               </div>
 
               {/* Toggle Sidebar Button */}

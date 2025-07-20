@@ -428,7 +428,17 @@ export const CardPopUp = (props) => {
                 )}
 
                 {/* Teks */}
-                <div style={{ marginTop: 5,marginBottom: 30, fontSize: 18, color: "#000", fontWeight: "bold" }}>
+                <div style={{ 
+                        marginTop: 5, 
+                        marginBottom: 30, 
+                        fontSize: 18, 
+                        color: "#000", 
+                        fontWeight: "bold",
+                        wordBreak: 'break-word',
+                        whiteSpace: 'pre-line',
+                        maxWidth: '100%',
+                    }}
+                >
                     {children}
                 </div>
 

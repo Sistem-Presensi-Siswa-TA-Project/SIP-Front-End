@@ -4,14 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import { Header, Sidebar, Card } from '../../components/Molekul.jsx';
 import { LightButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
+import { getUserByUsername } from '../../handlers/UserHandler.jsx';
 
 function DashboardAdmin() {
+  // Navigasi Page
   const navigate = useNavigate();
+  
+  // State
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
+  const [idUser, setIdUser] = useState('');
 
-  // Mengambil icon dari iconData.js
+  // Mengambil icon dari iconList
   const menuIconBlack = iconList.find((i) => i.label === 'Menu Icon Black')?.src;
   const menuIconWhite = iconList.find((i) => i.label === 'Menu Icon White')?.src;
   const userIcon = iconList.find((i) => i.label === 'User Icon')?.src;
@@ -26,6 +31,26 @@ function DashboardAdmin() {
   const handleToggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
   };
+
+  const username = localStorage.getItem('username');
+
+  // Mengambil id_user berdasarkan username dari localStorage saat mount
+  useEffect(() => {
+    async function fetchIdUser() {
+      if (!username) return;
+      
+      try {
+        const user = await getUserByUsername(username);
+        if (user && user.id_user) {
+          setIdUser(user.id_user);
+        }
+      } catch (err) {
+        console.error(err);
+        setIdUser('');
+      }
+    }
+    fetchIdUser();
+  }, []);
 
   // Set waktu up-to-date
   useEffect(() => {
@@ -62,7 +87,7 @@ function DashboardAdmin() {
                   sidebarMenu: [
                     { label: 'Minimize', icon: 'Back Icon Black' },
                     { label: 'Beranda', icon: 'Dashboard Icon' },
-                    { label: 'Profil', icon: 'Profile Icon' },
+                    { label: 'Ubah Password', icon: 'Ubah Password Icon' },
                     { label: 'Hak Akses Pengguna', icon: 'Hak Akses Icon' },
                     { label: 'Kelola Data Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
                     { label: 'Logout', icon: 'Logout Icon Black' },
@@ -78,7 +103,7 @@ function DashboardAdmin() {
 
                 pathMap={{
                   Beranda: '/admin',
-                  Profil: '/admin/profile',
+                  'Ubah Password': `/admin/ubah-password?id=${idUser}`,
                   'Hak Akses Pengguna': '/admin/user',
                   'Data Siswa': '/admin/data/siswa',
                   'Data Guru': '/admin/data/guru',
@@ -101,7 +126,7 @@ function DashboardAdmin() {
                 sidebarMenu: [
                   { label: 'Minimize', icon: 'Back Icon Black' },
                   { label: 'Beranda', icon: 'Dashboard Icon' },
-                  { label: 'Profil', icon: 'Profile Icon' },
+                  { label: 'Ubah Password', icon: 'Ubah Password Icon' },
                   { label: 'Hak Akses Pengguna', icon: 'Hak Akses Icon' },
                   { label: 'Kelola Data Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
                   { label: 'Logout', icon: 'Logout Icon Black' },
@@ -117,7 +142,7 @@ function DashboardAdmin() {
               
               pathMap={{
                 Beranda: '/admin',
-                Profil: '/admin/profile',
+                'Ubah Password': `/admin/ubah-password?id=${idUser}`,
                 'Hak Akses Pengguna': '/admin/user',
                 'Data Siswa': '/admin/data/siswa',
                 'Data Guru': '/admin/data/guru',
@@ -150,10 +175,9 @@ function DashboardAdmin() {
               </div>
 
               {/* Identitas User */}
-              <div>
-                <strong> Nama User </strong>
-                <br />
-                <small> Nomor Induk User (NIP/NIS/NISN) </small>
+              <div className="d-flex flex-column">
+                <strong style={{ fontSize: '18px', marginBottom: '3px'}}> {username || "-"} </strong>
+                <small style={{ fontSize: '15px'}}> Administrator </small>
               </div>
 
               {/* Toggle Sidebar Button */}

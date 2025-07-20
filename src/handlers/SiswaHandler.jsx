@@ -69,7 +69,7 @@ export async function createSiswa(data) {
     return response.data;
 }
 
-export async function updateSiswa(idSiswa, data) {
+export async function updateSiswaById(idSiswa, data) {
     const response = await axios.put(`${API}/api/siswa/${idSiswa}`, data);
     return response.data;
 }

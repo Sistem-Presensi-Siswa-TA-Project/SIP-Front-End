@@ -1,13 +1,13 @@
-// Filename: ProfileForm.jsx
+// Filename: ProfileForm-Osis.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Header, Card, CardPopUp } from '../components/Molekul.jsx';
 import { SuccessButton, SecondaryButton } from '../components/Button.jsx';
 import { iconList } from '../data/iconData.js';
 import { FormInput } from '../components/Forms.jsx'
-import { getGuruById, putGuruById } from '../handlers/GuruHandler.jsx';
+import { getSiswaById, updateSiswaById } from '../handlers/SiswaHandler.jsx';
 
-function ProfileForm() {
+function ProfileFormOsis() {
     // Navigasi Page
     const location = useLocation();
     const prefix = location.pathname.startsWith('/admin') 
@@ -15,7 +15,7 @@ function ProfileForm() {
         ? '/guru' : '/piket');
     const navigate = useNavigate();
     const params = new URLSearchParams(location.search);
-    const idGuru = params.get('id');
+    const idSiswa = params.get('id');
 
     // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
@@ -31,34 +31,22 @@ function ProfileForm() {
 
     const [formData, setFormData] = useState({
         namaLengkap: '',
+        nomorInduk: '',
+        kelas: '',
         jenisKelamin: '',
         tempatLahir: '',
         tanggalLahir: '',
-        agama: '',
-        nik: '',
         hp: '',
-        email: '',
-        nomorInduk: '',
-        mapel: '',
-        jabatan: '',
-        pendidikan: '', 
-        alamat: '',
-        rt: '',
-        rw: '',
-        desa: '',
-        kecamatan: '',
-        kabupaten: '',
-        provinsi: '',
-        kodePos: '',
+        kelasGabungan: '',
     });
 
     // Fetch data guru
     useEffect(() => {
         async function fetchGuru() {
-            if (!idGuru) return;
+            if (!idSiswa) return;
 
             try {
-                const data = await getGuruById(idGuru);
+                const data = await getSiswaById(idSiswa);
 
                 // Mengambil tangga lahir dalam format date
                 function formatTanggal(tanggal) {
@@ -78,56 +66,32 @@ function ProfileForm() {
 
                 if (data) {
                     setFormData({
-                        // Data Diri
                         namaLengkap: data.nama ?? '',
+                        nomorInduk: data.nisn ?? '',
+                        kelas: data.kelas ?? '',
                         jenisKelamin: data.jenis_kelamin ?? '',
                         tempatLahir: data.tempat_lahir ?? '',
                         tanggalLahir: formatTanggal(data.tanggal_lahir),
-                        agama: data.agama ?? '',
-                        nik: data.NIK ?? '',
                         hp: data.nomor_hp ?? '',
-                        email: data.email ?? '',
-
-                        // Data Akademik
-                        nomorInduk: data.nomor_induk ?? '',
-                        mapel: data.mata_pelajaran ?? '',
-                        jabatan: data.jabatan ?? '',
-                        pendidikan: data.pendidikan ?? '',
-
-                        // Alamat
-                        alamat: data.alamat ?? '',
-                        rt: data.rt ?? '',
-                        rw: data.rw ?? '',
-                        desa: data.kelurahan ?? '',
-                        kecamatan: data.kecamatan ?? '',
-                        kabupaten: data.kabupaten_kota ?? '',
-                        provinsi: data.provinsi ?? '',
-                        kodePos: data.kode_pos ?? '',
+                        kelasGabungan: data.kelas_gabungan ?? '',
                     });
                 }
             } catch (err) {
-                console.error('Gagal mengambil data guru:', err);
+                console.error('Gagal mengambil data siswa:', err);
             }
         }
         fetchGuru();
-    }, [idGuru]);
+    }, [idSiswa]);
 
-    const handleSimpan = () => {
+    const handleUpdate = () => {
         // Daftar kolom yang wajib diisi beserta labelnya
         const requiredFields = [
             ['Nama Lengkap', 'namaLengkap'],
+            ['Nomor Induk', 'nomorInduk'],
+            ['Kelas', 'kelas'],
             ['Jenis Kelamin', 'jenisKelamin'],
             ['Tempat Lahir', 'tempatLahir'],
             ['Tanggal Lahir', 'tanggalLahir'],
-            ['Agama', 'agama'],
-            ['Email', 'email'],
-            ['Nomor Handphone', 'hp'],
-            ['Nomor Induk', 'nomorInduk'],
-            ['Alamat', 'alamat'],
-            ['Desa/Kelurahan', 'desa'],
-            ['Kecamatan', 'kecamatan'],
-            ['Kabupaten/Kota', 'kabupaten'],
-            ['Provinsi', 'provinsi'],
         ];
 
         for (const [label, name] of requiredFields) {
@@ -142,40 +106,25 @@ function ProfileForm() {
 
     const handleConfirmUpdate = async () => {
         setShowUpdatePopup(false);
-        if (!idGuru) {
-            setErrorMsg('ID Guru tidak ditemukan!');
+
+        if (!idSiswa) {
+            setErrorMsg('ID Siswa tidak ditemukan!');
             return;
         }
         try {
-            await putGuruById(idGuru, {
-                // Data Diri
+            await updateSiswaById(idSiswa, {
                 nama: formData.namaLengkap,
+                nisn: formData.nomorInduk,
+                kelas: formData.kelas,
                 jenis_kelamin: formData.jenisKelamin,
                 tempat_lahir: formData.tempatLahir,
                 tanggal_lahir: formData.tanggalLahir,
-                agama: formData.agama,
-                NIK: formData.nik,
                 nomor_hp: formData.hp,
-                email: formData.email,
-
-                // Data Akademik
-                nomor_induk: formData.nomorInduk,
-                mata_pelajaran: formData.mapel,
-                jabatan: formData.jabatan,
-                pendidikan: formData.pendidikan,
-
-                // Alamat
-                alamat: formData.alamat,
-                rt: formData.rt,
-                rw: formData.rw,
-                kelurahan: formData.desa,
-                kecamatan: formData.kecamatan,
-                kabupaten_kota: formData.kabupaten,
-                provinsi: formData.provinsi,
-                kode_pos: formData.kodePos,
+                kelas_gabungan: formData.kelasGabungan,
             });
+
             alert('Data diri berhasil diperbarui!');
-            navigate(`${prefix}/profile`);
+            navigate(`${prefix}/profile/osis`);
         } catch (err) {
             setErrorMsg(
                 'ERROR: ' +
@@ -198,7 +147,7 @@ function ProfileForm() {
                     className="animate-button d-flex flex-row gap-2"
                     width="125px"
                     height="45px"
-                    onClick={() => navigate(`${prefix}/profile`)}
+                    onClick={() => navigate(`${prefix}/profile/osis`)}
                     onMouseEnter={() => setSecondaryButtonHovering(true)}
                     onMouseLeave={() => setSecondaryButtonHovering(false)}
                     style={{ 
@@ -243,86 +192,51 @@ function ProfileForm() {
                         {[
                             // Data Diri
                             ['Nama Lengkap', 'namaLengkap'],
+                            ['Nomor Induk', 'nomorInduk'],
+                            ['Kelas', 'kelas'],
                             ['Jenis Kelamin', 'jenisKelamin'],
                             ['Tempat Lahir', 'tempatLahir'],
                             ['Tanggal Lahir', 'tanggalLahir'],
-                            ['Agama', 'agama'],
-                            ['Nomor Induk Kependudukan (NIK)', 'nik'],
                             ['Nomor Handphone', 'hp'],
-                            ['Email', 'email'],
-
-                            // Data Akademik
-                            ['Nomor Induk', 'nomorInduk'],
-                            ['Mata Pelajaran', 'mapel'],
-                            ['Jabatan', 'jabatan'],
-                            ['Pendidikan', 'pendidikan'],
-
-                            // Alamat
-                            ['Alamat', 'alamat'],
-                            ['RT', 'rt'],
-                            ['RW', 'rw'],
-                            ['Desa/Kelurahan', 'desa'],
-                            ['Kecamatan', 'kecamatan'],
-                            ['Kabupaten/Kota', 'kabupaten'],
-                            ['Provinsi', 'provinsi'],
-                            ['Kode Pos', 'kodePos'],
+                            ['Kelas Gabungan', 'kelasGabungan'],
                         ].map(([label, name], index) => {
                             const isRequired = [
                                 'namaLengkap', 
-                                'jenisKelamin', 
-                                'tempatLahir', 
-                                'tanggalLahir', 
-                                'agama', 
                                 'nomorInduk',
-                                'mapel',
-                                'jabatan',
-                                'alamat', 
-                                'email', 
-                                'hp',
-                                'desa',
-                                'kecamatan',
-                                'kabupaten',
-                                'provinsi',
+                                'kelas',
+                                'jenisKelamin',
+                                'tempatLahir',
+                                'tanggalLahir',
                             ].includes(name);
 
-                            const isReadOnly = ['mapel', 'nomorInduk', 'namaLengkap', 'jabatan'].includes(name);
+                            const isReadOnly = [
+                                'namaLengkap', 
+                                'nomorInduk', 
+                                'kelas', 
+                                'jenisKelamin', 
+                                'kelasGabungan'
+                            ].includes(name);
                             
                             return (
                                 <div className="col-md-4 col-sm-12" key={index}>
-                                    {name === 'jenisKelamin' ? (
-                                        <FormInput
-                                            label={label}
-                                            name={name}
-                                            value={formData[name]}
-                                            required= {isRequired}
-                                            placeholder={label}
-                                            onChange={(e) =>
-                                                setFormData((prev) => ({ ...prev, [name]: e.target.value }))
-                                            }
-                                            options={['Laki-Laki', 'Perempuan']}
-                                        />
-                                    ) : (
-                                        <FormInput
-                                            label={label}
-                                            name={name}
-                                            type={
-                                                name === 'email'
-                                                    ? 'email'
-                                                    : name === 'tanggalLahir'
-                                                    ? 'date'
-                                                    : name === 'hp'
-                                                    ? 'tel'
-                                                    : 'text'
-                                            }
-                                            value={formData[name]}
-                                            required={isRequired}
-                                            readOnly={isReadOnly}
-                                            placeholder={label}
-                                            onChange={(e) =>
-                                                setFormData((prev) => ({ ...prev, [name]: e.target.value }))
-                                            }
-                                        />
-                                    )}
+                                    <FormInput
+                                        label={label}
+                                        name={name}
+                                        type={
+                                            name === 'tanggalLahir'
+                                                ? 'date'
+                                                : name === 'hp'
+                                                ? 'tel'
+                                                : 'text'
+                                        }
+                                        value={formData[name]}
+                                        required={isRequired}
+                                        readOnly={isReadOnly}
+                                        placeholder={label}
+                                        onChange={(e) =>
+                                            setFormData((prev) => ({ ...prev, [name]: e.target.value }))
+                                        }
+                                    />
                                 </div>
                             );
                         })}
@@ -354,7 +268,7 @@ function ProfileForm() {
                             }}
                             onMouseEnter={() => setSuccessButtonHovering(true)}
                             onMouseLeave={() => setSuccessButtonHovering(false)}
-                            onClick={handleSimpan}
+                            onClick={handleUpdate}
                         >
                             SIMPAN
                         </SuccessButton>
@@ -400,4 +314,4 @@ function ProfileForm() {
     );
 }
 
-export default ProfileForm;
+export default ProfileFormOsis;

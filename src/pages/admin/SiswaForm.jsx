@@ -5,7 +5,7 @@ import { Header, Card, CardPopUp } from '../../components/Molekul.jsx';
 import { SuccessButton, SecondaryButton } from '../../components/Button.jsx';
 import { FormInput } from '../../components/Forms.jsx'
 import { iconList } from '../../data/iconData.js';
-import { getSiswaById, createSiswa, updateSiswa } from '../../handlers/SiswaHandler.jsx';
+import { getSiswaById, createSiswa, updateSiswaById } from '../../handlers/SiswaHandler.jsx';
 
 // Default kosong
 const defaultForm = {
@@ -109,7 +109,7 @@ function SiswaForm() {
         try {
             if (idSiswa) {
                 // UPDATE (PUT)
-                await updateSiswa(idSiswa, pendingData);
+                await updateSiswaById(idSiswa, pendingData);
                 alert("Data siswa berhasil diupdate!");
             } else {
                 // CREATE (POST)

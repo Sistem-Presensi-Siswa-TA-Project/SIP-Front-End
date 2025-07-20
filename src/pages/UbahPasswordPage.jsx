@@ -1,13 +1,14 @@
-// Filename: PasswordPage.jsx
+// Filename: UbahPasswordPage.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Header, Card, CardPopUp } from '../components/Molekul.jsx';
 import { SuccessButton, SecondaryButton } from '../components/Button.jsx';
 import { iconList } from '../data/iconData.js';
-import { FormInput } from '../components/Forms.jsx'
-import { updatePasswordById } from '../handlers/userHandler.jsx'
+import { FormInput } from '../components/Forms.jsx';
+import { updatePasswordById } from '../handlers/UserHandler.jsx';
+import { getPiketByKodePiket } from '../handlers/PiketHandler.jsx';
 
-function PasswordForm() {
+function UbahPassword() {
     // Navigasi Page
     const location = useLocation();
     const prefix = location.pathname.startsWith('/admin') 
@@ -20,12 +21,11 @@ function PasswordForm() {
     // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
-    const [formData, setFormData] = useState({
-        username: '',
-        passwordBaru: '',
-    });
+    const [formData, setFormData] = useState({ username: '', passwordBaru: '' });
     const [errorMsg, setErrorMsg] = useState('');
     const [showPopup, setShowPopup] = useState(false);
+    const [role, setRole] = useState('');
+    const [statusPiket, setStatusPiket] = useState('');
 
     // Icon
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
@@ -35,8 +35,32 @@ function PasswordForm() {
     // Isi username dari localStorage saat mount
     useEffect(() => {
         const username = localStorage.getItem('username') || '';
+        const roleStorage = localStorage.getItem('role') || '';
+        setRole(roleStorage);
         setFormData(prev => ({ ...prev, username }));
+
+        if (roleStorage === 'piket' && username) {
+            // Cek status piket
+            getPiketByKodePiket(username).then((data) => {
+                setStatusPiket(data?.status || '');
+            });
+        }
     }, []);
+
+    // Fungsi back button dinamis
+    const handleBack = () => {
+        if (role === 'admin') {
+            navigate(`${prefix}`);
+        } else if (role === 'piket') {
+            if (statusPiket.toUpperCase() === 'OSIS') {
+                navigate(`${prefix}/profile/osis`);
+            } else {
+                navigate(`${prefix}/profile`);
+            }
+        } else {
+            navigate(`${prefix}/profile`);
+        }
+    };
 
     // Handle Update Password
     const handleUpdate = () => {
@@ -59,7 +83,7 @@ function PasswordForm() {
         try {
             await updatePasswordById(idUser, formData.passwordBaru);
             alert("Password berhasil diubah!");
-            navigate(`${prefix}/profile`);
+            handleBack();
         } catch (err) {
             setErrorMsg(
                 "ERROR: " +
@@ -82,7 +106,7 @@ function PasswordForm() {
                     className="animate-button d-flex flex-row gap-2"
                     width="125px"
                     height="45px"
-                    onClick={() => navigate(`${prefix}/profile`)}
+                    onClick={handleBack}
                     onMouseEnter={() => setSecondaryButtonHovering(true)}
                     onMouseLeave={() => setSecondaryButtonHovering(false)}
                     style={{ 
@@ -192,33 +216,33 @@ function PasswordForm() {
             </div>
         </main>
 
-        {/* Popup konfirmasi simpan data siswa */}
-                <CardPopUp
-                    open={showPopup}
-                    image={blueWarningIcon}
-                    borderColor="#1976D2"
-                    buttons={[
-                        {
-                            label: "Kembali",
-                            bgColor: "#FFFFFF",
-                            textColor: "#1976D2",
-                            borderColor: "#1976D2",
-                            onClick: () => setShowPopup(false),
-                        },
+        {/* Popup konfirmasi ubah password */}
+        <CardPopUp
+            open={showPopup}
+            image={blueWarningIcon}
+            borderColor="#1976D2"
+            buttons={[
+                {
+                    label: "Kembali",
+                    bgColor: "#FFFFFF",
+                    textColor: "#1976D2",
+                    borderColor: "#1976D2",
+                    onClick: () => setShowPopup(false),
+                },
 
-                        {
-                            label: "Ya, Saya Yakin",
-                            bgColor: "#1976D2",
-                            textColor: "#FFFFFF",
-                            borderColor: "#1976D2",
-                            onClick: handleConfirmUpdate,
-                        }
-                    ]}
-                >
-                    <React.Fragment>
-                        Apakah Anda yakin ingin mengubah password"? 
-                    </React.Fragment>
-                </CardPopUp>
+                {
+                    label: "Ya, Saya Yakin",
+                    bgColor: "#1976D2",
+                    textColor: "#FFFFFF",
+                    borderColor: "#1976D2",
+                    onClick: handleConfirmUpdate,
+                }
+            ]}
+        >
+            <React.Fragment>
+                Apakah Anda yakin ingin mengubah Password? 
+            </React.Fragment>
+        </CardPopUp>
 
         <footer>
             <small style={{ fontSize: '14px', color: '#808080' }}>
@@ -229,4 +253,4 @@ function PasswordForm() {
     );
 }
 
-export default PasswordForm;
+export default UbahPassword;

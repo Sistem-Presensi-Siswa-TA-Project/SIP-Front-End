@@ -6,6 +6,7 @@ import { PrimaryButton, SecondaryButton } from '../components/Button.jsx';
 import { iconList } from '../data/iconData.js';
 import { getGuruByNomorInduk } from '../handlers/GuruHandler.jsx';
 import { getPiketByKodePiket } from '../handlers/PiketHandler.jsx';
+import { getUserByUsername } from '../handlers/UserHandler.jsx';
 
 function Profile() {
     // Navigasi Page
@@ -19,15 +20,46 @@ function Profile() {
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [primaryButtonHovering, setPrimaryButtonHovering] = useState(false);
     const [guru, setGuru] = useState(null);
-    const [idUser, setIdUser] = useState(""); 
+    const [idUser, setIdUser] = useState("");
 
     // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
 
-    // Mengambil data guru ketika mount
+    // Mengubah format tanggal lahir
+    function formatTanggalIndo(dateString) {
+        if (!dateString) return "-";
+
+        // Handle jika dalam bentuk string ISO (2003-05-18T17:00:00.000Z)
+        let date = dateString;
+
+        if (typeof dateString === "string" && dateString.includes("T")) {
+            date = new Date(dateString);
+        } else if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+            // Jika hanya YYYY-MM-DD
+            date = new Date(dateString + "T00:00:00");
+        } else {
+            // Fallback
+            date = new Date(dateString);
+        }
+
+        if (isNaN(date.getTime())) return "-";
+
+        const bulan = [
+            "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+            "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+        ];
+
+        const tgl = date.getDate();
+        const bln = bulan[date.getMonth()];
+        const thn = date.getFullYear();
+
+        return `${tgl} ${bln} ${thn}`;
+    }
+
+    // Mengambil data user ketika mount
     useEffect(() => {
-        async function fetchGuru() {
+        async function fetchUser() {
             const role = localStorage.getItem("role");
             const username = localStorage.getItem("username");
             
@@ -37,17 +69,21 @@ function Profile() {
                 let nomorInduk = username;
                 let userId = "";
 
+                // Mengambil ID user dari tabel User
+                const dataUser = await getUserByUsername(username)
+
+                if (dataUser && dataUser.id_user) {
+                    userId = dataUser.id_user;
+                    setIdUser(userId);
+                } else {
+                    setIdUser("");
+                    return;
+                }
+
                 // Jika role adalah piket, dapatkan nomor_induk dari data piket
                 if (role === "piket") {
+                    // Mengambil nomor induk petugas piket
                     const dataPiket = await getPiketByKodePiket(username);
-
-                    if (dataPiket && dataPiket.id_piket) {
-                        userId = dataPiket.id_piket;
-                    } else {
-                        setGuru(null);
-                        setIdUser("");
-                        return;
-                    }
 
                     if (dataPiket && dataPiket.nomor_induk) {
                         nomorInduk = dataPiket.nomor_induk;
@@ -57,31 +93,28 @@ function Profile() {
                         return;
                     }
 
-                    // Fetch data piket
+                    // Fetch data user
                     const dataGuru = await getGuruByNomorInduk(nomorInduk);
                     setGuru(dataGuru || null);
-                    setIdUser(userId);
                 } else {
-                    // Fetch data guru
+                    // Fetch data user
                     const dataGuru = await getGuruByNomorInduk(nomorInduk);
 
                     if (dataGuru && dataGuru.id_guru) {
                         userId = dataGuru.id_guru;
                     } else {
                         setGuru(null);
-                        setIdUser("");
                         return;
                     }
                     
                     setGuru(dataGuru || null);
-                    setIdUser(userId);
                 }
             } catch (err) {
                 setGuru(null);
                 console.error('Gagal mengambil data guru', err);
             }
         }
-        fetchGuru();
+        fetchUser();
     }, []);
 
     // Helper agar lebih aman, fallback ke "-" jika null/undefined
@@ -185,7 +218,7 @@ function Profile() {
                                                 className="width-button-mobile"
                                                 onMouseEnter={() => setPrimaryButtonHovering(true)}
                                                 onMouseLeave={() => setPrimaryButtonHovering(false)}
-                                                onClick={() => navigate(`${prefix}/profile-form`)}
+                                                onClick={() => navigate(`${prefix}/profile-form?id=${guru.id_guru}`)}
                                                 style={{ 
                                                     justifyContent: 'center', 
                                                     alignItems: 'center',
@@ -247,7 +280,7 @@ function Profile() {
                                                             maxWidth: '100%'
                                                         }}
                                                     > 
-                                                        {`${safe(guru?.tempat_lahir)}, ${safe(guru?.tanggal_lahir)}`} 
+                                                        {`${safe(guru?.tempat_lahir)}${guru?.tanggal_lahir ? ', ' + formatTanggalIndo(guru.tanggal_lahir) : ''}`}
                                                     </div>
                                                 </div>
 
@@ -295,7 +328,7 @@ function Profile() {
                                                             maxWidth: '100%'
                                                         }}
                                                     > 
-                                                        {safe(guru?.nomor_hp)} 
+                                                        {safe(guru?.nomor_hp)}
                                                     </div>
                                                 </div>
 

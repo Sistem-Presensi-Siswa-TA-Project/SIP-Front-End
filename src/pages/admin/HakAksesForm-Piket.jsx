@@ -216,7 +216,7 @@ function HakAksesFormPiket() {
                     className="animate-button d-flex flex-row gap-2"
                     width="125px"
                     height="45px"
-                    onClick={() => navigate(`/admin/user/guru`)}
+                    onClick={() => navigate(`/admin/user/piket`)}
                     onMouseEnter={() => setSecondaryButtonHovering(true)}
                     onMouseLeave={() => setSecondaryButtonHovering(false)}
                     style={{ 

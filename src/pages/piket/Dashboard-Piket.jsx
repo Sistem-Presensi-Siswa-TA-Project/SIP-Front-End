@@ -193,7 +193,7 @@ function DashboardPiket() {
               {/* Identitas User */}
               <div className="d-flex flex-column">
                 <strong style={{ fontSize: '18px', marginBottom: '3px'}}> {petugasPiket.nama || "-"} </strong>
-                <small style={{ fontSize: '15px'}}> {petugasPiket.nomor_induk || "-"} </small>
+                <small style={{ fontSize: '15px'}}> Petugas Piket </small>
               </div>
 
               {/* Toggle Sidebar Button */}
