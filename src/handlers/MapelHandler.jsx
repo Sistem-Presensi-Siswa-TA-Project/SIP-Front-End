@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 
-const API = 'https://backend.ajwan.my.id';
+const API = 'https://backend.ajwan.xyz';
 
 export async function getAllMapel() {
     try {

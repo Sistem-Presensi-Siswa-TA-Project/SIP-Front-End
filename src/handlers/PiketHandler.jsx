@@ -1,6 +1,6 @@
 // Filename: PiketHandler.jsx
 
-const API = 'https://backend.ajwan.my.id';
+const API = 'https://backend.ajwan.xyz';
 
 export async function getAllPiket() {
     const response = await fetch(`${API}/api/piket`, {

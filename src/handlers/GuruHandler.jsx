@@ -1,6 +1,6 @@
 // Filename: GuruHandler.jsx
 
-const API = 'https://backend.ajwan.my.id';
+const API = 'https://backend.ajwan.xyz';
 
 export async function getAllGuru() {
     const response = await fetch(`${API}/api/guru`, {
