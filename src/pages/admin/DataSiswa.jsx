@@ -60,7 +60,7 @@ function DataSiswa() {
             alert('Data siswa berhasil dihapus!');
             
             // Refresh halaman:
-            window.location.reload();
+            // window.location.reload();
         } catch (error) {
             setIdSiswaToDelete(null);
             alert("Gagal menghapus data siswa.", error);

@@ -167,7 +167,7 @@ function Login() {
           </div>
         </Form>
 
-        <small className="text-center mt-4" style={{ fontSize: '12px', color: '#808080' }}>
+        <small className="text-center mt-5" style={{ fontSize: '12px', color: '#808080' }}>
           Copyright &copy; {new Date().getFullYear()} SMP Plus Babussalam. All Rights Reserved.
         </small>
       </div>

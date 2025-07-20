@@ -65,7 +65,7 @@ function DataJadwal() {
             alert('Data jadwal berhasil dihapus!');
     
             // Refresh halaman:
-            window.location.reload();
+            // window.location.reload();
         } catch (error) {
             setIdJadwalToDelete(null);
             console.error("Gagal menghapus data jadwal.", error);

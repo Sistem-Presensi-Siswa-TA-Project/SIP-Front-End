@@ -102,7 +102,7 @@ function HakAksesPiket() {
             setPiketList(prev => prev.filter(item => item.id_piket !== idPiketToDelete));
             setIdPiketToDelete(null);
             alert('Data piket & user berhasil dihapus!');
-            window.location.reload();
+            // window.location.reload();
         } catch (error) {
             setIdPiketToDelete(null);
             alert('Gagal menghapus data piket atau user:', error);

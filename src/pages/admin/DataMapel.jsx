@@ -60,7 +60,7 @@ function DataMapel() {
             alert('Data mapel berhasil dihapus!');
             
             // Refresh halaman:
-            window.location.reload();
+            // window.location.reload();
         } catch (error) {
             setIdMapelToDelete(null);
             alert("Gagal menghapus data mapel.", error);

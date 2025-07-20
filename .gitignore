@@ -1,3 +1,5 @@
+vite.config.js
+
 # Dependencies
 node_modules/
 
@@ -12,7 +14,7 @@ build/
 .vite/
 
 # Local env files
-.env
+# .env
 .env.local
 .env.development
 .env.test

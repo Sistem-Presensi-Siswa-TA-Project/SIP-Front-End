@@ -6,6 +6,7 @@ import { SecondaryButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
 import { getJadwalByNomorInduk } from '../../handlers/JadwalHandler.jsx';
 import { getSiswaByKelas } from '../../handlers/SiswaHandler.jsx';
+import { getMapelById } from '../../handlers/MapelHandler.jsx';
 
 function DaftarKelasGuru() {
     // Navigasi
@@ -34,13 +35,20 @@ function DaftarKelasGuru() {
                 // Ambil jumlah siswa untuk setiap kelas
                 const jadwalWithSiswa = await Promise.all(jadwalArray.map(async (jadwal) => {
                     let totalSiswa = "-";
+                    let namaMapel = "";
+
                     try {
+                        // Fetch jumlah siswa di kelas tersebut
                         const siswaData = await getSiswaByKelas(jadwal.kelas);
                         totalSiswa = Array.isArray(siswaData) ? siswaData.length : "-";
+
+                        // Fetch nama mata pelajaran dari id_mapel yang terdaftar di jadwal
+                        const mapelData = await getMapelById(jadwal.id_mapel);
+                        namaMapel = mapelData.nama;
                     } catch {
                         totalSiswa; // totalSiswa tetap "-"
                     }
-                    return { ...jadwal, totalSiswa };
+                    return { ...jadwal, totalSiswa, namaMapel };
                 }));
 
                 setJadwalList(jadwalWithSiswa);
@@ -129,6 +137,7 @@ function DaftarKelasGuru() {
                                                     namaKelas={`Kelas ${jadwal.kelas}`}
                                                     tahunAjar={`${jadwal.tahun_ajaran || "202X/202X"} ${jadwal.semester || ""}`}
                                                     totalSiswa={jadwal.totalSiswa || "-"}
+                                                    mapel={jadwal.namaMapel || ""}
                                                     children="Lihat Detail" to={`/guru/kelas/${jadwal.kelas.toUpperCase()}/pertemuan`}
                                                 />
                                             </div>

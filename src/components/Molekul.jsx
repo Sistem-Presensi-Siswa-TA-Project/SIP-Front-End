@@ -293,6 +293,7 @@ export const CardPresensi = (props) => {
         namaKelas, 
         tahunAjar, 
         totalSiswa,
+        mapel,
         children,
         to,
     } = props;
@@ -310,7 +311,7 @@ export const CardPresensi = (props) => {
 
             {/* Body */}
             <div className="card-presensi-body d-flex flex-column gap-1">
-                <span className="text-secondary"> {tahunAjar} </span>
+                <span className="text-secondary"> {mapel} </span>
 
                 <div className="d-flex justify-content-between align-items-center">
                     <span className="text-secondary"> Jumlah Siswa </span>
@@ -326,6 +327,8 @@ export const CardPresensi = (props) => {
                         />
                     </span>
                 </div>
+                
+                <span className="text-secondary"> {tahunAjar} </span>
             </div>
 
             {/* Footer */}

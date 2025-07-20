@@ -86,7 +86,7 @@ function HakAksesGuru() {
             alert('Data user berhasil dihapus!');
             
             // Refresh halaman:
-            window.location.reload();
+            // window.location.reload();
         } catch (error) {
             setIdUserToDelete(null);
             console.error("Gagal menghapus data user.", error);

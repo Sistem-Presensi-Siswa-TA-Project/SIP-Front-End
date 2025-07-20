@@ -1,6 +1,6 @@
 // Filename: JadwalHandler.jsx
 
-const API = 'https://backend.ajwan.xyz';
+const API = import.meta.env.VITE_API_URL;
 
 export async function getAllJadwal() {
     const response = await fetch(`${API}/api/jadwal`, {

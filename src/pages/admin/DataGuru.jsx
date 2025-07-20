@@ -65,7 +65,7 @@ function DataGuru() {
             alert('Data guru berhasil dihapus!');
     
             // Refresh halaman:
-            window.location.reload();
+            // window.location.reload();
         } catch (error) {
             setIdGuruToDelete(null);
             console.error("Gagal menghapus data guru.", error);
