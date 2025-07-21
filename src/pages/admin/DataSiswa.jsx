@@ -278,7 +278,7 @@ function DataSiswa() {
                             const siswaToDelete = siswaList.find(s => s.id_siswa === idSiswaToDelete);
 
                             return (
-                                <> Apakah Anda yakin ingin menghapus data "<b>{siswaToDelete?.nama || 'siswa ini'}</b>"? </>
+                                <React.Fragment> Apakah Anda yakin ingin menghapus data "<b>{siswaToDelete?.nama || 'siswa ini'}</b>"? </React.Fragment>
                             );
                         }
                     )()

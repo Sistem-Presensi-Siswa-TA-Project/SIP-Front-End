@@ -1,18 +1,15 @@
 // Filename: ScanPresensi.jsx
-import React, { useState, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Header, Card, Camera } from '../../components/Molekul.jsx';
+import { Header, Card, CardPopUp } from '../../components/Molekul.jsx';
 import { CustomButton, SecondaryButton } from '../../components/Button.jsx';
 import { FormInput } from '../../components/Forms.jsx';
 import { iconList } from '../../data/iconData.js';
 import { getAllSiswa, getSiswaByNISN } from '../../handlers/SiswaHandler.jsx';
-// import QrReader from 'react-qr-reader';
+import { Html5Qrcode } from 'html5-qrcode';
 
 function ScanPresensi() {
     const navigate = useNavigate();
-    const camRef = useRef();
-
-    // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [customButtonHovering, setCustomButtonHovering] = useState(false);
     const [qrCodeHovering, setQRCodeHovering] = useState(false);
@@ -22,6 +19,13 @@ function ScanPresensi() {
     const [showCam, setShowCam] = useState(false);
     const [kelasList, setKelasList] = useState([]);
     const [scanned, setScanned] = useState(false);
+    const [facingMode, setFacingMode] = useState('environment');
+    const [errorMsg, setErrorMsg] = useState('');
+    // ==== Tambahan untuk popup QR code tidak valid ====
+    const [showQrInvalidPopup, setShowQrInvalidPopup] = useState(false);
+
+    const qrRef = useRef(null);
+    const html5QrCodeInstance = useRef(null);
 
     // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
@@ -30,6 +34,7 @@ function ScanPresensi() {
     const cancelIconA = iconList.find((i) => i.label === 'Cancel Icon A')?.src;
     const cancelIconB = iconList.find((i) => i.label === 'Cancel Icon B')?.src;
     const swapCamera = iconList.find((i) => i.label === 'Swap Camera')?.src;
+    const yellowWarningIcon = iconList.find(i => i.label === "Yellow Warning Icon")?.src;
 
     // Form data
     const [formData, setFormData] = useState({
@@ -51,7 +56,7 @@ function ScanPresensi() {
     };
 
     // Ambil kelas dari semua siswa (unik, urut)
-    React.useEffect(() => {
+    useEffect(() => {
         async function fetchKelas() {
             try {
                 const siswa = await getAllSiswa() || [];
@@ -66,21 +71,19 @@ function ScanPresensi() {
     }, []);
 
     // Ambil waktu up-to-date (real-time)
-    React.useEffect(() => {
+    useEffect(() => {
         const interval = setInterval(() => {
             const now = new Date().toLocaleTimeString('en-GB', { hour12: false });
             setFormData((prev) => ({ ...prev, waktu: now }));
         }, 1000);
-        
         return () => clearInterval(interval);
     }, []);
 
     // QR Code: Hasil Scan
     const handleScan = async (data) => {
         if (data && !scanned) {
-            setScanned(true); // Biar ga ke-trigger berkali-kali
+            setScanned(true);
 
-            // Anggap QR code isinya NISN (nomor induk siswa)
             const nisn = data.trim();
             setFormData(prev => ({ ...prev, nisn }));
 
@@ -94,21 +97,83 @@ function ScanPresensi() {
                         nama: siswa.nama || '',
                         kelas: siswa.kelas || '',
                     }));
+                } else {
+                    // === QR code tidak valid (tidak ditemukan) ===
+                    setShowQrInvalidPopup(true);
                 }
             } catch (err) {
-                // Reset scan jika gagal
                 setFormData(prev => ({ ...prev, nama: '', kelas: '' }));
+                setShowQrInvalidPopup(true);
                 console.error(err);
             }
 
-            setTimeout(() => setScanned(false), 2000); // Bisa scan ulang setelah 2 detik
-            setShowCam(false); // Tutup kamera
+            setTimeout(() => setScanned(false), 1500);
+            setShowCam(false);
+            stopScanner();
         }
     };
 
+    // Start/Stop html5-qrcode scanner
+    const startScanner = async () => {
+        setErrorMsg('');
+        if (!qrRef.current) return;
+        try {
+            if (html5QrCodeInstance.current) {
+                await html5QrCodeInstance.current.stop();
+                html5QrCodeInstance.current.clear();
+            }
+            html5QrCodeInstance.current = new Html5Qrcode("qr-reader-box");
+            await html5QrCodeInstance.current.start(
+                { facingMode },
+                { fps: 10, qrbox: 250 },
+                (decodedText) => handleScan(decodedText),
+                (err) => {
+                    console.error(err);
+                }
+            );
+        } catch (e) {
+            setErrorMsg('Tidak dapat mengakses kamera.\nSilakan coba tutup lalu buka kamera lagi atau refresh halaman!');
+            console.error(e);
+        }
+    };
+
+    const stopScanner = async () => {
+        try {
+            if (html5QrCodeInstance.current) {
+                await html5QrCodeInstance.current.stop();
+                html5QrCodeInstance.current.clear();
+                html5QrCodeInstance.current = null;
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    // Auto start/stop scanner on showCam
+    useEffect(() => {
+        if (showCam) {
+            startScanner();
+        } else {
+            stopScanner();
+        }
+        return () => { stopScanner(); }
+    }, [showCam, facingMode]);
+
     // Swap Camera
     const handleSwapCamera = () => {
-        setFacingMode(prev => (prev === 'environment' ? 'user' : 'environment'));
+        setFacingMode((prev) => (prev === 'environment' ? 'user' : 'environment'));
+    };
+
+    // Handler tutup popup invalid QR
+    const handleCloseQrInvalidPopup = () => {
+        setShowQrInvalidPopup(false);
+        // Reset form jika ingin (optional)
+        setFormData(prev => ({
+            ...prev,
+            nisn: '',
+            nama: '',
+            kelas: '',
+        }));
     };
 
     return (
@@ -128,8 +193,8 @@ function ScanPresensi() {
                         onClick={() => navigate('/piket')}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
-                        style={{ 
-                            justifyContent: 'center', 
+                        style={{
+                            justifyContent: 'center',
                             alignItems: 'center',
                             boxShadow: secondaryButtonHovering ? '6px 6px 12px rgba(0, 0, 0, 0.5)' : '2px 2px 8px rgba(0, 0, 0, 0.5)',
                             transition: 'box-shadow 0.2s ease-in-out',
@@ -140,29 +205,104 @@ function ScanPresensi() {
                             alt="Back"
                             width="15"
                             height="15"
-                            style={{ 
+                            style={{
                                 marginLeft: '4px',
                             }}
                         />
-
-                        <span style={{ 
-                                fontSize: '18px', 
-                                color: secondaryButtonHovering ? '#FFC107' : '#000', 
-                                marginLeft: '2px' 
-                            }}
-                        > 
-                            Kembali 
+                        <span style={{
+                            fontSize: '18px',
+                            color: secondaryButtonHovering ? '#FFC107' : '#000',
+                            marginLeft: '2px'
+                        }}
+                        >
+                            Kembali
                         </span>
-
                     </SecondaryButton>
 
                     {/* Scan Presensi */}
                     <Card style={{ width: '100%', marginTop: '45px', padding: '30px' }}>
                         {/* Kamera untuk Scan Presensi */}
                         <div className="d-flex flex-column justify-content-center align-items-center mt-2">
-                            {!showCam ? (
+                            {showCam ? (
+                                // === Div Kamera Aktif (html5-qrcode) ===
+                                <React.Fragment>
+                                    <div
+                                        style={{
+                                            position: 'relative',
+                                            marginTop: '12px',
+                                            borderRadius: '16px',
+                                            boxShadow: '2px 2px 12px rgba(0, 0, 0, 0.4)',
+                                            width: 400,
+                                            height: 300,
+                                            background: "#222",
+                                            overflow: 'hidden',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            marginBottom: '24px',
+                                        }}
+                                    >
+                                        <div
+                                            id="qr-reader-box"
+                                            ref={qrRef}
+                                            style={{
+                                                width: '100%',
+                                                height: '100%',
+                                                borderRadius: '16px',
+                                            }}
+                                        />
+
+                                        {/* Tombol Close */}
+                                        <img
+                                            src={cancelButtonHovering ? cancelIconB : cancelIconA}
+                                            alt="Cancel"
+                                            width="34px"
+                                            height="34px"
+                                            onClick={() => setShowCam(false)}
+                                            onMouseEnter={() => setCancelButtonHovering(true)}
+                                            onMouseLeave={() => setCancelButtonHovering(false)}
+                                            style={{
+                                                position: 'absolute',
+                                                top: '12px',
+                                                left: '12px',
+                                                cursor: 'pointer',
+                                                backgroundColor: '#FFF',
+                                                borderRadius: '50%',
+                                            }}
+                                            draggable={false}
+                                        />
+
+                                        {/* Tombol Swap Camera */}
+                                        <img
+                                            src={swapCamera}
+                                            alt="Swap"
+                                            width="34px"
+                                            height="34px"
+                                            onClick={handleSwapCamera}
+                                            onMouseEnter={() => setSwapButtonHovering(true)}
+                                            onMouseLeave={() => setSwapButtonHovering(false)}
+                                            style={{
+                                                position: 'absolute',
+                                                top: '12px',
+                                                right: '12px',
+                                                cursor: 'pointer',
+                                                backgroundColor: swapButtonHovering ? '#4D4D4D' : '#808080',
+                                                borderRadius: '50%',
+                                            }}
+                                            draggable={false}
+                                        />
+                                    </div>
+
+                                    {/* ERROR MESSAGE */}
+                                    {errorMsg && errorMsg.split('\n').map((line, i) => (
+                                        <div key={i} style={{ color: 'red', fontWeight: 'bold', width: 400, textAlign: 'center' }}>
+                                            {line}
+                                        </div>
+                                    ))}
+                                </React.Fragment>
+                            ) : (
                                 // === Div Buka Kamera ===
-                                <div 
+                                <div
                                     className="d-flex flex-column justify-content-center align-items-center"
                                     onClick={() => setShowCam(true)}
                                     onMouseEnter={() => setQRCodeHovering(true)}
@@ -178,7 +318,7 @@ function ScanPresensi() {
                                         transition: 'box-shadow 0.3s ease-in-out',
                                     }}
                                 >
-                                    <img 
+                                    <img
                                         src={qrCodeIcon}
                                         alt="QR Code"
                                         width="100px"
@@ -187,7 +327,7 @@ function ScanPresensi() {
                                         draggable={false}
                                     />
 
-                                    <span 
+                                    <span
                                         onMouseEnter={() => setTeksHovering(true)}
                                         onMouseLeave={() => setTeksHovering(false)}
                                         style={{
@@ -201,80 +341,13 @@ function ScanPresensi() {
                                         Buka Kamera
                                     </span>
                                 </div>
-                            ) : (
-                                // === Div Kamera Aktif ===
-                                <div 
-                                    style={{ 
-                                        position: 'relative', 
-                                        marginTop: '20px', 
-                                        borderRadius: '15px', 
-                                        boxShadow: '2px 2px 12px rgba(0, 0, 0, 0.4)'
-                                    }}
-                                >
-                                    <Camera ref={camRef} />
-
-                                    {/* Tombol Close */}
-                                    <img 
-                                        src={cancelButtonHovering ? cancelIconB : cancelIconA}
-                                        alt="Cancel"
-                                        width="34px"
-                                        height="34px"
-
-
-                                        onClick={() => {
-                                            if (camRef.current) camRef.current.stopCamera(); // Stop Camera
-                                            setShowCam(false);
-                                            setTeksHovering(false);
-                                            setQRCodeHovering(false);
-                                        }}
-
-                                        onMouseEnter={() => setCancelButtonHovering(true)}
-                                        onMouseLeave={() => setCancelButtonHovering(false)}
-
-                                        style={{
-                                            position: 'absolute',
-                                            top: '12px',
-                                            left: '12px',
-                                            cursor: 'pointer',
-                                            backgroundColor: '#FFF',
-                                            borderRadius: '50%',
-                                        }}
-                                        draggable={false}
-                                    />
-
-                                    {/* Tombol Swap Camera */}
-                                    <img 
-                                        src={swapCamera}
-                                        alt="Swap"
-                                        width="34px"
-                                        height="34px"
-
-
-                                        onClick={() => {
-                                            if (camRef.current) camRef.current.swapCamera(); // Swap Camera
-                                        }}
-
-                                        onMouseEnter={() => setSwapButtonHovering(true)}
-                                        onMouseLeave={() => setSwapButtonHovering(false)}
-
-                                        style={{
-                                            position: 'absolute',
-                                            top: '12px',
-                                            right: '12px',
-                                            cursor: 'pointer',
-                                            backgroundColor: swapButtonHovering ? '#4D4D4D' : '#808080',
-                                            borderRadius: '50%',
-                                        }}
-                                        draggable={false}
-                                    />
-                                </div>
                             )}
                         </div>
 
                         {/* Form Presensi Piket */}
-                        <div 
+                        <div
                             className="d-flex flex-column justify-content-center align-items-center w-full"
-                            style={{ marginTop: '5px' }}
+                            style={{ marginTop: '15px' }}
                         >
                             {[
                                 ['Waktu Presensi', 'Waktu Presensi', 'waktu'],
@@ -295,7 +368,11 @@ function ScanPresensi() {
                                                 required={isRequired}
                                                 placeholder={placeholder}
                                                 onChange={handleChange}
-                                                options={['Presensi Masuk', 'Presensi Pulang']}
+                                                type="select"
+                                                options={[
+                                                    { label: 'Presensi Masuk', value: 'Presensi Masuk' },
+                                                    { label: 'Presensi Pulang', value: 'Presensi Pulang' }
+                                                ]}
                                             />
                                         ) : name === 'kelas' ? (
                                             <FormInput
@@ -305,6 +382,7 @@ function ScanPresensi() {
                                                 required={isRequired}
                                                 placeholder={placeholder}
                                                 onChange={handleChange}
+                                                type="select"
                                                 options={kelasList.map(k => ({ value: k, label: k }))}
                                             />
                                         ) : name === 'waktu' ? (
@@ -344,8 +422,8 @@ function ScanPresensi() {
                                     fontWeight: 'bold',
                                     fontSize: '14px',
                                     borderRadius: customButtonHovering ? '14px' : '12px',
-                                    backgroundColor: isButtonDisabled 
-                                        ? '#666' 
+                                    backgroundColor: isButtonDisabled
+                                        ? '#666'
                                         : (customButtonHovering ? '#FFF' : '#33DB00'),
                                     borderColor: isButtonDisabled ? '#666' : '#33DB00',
                                     color: customButtonHovering ? '#33DB00' : 'white',
@@ -370,6 +448,25 @@ function ScanPresensi() {
                     </Card>
                 </div>
             </main>
+
+            {/* Popup jika QR code tidak valid */}
+            <CardPopUp
+                open={showQrInvalidPopup}
+                image={yellowWarningIcon}
+                borderColor="#FFC107"
+                buttons={[
+                    {
+                        label: "Tutup",
+                        bgColor: "#FFC107",
+                        textColor: "#FFFFFF",
+                        borderColor: "#FFC107",
+                        onClick: handleCloseQrInvalidPopup,
+                    }
+                ]}
+            >
+                    QR Code tidak valid!! <br />
+                    Data siswa tidak ditemukan.
+            </CardPopUp>
 
             <footer>
                 <small style={{ fontSize: '14px', color: '#808080' }}>
