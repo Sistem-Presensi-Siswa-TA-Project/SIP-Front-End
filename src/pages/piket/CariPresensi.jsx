@@ -5,12 +5,21 @@ import { Header, Card } from '../../components/Molekul.jsx';
 import { PrimaryButton, SecondaryButton, ToggleButton } from '../../components/Button.jsx';
 import { FormInput } from '../../components/Forms.jsx';
 import { iconList } from '../../data/iconData.js';
+import { searchPresensiMapel, searchPresensiPiket } from '../../handlers/PresensiHandler.jsx';
+import { getAllSiswa } from '../../handlers/SiswaHandler.jsx';
+import { getAllMapel } from '../../handlers/MapelHandler.jsx';
 
 function CariPresensi() {
+    // Navigasi
     const navigate = useNavigate();
+    
+    // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [primaryButtonHovering, setPrimaryButtonHovering] = useState(false);
     const [formType, setFormType] = useState('btnA');
+    const [error, setError] = useState('');
+    const [listMapel, setListMapel] = useState([]);
+    const [listKelas, setListKelas] = useState([]);
 
     const [formData, setFormData] = useState({
         tanggal: '',
@@ -19,13 +28,60 @@ function CariPresensi() {
         kelas: '',
     });
 
+    // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+        if (name === 'tanggal' && value) setError('');
     };
+
+    const handleCari = async () => {
+        setError('');
+        if (!formData.tanggal) {
+            setError("Kolom Tanggal Presensi wajib diisi!");
+            return;
+        }
+
+        try {
+            if (formType === 'btnA') {
+                // Presensi Mapel
+                const data = await searchPresensiMapel({
+                    tanggal: formData.tanggal,
+                    nama: formData.siswa,
+                    mapel: formData.mapel,
+                    kelas: formData.kelas,
+                });
+
+                navigate('/piket/cari-presensi/presensi-mapel', { state: { result: data, filter: formData } });
+            } else {
+                // Presensi Piket
+                const data = await searchPresensiPiket({
+                    tanggal_presensi: formData.tanggal,
+                    nama_siswa: formData.siswa,
+                    kelas: formData.kelas,
+                });
+
+                navigate('/piket/cari-presensi/presensi-piket', { state: { result: data, filter: formData } });
+            }
+        } catch (err) {
+            console.error(err);
+            setError('Gagal mengambil data presensi.');
+        }
+    };
+
+    React.useEffect(() => {
+        // Fetch mapel
+        getAllMapel().then(setListMapel);
+        // Fetch siswa, lalu ambil distinct kelas
+        getAllSiswa().then((data) => {
+            // Ekstrak kelas unik dari data siswa
+            const kelasUnik = [...new Set(data.map(s => s.kelas))];
+            setListKelas(kelasUnik);
+        });
+    }, []);
 
     return (
         <div>
@@ -41,7 +97,7 @@ function CariPresensi() {
                         className="animate-button d-flex flex-row gap-2"
                         width="125px"
                         height="45px"
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate('/piket')}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
                         style={{ 
@@ -84,6 +140,7 @@ function CariPresensi() {
                             <FormInput
                                 label="Tanggal Presensi"
                                 name="tanggal"
+                                type="date"
                                 value={formData.tanggal}
                                 onChange={handleChange}
                                 placeholder="Masukkan Tanggal Presensi"
@@ -106,8 +163,11 @@ function CariPresensi() {
                                     name="mapel"
                                     value={formData.mapel}
                                     onChange={handleChange}
-                                    placeholder="Masukkan Mata Pelajaran"
+                                    placeholder="Pilih Mata Pelajaran"
                                     fontSize="15px"
+                                    type="select"
+                                    options={listMapel.map(mp => ({ label: mp.nama, value: mp.nama }))}
+                                    required
                                 />
                             )}
 
@@ -116,10 +176,20 @@ function CariPresensi() {
                                 name="kelas"
                                 value={formData.kelas}
                                 onChange={handleChange}
-                                placeholder="Masukkan Kelas"
+                                placeholder="Pilih Kelas"
                                 fontSize="15px"
+                                type="select"
+                                options={listKelas.map(kls => ({ label: kls, value: kls }))}
+                                required
                             />
                         </div>
+
+                        {/* Error Message */}
+                        {error && 
+                            <div style={{ color: "red", fontWeight: 'bold', marginBottom: 16 }}> 
+                                {error} 
+                            </div>
+                        }
 
                         <div className="d-flex justify-content-end mt-3">
                             <PrimaryButton 
@@ -129,13 +199,7 @@ function CariPresensi() {
                                 className="width-button-mobile"
                                 onMouseEnter={() => setPrimaryButtonHovering(true)}
                                 onMouseLeave={() => setPrimaryButtonHovering(false)}
-                                onClick={() => {
-                                    if (formType === 'btnA') {
-                                        navigate('/piket/cari-presensi/presensi-mapel');
-                                    } else {
-                                        navigate('/piket/cari-presensi/presensi-piket');
-                                    }
-                                }}
+                                onClick={handleCari}
                                 style={{ 
                                     justifyContent: 'center', 
                                     alignItems: 'center',

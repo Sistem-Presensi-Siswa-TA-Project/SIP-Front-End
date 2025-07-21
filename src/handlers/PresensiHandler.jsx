@@ -45,3 +45,35 @@ export async function updatePresensiMapel(dataPresensi) {
         .then(res => res.data)
         .catch(err => { throw err.response?.data || err; });
 }
+
+export async function searchPresensiMapel({ tanggal, nama, mapel, kelas }) {
+    try {
+        const res = await axios.post(`${API}/api/presensi-mapel/search`, {
+            tanggal,
+            nama,
+            mapel,
+            kelas,
+        });
+
+        return res.data?.data || [];
+    } catch (error) {
+        console.error("Gagal mengambil data presensi:", error);
+        return [];
+    }
+}
+
+// Presensi Piket ~~~
+export async function searchPresensiPiket({ tanggal_presensi, nama_siswa, kelas }) {
+    try {
+        const res = await axios.post(`${API}/api/presensi-piket/search`, {
+            tanggal_presensi,
+            nama_siswa,
+            kelas,
+        });
+        
+        return res.data?.data || [];
+    } catch (error) {
+        console.error("Gagal mengambil data presensi:", error);
+        return [];
+    }
+}

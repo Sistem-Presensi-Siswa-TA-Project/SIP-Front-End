@@ -17,6 +17,7 @@ export const Header = ({ children='As User' }) => {
 
     return (
         <header className="header-bar animate-slide-down">
+            
         <div className="header-container">
                 <img 
                     src={logo} alt="Logo" 

@@ -1,6 +1,6 @@
 // Filename: LihatPresensi-Piket.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card } from '../../components/Molekul.jsx';
 import { SecondaryButton } from '../../components/Button.jsx';
@@ -8,10 +8,29 @@ import { iconList } from '../../data/iconData.js';
 
 function LihatPresensiPiket() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const result = location.state?.result || [];
+  const filter = location.state?.filter || {};
+
   const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
 
+  // Icon from iconList
   const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
   const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
+
+  // Fungsi ubah format tanggal
+  function formatTanggalIndo(tanggal) {
+    if (!tanggal) return '-';
+
+    const bulan = [
+      '', 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+
+    const [tahun, bln, tgl] = tanggal.split('-');
+    if (!tahun || !bln || !tgl) return tanggal;
+    return `${parseInt(tgl)} ${bulan[parseInt(bln)]} ${tahun}`;
+  }
 
   return (
     <div>
@@ -27,7 +46,7 @@ function LihatPresensiPiket() {
             className="animate-button d-flex flex-row gap-2"
             width="125px"
             height="45px"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate('/piket/cari-presensi')}
             onMouseEnter={() => setSecondaryButtonHovering(true)}
             onMouseLeave={() => setSecondaryButtonHovering(false)}
             style={{ 
@@ -70,26 +89,25 @@ function LihatPresensiPiket() {
               Profil Pencarian
             </h3>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '16px', color: '#1c1c1c' }}>
+            <div style={{ marginBottom: 24 }}>
               {[
-                ['Nama Siswa', '-'],
-                ['Kelas', '-'],
-                ['Tanggal Presensi', '22 Juni 2025'],
-              ].map(([label, value], index) => (
-                <div key={index} style={{ display: 'flex', flexDirection: 'row' }}>
-                  <div className="d-flex flex-row gap-4"> 
-                    <div className="custom-width-form-besar"> {label} </div>
-                    <div style={{ width: '15px' }}> : </div>
-                  </div>
-
-                  <div 
-                    style={{ 
-                        wordBreak: 'break-word', 
-                        overflowWrap: 'break-word', 
-                    }}
-                  > 
-                    {value} 
-                  </div>
+                { label: 'Nama Siswa', value: filter.siswa || '-' },
+                { label: 'Kelas', value: filter.kelas || '-' },
+                { label: 'Tanggal Presensi', value: formatTanggalIndo(filter.tanggal) }
+              ].map((item, i) => (
+                <div
+                  key={i}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginBottom: '16px',
+                    fontSize: 16,
+                  }}
+                >
+                  <div style={{ width: 140 }}> {item.label} </div>
+                  <div style={{ marginLeft: '25px', textAlign: 'center' }}> : </div>
+                  <div style={{ marginLeft: '10px', flex: 1, wordBreak: 'break-word' }}> {item.value} </div>
                 </div>
               ))}
             </div>
@@ -122,17 +140,24 @@ function LihatPresensiPiket() {
                     <th style={{ padding: '16px 12px 16px 12px' }}> Waktu Pulang </th>
                   </tr>
                 </thead>
+
                 <tbody>
-                  {[...Array(20)].map((_, i) => (
-                    <tr key={i}>
-                      <td className="border-right" style={{ padding: '14px' }}> {i+1}. </td>
-                      <td style={{ padding: '14px' }}> 20242025 </td>
-                      <td style={{ padding: '14px', textAlign: 'left' }}> Nama Siswa ABCDEFGH IJKLMNO </td>
-                      <td style={{ padding: '14px' }}> VIII B </td>
-                      <td style={{ padding: '14px 10px 14px 10px' }}> 07:39 </td>
-                      <td style={{ padding: '14px 10px 14px 10px' }}> 15:07 </td>
+                  {result.length === 0 ? (
+                    <tr>
+                      <td colSpan="6"> Data tidak ditemukan! </td>
                     </tr>
-                  ))}
+                  ) : (
+                    result.map((row, i) => (
+                      <tr key={row.id_presensi_piket || i}>
+                        <td className="border-right" style={{ padding: '14px' }}> {i + 1} </td>
+                        <td style={{ padding: '14px' }}> {row.nisn || '-'} </td>
+                        <td style={{ padding: '14px', textAlign: 'left' }}> {row.nama_siswa} </td>
+                        <td style={{ padding: '14px' }}> {row.kelas} </td>
+                        <td style={{ padding: '14px 10px 14px 10px' }}> {row.waktu_masuk || '-'} </td>
+                        <td style={{ padding: '14px 10px 14px 10px' }}> {row.waktu_pulang || '-'} </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </Table>
             </div>

@@ -5,7 +5,8 @@ import { Header, Card, Camera } from '../../components/Molekul.jsx';
 import { CustomButton, SecondaryButton } from '../../components/Button.jsx';
 import { FormInput } from '../../components/Forms.jsx';
 import { iconList } from '../../data/iconData.js';
-import { getAllSiswa } from '../../handlers/SiswaHandler.jsx';
+import { getAllSiswa, getSiswaByNISN } from '../../handlers/SiswaHandler.jsx';
+// import QrReader from 'react-qr-reader';
 
 function ScanPresensi() {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ function ScanPresensi() {
     const [swapButtonHovering, setSwapButtonHovering] = useState(false);
     const [showCam, setShowCam] = useState(false);
     const [kelasList, setKelasList] = useState([]);
+    const [scanned, setScanned] = useState(false);
 
     // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
@@ -29,6 +31,7 @@ function ScanPresensi() {
     const cancelIconB = iconList.find((i) => i.label === 'Cancel Icon B')?.src;
     const swapCamera = iconList.find((i) => i.label === 'Swap Camera')?.src;
 
+    // Form data
     const [formData, setFormData] = useState({
         waktu: '',
         nisn: '',
@@ -71,6 +74,42 @@ function ScanPresensi() {
         
         return () => clearInterval(interval);
     }, []);
+
+    // QR Code: Hasil Scan
+    const handleScan = async (data) => {
+        if (data && !scanned) {
+            setScanned(true); // Biar ga ke-trigger berkali-kali
+
+            // Anggap QR code isinya NISN (nomor induk siswa)
+            const nisn = data.trim();
+            setFormData(prev => ({ ...prev, nisn }));
+
+            // Get data siswa by NISN, lalu set nama dan kelas
+            try {
+                const siswa = await getSiswaByNISN(nisn);
+                if (siswa) {
+                    setFormData(prev => ({
+                        ...prev,
+                        nisn: siswa.nisn || nisn,
+                        nama: siswa.nama || '',
+                        kelas: siswa.kelas || '',
+                    }));
+                }
+            } catch (err) {
+                // Reset scan jika gagal
+                setFormData(prev => ({ ...prev, nama: '', kelas: '' }));
+                console.error(err);
+            }
+
+            setTimeout(() => setScanned(false), 2000); // Bisa scan ulang setelah 2 detik
+            setShowCam(false); // Tutup kamera
+        }
+    };
+
+    // Swap Camera
+    const handleSwapCamera = () => {
+        setFacingMode(prev => (prev === 'environment' ? 'user' : 'environment'));
+    };
 
     return (
         <div>

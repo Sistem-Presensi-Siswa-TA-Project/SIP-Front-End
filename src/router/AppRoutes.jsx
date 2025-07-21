@@ -51,7 +51,6 @@ import ScanPresensi from '../pages/piket/ScanPresensi.jsx';
 import DaftarKelasPiket from '../pages/piket/DaftarKelas-Piket.jsx';
 import DaftarGuru from '../pages/piket/DaftarGuru.jsx';
 
-
 function AppRoutes() {
   return (
     <Routes>

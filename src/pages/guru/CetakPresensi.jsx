@@ -1,4 +1,4 @@
-// Filename: DaftarKelas-Guru.jsx
+// Filename: CetakPresensi.jsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header, Card, CardPresensi } from '../../components/Molekul.jsx';
@@ -6,9 +6,13 @@ import { SecondaryButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
 import { getJadwalByNomorInduk } from '../../handlers/JadwalHandler.jsx';
 import { getSiswaByKelas } from '../../handlers/SiswaHandler.jsx';
+import { getMapelById } from '../../handlers/MapelHandler.jsx';
 
 function CetakPresensi() {
+    // Navigasi
     const navigate = useNavigate();
+
+    // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [jadwalList, setJadwalList] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -30,14 +34,21 @@ function CetakPresensi() {
 
                 // Ambil jumlah siswa untuk setiap kelas
                 const jadwalWithSiswa = await Promise.all(jadwalArray.map(async (jadwal) => {
-                    let totalSiswa = "XX";
+                    let totalSiswa = "-";
+                    let namaMapel = "";
+
                     try {
+                        // Fetch jumlah siswa di kelas tersebut
                         const siswaData = await getSiswaByKelas(jadwal.kelas);
-                        totalSiswa = Array.isArray(siswaData) ? siswaData.length : "XX";
+                        totalSiswa = Array.isArray(siswaData) ? siswaData.length : "-";
+
+                        // Fetch nama mata pelajaran dari id_mapel yang terdaftar di jadwal
+                        const mapelData = await getMapelById(jadwal.id_mapel);
+                        namaMapel = mapelData.nama;
                     } catch {
-                        // totalSiswa tetap "XX"
+                        totalSiswa; // totalSiswa tetap "-"
                     }
-                    return { ...jadwal, totalSiswa };
+                    return { ...jadwal, totalSiswa, namaMapel };
                 }));
 
                 setJadwalList(jadwalWithSiswa);
@@ -126,7 +137,8 @@ function CetakPresensi() {
                                                     namaKelas={`Kelas ${jadwal.kelas}`}
                                                     tahunAjar={`${jadwal.tahun_ajaran || "202X/202X"} ${jadwal.semester || ""}`}
                                                     totalSiswa={jadwal.totalSiswa || "-"}
-                                                    children="Cetak Presensi" to={`/guru/cetak-presensi/cetak?kelas=${jadwal.kelas.toUpperCase()}`}
+                                                    mapel={jadwal.namaMapel || ""}
+                                                    children="Cetak Presensi" to={`/guru/cetak-presensi/cetak?id=${jadwal.id_jadwal}`}
                                                 />
                                             </div>
                                         ))
