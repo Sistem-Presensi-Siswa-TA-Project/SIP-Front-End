@@ -1,22 +1,29 @@
 // Filename: DaftarPertemuan.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
-import { Header, Card } from '../../components/Molekul.jsx';
+import { Header, Card, CardPopUp } from '../../components/Molekul.jsx';
 import { SecondaryButton, InfoButton, SuccessButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
+import { getPresensiMapelByIdJadwal } from '../../handlers/PresensiHandler.jsx';
 
 function DaftarPertemuan() {
     // State Hovering
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
     const [hoveredId, setHoveredId] = useState(null);
+    const [daftarPertemuan, setDaftarPertemuan] = useState([]);
+    const [showWarningPopup, setShowWarningPopup] = useState(false);
+    const todayString = new Date().toISOString().slice(0, 10);
+    const blueWarningIcon = iconList.find(i => i.label === "Blue Warning Icon")?.src;
     
     // Navigasi Page
     const navigate = useNavigate();
     const { kelasId } = useParams();
     const location = useLocation();
     const prefix = location.pathname.startsWith('/piket') ? '/piket' : '/guru';
+    const params = new URLSearchParams(location.search);
+    const idJadwal = params.get('id');
 
     // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
@@ -25,11 +32,45 @@ function DaftarPertemuan() {
     const addWhite = iconList.find((i) => i.label === 'Add White')?.src;
     const addGreen = iconList.find((i) => i.label === 'Add Green')?.src;
 
-    // Dummy data pertemuan
-    const daftarPertemuan = Array(10).fill({
-        label: 'Pertemuan ke-',
-        tanggal: 'Tanggal Pertemuan',
-    });
+    // Ubah format tanggal agar sesuai
+    function formatTanggalIndo(dateStr) {
+        const bulanIndo = [
+            "Januari","Februari","Maret","April","Mei","Juni",
+            "Juli","Agustus","September","Oktober","November","Desember"
+        ];
+
+        const [year, month, day] = dateStr.split('-');
+        return `${day} ${bulanIndo[parseInt(month)-1]} ${year}`;
+    }
+
+    // Fetch data presensi mapel
+    useEffect(() => {
+        async function fetchTanggalPresensi() {
+            if (!idJadwal) return;
+
+            try {
+                const data = await getPresensiMapelByIdJadwal(idJadwal);
+
+                // 1. Mengambil semua tanggal (ISO String)
+                let tanggalList = data.map(item => item.tanggal_presensi);
+
+                // 2. Filter hanya tanggal (tanpa jam)
+                tanggalList = tanggalList.map(tgl => tgl.split('T')[0]);
+
+                // 3. Ambil yang unik (no duplikat)
+                const uniqueTanggal = [...new Set(tanggalList)];
+
+                // 4. Urutkan ascending (asc)
+                uniqueTanggal.sort();
+
+                setDaftarPertemuan(uniqueTanggal);
+            } catch (err) {
+                setDaftarPertemuan([]);
+                console.error(err);
+            }
+        }
+        fetchTanggalPresensi();
+    }, [idJadwal]);
 
     return (
         <div>
@@ -101,6 +142,16 @@ function DaftarPertemuan() {
                                 }}
                                 onMouseEnter={() => setSuccessButtonHovering(true)}
                                 onMouseLeave={() => setSuccessButtonHovering(false)}
+                                onClick={() => {
+                                    // Cek apakah sudah ada presensi untuk tanggal hari ini
+                                    if (daftarPertemuan.includes(todayString)) {
+                                        setShowWarningPopup(true);
+                                    } else {
+                                        navigate(
+                                            `${prefix}/kelas/${kelasId?.toUpperCase()}/pertemuan/lihat-presensi/presensi-form?id=${idJadwal}`
+                                        );
+                                    }
+                                }}
                             >
                                 <img 
                                     src={successButtonHovering ? addGreen : addWhite} 
@@ -124,71 +175,100 @@ function DaftarPertemuan() {
                                 </thead>
 
                                 <tbody>
-                                    {daftarPertemuan.map((pertemuan, i) => (
-                                        <tr key={i}>
-                                            <td style={{ padding: '14px 14px 14px 25px' }}>
-                                                <div className="d-flex align-items-start gap-3">
-                                                    {/* Bulatan Hijau */}
-                                                    <div
-                                                        className="my-auto"
-                                                        style={{
-                                                            width: '10px',
-                                                            height: '10px',
-                                                            borderRadius: '50%',
-                                                            backgroundColor: '#379777',
-                                                            marginTop: '4px',
-                                                        }}
-                                                    />
-
-                                                    {/* Nama Guru dan Mapel */}
-                                                    <div className="d-flex flex-column">
-                                                        <span style={{ fontWeight: 'bold', textAlign: 'left', marginBottom: '4px' }}> {pertemuan.label}{i+1} </span>
-                                                        <span style={{ color: '#666', fontSize: '14px', textAlign: 'left' }}> {pertemuan.tanggal} </span>
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td 
-                                                className="d-flex justify-content-end align-items-center" 
-                                                style={{ textAlign: 'right', padding: '20px 20px 14px 14px' }}
-                                            >
-                                                {/* Tombol Lihat */}
-                                                <InfoButton
-                                                    height="35px"
-                                                    width="105px"
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        gap: '6px',
-                                                        boxShadow: hoveredId === i ? 'inset 2px 2px 10px rgba(0, 0, 0, 0.45)' : 'none',
-                                                        transition: 'box-shadow 0.2s ease-in-out',
-                                                    }}
-                                                    onClick={() => navigate(
-                                                        `${prefix}/kelas/${kelasId?.toUpperCase()}/pertemuan/lihat-presensi`
-                                                    )}
-                                                    onMouseEnter={() => setHoveredId(i)}
-                                                    onMouseLeave={() => setHoveredId(null)}
-                                                >
-                                                    <img
-                                                        src={presensiButtonBlack}
-                                                        alt="Presensi"
-                                                        width="20"
-                                                        height="20"
-                                                    />
-                                                    <span style={{ fontWeight: 'bold', fontSize: '13px' }}> 
-                                                        Lihat 
-                                                    </span>
-                                                </InfoButton>
+                                    {daftarPertemuan.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={2} style={{ textAlign: "center", padding: 20, color: "#000" }}>
+                                                Tidak ada pertemuan ditemukan!
                                             </td>
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        daftarPertemuan.map((tanggal, i) => (
+                                            <tr key={i}>
+                                                <td style={{ padding: '14px 14px 14px 25px' }}>
+                                                    <div className="d-flex align-items-start gap-3">
+                                                        {/* Bullet Hijau */}
+                                                        <div
+                                                            className="my-auto"
+                                                            style={{
+                                                                width: '10px',
+                                                                height: '10px',
+                                                                borderRadius: '50%',
+                                                                backgroundColor: '#379777',
+                                                                marginTop: '4px',
+                                                            }}
+                                                        />
+                                                        {/* Pertemuan */}
+                                                        <div className="d-flex flex-column">
+                                                            <span style={{ fontWeight: 'bold', textAlign: 'left', marginBottom: '4px' }}> Pertemuan ke-{i+1} </span>
+                                                            <span style={{ color: '#666', fontSize: '15px', textAlign: 'left' }}>
+                                                                {formatTanggalIndo(tanggal)}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </td>
+
+                                                <td
+                                                    className="d-flex justify-content-end align-items-center"
+                                                    style={{ textAlign: 'right', padding: '20px 20px 14px 14px' }}
+                                                >
+                                                    <InfoButton
+                                                        height="35px"
+                                                        width="105px"
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '6px',
+                                                            boxShadow: hoveredId === i ? 'inset 2px 2px 10px rgba(0, 0, 0, 0.45)' : 'none',
+                                                            transition: 'box-shadow 0.2s ease-in-out',
+                                                        }}
+                                                        onClick={() => navigate(
+                                                            `${prefix}/kelas/${kelasId?.toUpperCase()}/pertemuan/lihat-presensi?id=${idJadwal}&tgl=${tanggal}`
+                                                        )}
+                                                        onMouseEnter={() => setHoveredId(i)}
+                                                        onMouseLeave={() => setHoveredId(null)}
+                                                    >
+                                                        <img
+                                                            src={presensiButtonBlack}
+                                                            alt="Presensi"
+                                                            width="20"
+                                                            height="20"
+                                                        />
+
+                                                        <span style={{ fontWeight: 'bold', fontSize: '13px' }}>
+                                                            Lihat
+                                                        </span>
+                                                    </InfoButton>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </Table>
                         </div>
                     </Card>
                 </div>
             </main>
+
+            {/* Popup konfirmasi simpan data user */}
+            <CardPopUp
+                open={showWarningPopup}
+                image={blueWarningIcon}
+                borderColor="#1976D2"
+                buttons={[
+                    {
+                        label: "Kembali",
+                        bgColor: "#1976D2",
+                        textColor: "#FFFFFF",
+                        borderColor: "#FFFFFF",
+                        onClick: () => setShowWarningPopup(false),
+                    }
+                ]}
+            >
+                <React.Fragment>
+                    Anda telah melakukan presensi di hari ini <br /> ({formatTanggalIndo(todayString)})!
+                </React.Fragment>
+            </CardPopUp>
 
             <footer>
                 <small style={{ fontSize: '14px', color: '#808080' }}>

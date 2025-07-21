@@ -37,6 +37,7 @@ function DataGuru() {
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
+
             try {
                 const data = await getAllGuru();
                 setGuruList(data);
@@ -44,6 +45,7 @@ function DataGuru() {
                 setGuruList([]);
                 alert("Gagal mengambil data guru.", e);
             }
+            
             setLoading(false);
         }
         fetchData();

@@ -122,8 +122,6 @@ function ProfileFormOsis() {
                 nomor_hp: formData.hp,
                 kelas_gabungan: formData.kelasGabungan,
             });
-
-            alert('Data diri berhasil diperbarui!');
             navigate(`${prefix}/profile/osis`);
         } catch (err) {
             setErrorMsg(

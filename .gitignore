@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-vite.config.js
 
 #Package-lock
 # package-lock.json

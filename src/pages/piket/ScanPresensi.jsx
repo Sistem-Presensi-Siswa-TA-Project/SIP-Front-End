@@ -5,19 +5,23 @@ import { Header, Card, Camera } from '../../components/Molekul.jsx';
 import { CustomButton, SecondaryButton } from '../../components/Button.jsx';
 import { FormInput } from '../../components/Forms.jsx';
 import { iconList } from '../../data/iconData.js';
+import { getAllSiswa } from '../../handlers/SiswaHandler.jsx';
 
 function ScanPresensi() {
     const navigate = useNavigate();
     const camRef = useRef();
 
+    // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [customButtonHovering, setCustomButtonHovering] = useState(false);
     const [qrCodeHovering, setQRCodeHovering] = useState(false);
     const [teksHovering, setTeksHovering] = useState(false);
     const [cancelButtonHovering, setCancelButtonHovering] = useState(false);
     const [swapButtonHovering, setSwapButtonHovering] = useState(false);
-    const [showCam, setShowCam] = useState(false)
+    const [showCam, setShowCam] = useState(false);
+    const [kelasList, setKelasList] = useState([]);
 
+    // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
     const qrCodeIcon = iconList.find((i) => i.label === 'QR Code')?.src;
@@ -31,15 +35,42 @@ function ScanPresensi() {
         nama: '',
         kelas: '',
         jenis: '',
-        ket: '',
+        cat: '',
     });
 
-    const isButtonDisabled = !formData.ket;
+    // Form required (selain cat)
+    const requiredFields = ['waktu', 'nisn', 'nama', 'kelas', 'jenis'];
+    const isButtonDisabled = requiredFields.some(field => !formData[field] || !formData[field].trim());
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
+
+    // Ambil kelas dari semua siswa (unik, urut)
+    React.useEffect(() => {
+        async function fetchKelas() {
+            try {
+                const siswa = await getAllSiswa() || [];
+                const kelasUnik = Array.from(new Set((siswa || []).map(s => s.kelas))).sort();
+                setKelasList(kelasUnik);
+            } catch (err) {
+                console.error(err);
+                setKelasList([]);
+            }
+        }
+        fetchKelas();
+    }, []);
+
+    // Ambil waktu up-to-date (real-time)
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            const now = new Date().toLocaleTimeString('en-GB', { hour12: false });
+            setFormData((prev) => ({ ...prev, waktu: now }));
+        }, 1000);
+        
+        return () => clearInterval(interval);
+    }, []);
 
     return (
         <div>
@@ -55,7 +86,7 @@ function ScanPresensi() {
                         className="animate-button d-flex flex-row gap-2"
                         width="125px"
                         height="45px"
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate('/piket')}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
                         style={{ 
@@ -212,16 +243,9 @@ function ScanPresensi() {
                                 ['Nama Siswa', 'Nama Siswa', 'nama'],
                                 ['Kelas', 'Kelas', 'kelas'],
                                 ['Jenis Presensi', 'Jenis Presensi', 'jenis'],
-                                ['Keterangan', 'Keterangan', 'ket'],
+                                ['Catatan', 'Catatan', 'cat'],
                             ].map(([label, placeholder, name], index) => {
-                                const isRequired = [
-                                    'waktu', 
-                                    'nisn', 
-                                    'nama', 
-                                    'kelas', 
-                                    'jenis', 
-                                ].includes(name);
-                                
+                                const isRequired = requiredFields.includes(name);
                                 return (
                                     <div style={{ maxWidth: '650px', width: '100%' }} key={index}>
                                         {name === 'jenis' ? (
@@ -229,32 +253,40 @@ function ScanPresensi() {
                                                 label={label}
                                                 name={name}
                                                 value={formData[name]}
-                                                required= {isRequired}
+                                                required={isRequired}
                                                 placeholder={placeholder}
                                                 onChange={handleChange}
                                                 options={['Presensi Masuk', 'Presensi Pulang']}
                                             />
+                                        ) : name === 'kelas' ? (
+                                            <FormInput
+                                                label={label}
+                                                name={name}
+                                                value={formData[name]}
+                                                required={isRequired}
+                                                placeholder={placeholder}
+                                                onChange={handleChange}
+                                                options={kelasList.map(k => ({ value: k, label: k }))}
+                                            />
+                                        ) : name === 'waktu' ? (
+                                            <FormInput
+                                                label={label}
+                                                name={name}
+                                                value={formData[name]}
+                                                required={isRequired}
+                                                placeholder={placeholder}
+                                                onChange={handleChange}
+                                                readOnly
+                                            />
                                         ) : (
-                                            name === 'waktu' ? (
-                                                <FormInput
-                                                    label={label}
-                                                    name={name}
-                                                    value={formData[name]}
-                                                    required= {isRequired}
-                                                    placeholder={placeholder}
-                                                    onChange={handleChange}
-                                                    readOnly
-                                                />
-                                            ) : (
-                                                <FormInput
-                                                    label={label}
-                                                    name={name}
-                                                    value={formData[name]}
-                                                    required= {isRequired}
-                                                    placeholder={placeholder}
-                                                    onChange={handleChange}
-                                                />
-                                            )
+                                            <FormInput
+                                                label={label}
+                                                name={name}
+                                                value={formData[name]}
+                                                required={isRequired}
+                                                placeholder={placeholder}
+                                                onChange={handleChange}
+                                            />
                                         )}
                                     </div>
                                 );

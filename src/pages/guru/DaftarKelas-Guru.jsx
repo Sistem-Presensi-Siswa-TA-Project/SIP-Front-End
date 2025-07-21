@@ -138,7 +138,7 @@ function DaftarKelasGuru() {
                                                     tahunAjar={`${jadwal.tahun_ajaran || "202X/202X"} ${jadwal.semester || ""}`}
                                                     totalSiswa={jadwal.totalSiswa || "-"}
                                                     mapel={jadwal.namaMapel || ""}
-                                                    children="Lihat Detail" to={`/guru/kelas/${jadwal.kelas.toUpperCase()}/pertemuan`}
+                                                    children="Lihat Detail" to={`/guru/kelas/${jadwal.kelas.toUpperCase()}/pertemuan?id=${jadwal.id_jadwal}`}
                                                 />
                                             </div>
                                         ))

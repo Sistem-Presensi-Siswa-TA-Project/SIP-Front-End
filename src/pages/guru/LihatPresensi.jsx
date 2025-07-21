@@ -1,21 +1,32 @@
 // Filename: LihatPresensi-Guru.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card } from '../../components/Molekul.jsx';
 import { SecondaryButton, InfoButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
+import { getPresensiMapelByJadwalTanggal } from '../../handlers/PresensiHandler.jsx';
+import { getJadwalById } from '../../handlers/JadwalHandler.jsx';
+import { getMapelById } from '../../handlers/MapelHandler.jsx';
+import { getGuruByNomorInduk } from '../../handlers/GuruHandler.jsx';
 
 function LihatPresensi() {
   // State Hovering
   const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
   const [infoButtonHovering, setInfoButtonHovering] = useState(false);
+  const [dataPresensi, setDataPresensi] = useState([]);
+  const [jadwal, setJadwal] = useState(null);
+  const [namaGuru, setNamaGuru] = useState('');
+  const [namaMapel, setNamaMapel] = useState('');
 
   // Navigasi Page
   const navigate = useNavigate();
   const { kelasId } = useParams();
   const location = useLocation();
   const prefix = location.pathname.startsWith('/piket') ? '/piket' : '/guru';
+  const params = new URLSearchParams(location.search);
+  const idJadwal = params.get('id');
+  const tanggalPresensi = params.get('tgl');
 
   // Icon from iconList
   const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
@@ -25,6 +36,79 @@ function LihatPresensi() {
   const sakitIcon = iconList.find((i) => i.label === 'Sakit Icon')?.src;
   const alpaIcon = iconList.find((i) => i.label === 'Alpa Icon')?.src;
   const presensiButtonBlack = iconList.find((i) => i.label === 'Presensi Button Black')?.src;
+
+  // Ubah format tanggal agar sesuai
+  function formatTanggalIndo(dateStr) {
+    const bulanIndo = [
+        "Januari","Februari","Maret","April","Mei","Juni",
+        "Juli","Agustus","September","Oktober","November","Desember"
+    ];
+
+    const [year, month, day] = dateStr.split('-');
+    return `${day} ${bulanIndo[parseInt(month)-1]} ${year}`;
+  }
+
+  // Fetch data profil presensi
+  useEffect(() => {
+    async function fetchProfilPresensi() {
+      if (!idJadwal) return;
+      try {
+        // Ambil data jadwal
+        const jadwalData = await getJadwalById(idJadwal);
+        setJadwal(jadwalData);
+
+        // Ambil nama guru
+        if (jadwalData?.nomor_induk_guru) {
+          const guruData = await getGuruByNomorInduk(jadwalData.nomor_induk_guru);
+          setNamaGuru(guruData?.nama || '-');
+        }
+
+        // Ambil nama mapel
+        if (jadwalData?.id_mapel) {
+          const mapelData = await getMapelById(jadwalData.id_mapel);
+          setNamaMapel(mapelData?.nama || '-');
+        }
+      } catch (err) {
+        console.error(err);
+        setJadwal(null);
+        setNamaGuru('');
+        setNamaMapel('');
+      }
+    }
+    fetchProfilPresensi();
+  }, [idJadwal]);
+
+  // Fetch data presensi mapel
+  useEffect(() => {
+    async function fetchPresensi() {
+      if (!idJadwal || !tanggalPresensi) return;
+
+      try {
+        const data = await getPresensiMapelByJadwalTanggal(idJadwal, tanggalPresensi);
+        setDataPresensi(data || []);
+      } catch (err) {
+        setDataPresensi([]);
+        console.error(err);
+      }
+    }
+    fetchPresensi();
+  }, [idJadwal, tanggalPresensi]);
+
+  // Ubah keterangan jadi icon
+  function getStatusIcon(status) {
+  switch ((status || '').toUpperCase()) {
+    case 'H':
+      return hadirIcon;
+    case 'I':
+      return izinIcon;
+    case 'S':
+      return sakitIcon;
+    case 'A':
+      return alpaIcon;
+    default:
+      return '';
+  }
+}
 
   return (
     <div>
@@ -85,26 +169,20 @@ function LihatPresensi() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', fontSize: '16px', color: '#1c1c1c' }}>
               {[
-                ['Nama Guru', 'Sukiman Bin Sukijan'],
-                ['Mata Pelajaran', 'Bahasa Indonesia'],
-                ['Kelas', `${kelasId?.toUpperCase()}`],
-                ['Jumlah Siswa', '20 siswa'],
-                ['Tahun Ajaran', '2024/2025'],
-                ['Pertemuan ke-', '2'],
-                ['Tanggal', '22 Juni 2025'],
+                ['Nama Guru', namaGuru || '-'],
+                ['Mata Pelajaran', namaMapel || '-'],
+                ['Kelas', kelasId?.toUpperCase() || '-'],
+                ['Jumlah Siswa', dataPresensi.length + ' siswa'],
+                ['Tahun Ajaran', jadwal?.tahun_ajaran || '-'],
+                ['Tanggal Presensi', tanggalPresensi ? formatTanggalIndo(tanggalPresensi) : '-'],
               ].map(([label, value], index) => (
                 <div key={index} style={{ display: 'flex', flexDirection: 'row' }}>
                   <div className="d-flex flex-row gap-4"> 
                     <div className="custom-width-form-besar"> {label} </div>
                     <div style={{ width: '15px' }}> : </div>
                   </div>
-
-                  <div 
-                    style={{ 
-                        wordBreak: 'break-word', 
-                        overflowWrap: 'break-word', 
-                    }}
-                  > 
+                  
+                  <div style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}> 
                     {value} 
                   </div>
                 </div>
@@ -153,12 +231,13 @@ function LihatPresensi() {
                     transition: 'box-shadow 0.2s ease-in-out',
                   }}
                   onClick={() => navigate(
-                    `${prefix}/kelas/${kelasId?.toUpperCase()}/pertemuan/lihat-presensi/presensi-form`
+                    `${prefix}/kelas/${kelasId?.toUpperCase()}/pertemuan/lihat-presensi/presensi-form?id=${idJadwal}&tgl=${tanggalPresensi}`
                   )}
                   onMouseEnter={() => setInfoButtonHovering(true)}
                   onMouseLeave={() => setInfoButtonHovering(false)}
                 >
                   <img src={presensiButtonBlack} alt="Presensi" width="20" height="20" />
+
                   <span style={{ fontWeight: 'bold', fontSize: '14px' }}> Ubah </span>
                 </InfoButton>
               </div>
@@ -184,49 +263,34 @@ function LihatPresensi() {
                     <th style={{ padding: '16px' }}> Keterangan </th>
                   </tr>
                 </thead>
+
                 <tbody>
-                  {[...Array(20)].map((_, i) => (
-                    <tr key={i}>
-                      <td className="border-right" style={{ padding: '14px' }}> {i+1}. </td>
-                      <td style={{ padding: '14px' }}> 20242025 </td>
-                      <td style={{ padding: '14px', textAlign: 'left' }}> Nama Siswa ABCDEFGH IJKLMNO </td>
-                      <td style={{ padding: '14px' }}> Pendidikan Kewarganegaraan </td>
-                      <td style={{ padding: '14px' }}> VIII C </td>
-                      <td style={{ padding: '14px' }}>
-                        <img
-                          src={[
-                            alpaIcon,
-                            hadirIcon,
-                            sakitIcon,
-                            hadirIcon,
-                            sakitIcon,
-                            alpaIcon,
-                            izinIcon,
-                            izinIcon,
-                            alpaIcon,
-                            hadirIcon,
-                            sakitIcon,
-                            hadirIcon,
-                            sakitIcon,
-                            alpaIcon,
-                            izinIcon,
-                            izinIcon,
-                            alpaIcon,
-                            hadirIcon,
-                            sakitIcon,
-                            hadirIcon,
-                          ][i]}
-                          alt="status"
-                          width="28"
-                          height="28"
-                          style={{
-                            display: 'block',
-                            margin: '0 auto',
-                          }}
-                        />
+                  {dataPresensi.length === 0 ? (
+                    <tr>
+                      <td colSpan={6} style={{ textAlign: 'center' }}>
+                        Tidak ada data presensi.
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    dataPresensi.map((item, i) => (
+                      <tr key={i}>
+                        <td className="border-right" style={{ padding: '14px' }}> {i + 1}. </td>
+                        <td style={{ padding: '14px' }}> {item.nisn || '-'} </td>
+                        <td style={{ padding: '14px', textAlign: 'left' }}> {item.nama_siswa || '-'} </td>
+                        <td style={{ padding: '14px' }}> {namaMapel || '-'} </td>
+                        <td style={{ padding: '14px' }}> {item.kelas || '-'} </td>
+                        <td style={{ padding: '14px' }}>
+                          <img
+                            src={getStatusIcon(item.keterangan)}
+                            alt={item.keterangan}
+                            width="28"
+                            height="28"
+                            style={{ display: 'block', margin: '0 auto' }}
+                          />
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </Table>
             </div>

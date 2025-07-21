@@ -6,6 +6,9 @@ import { SuccessButton, SecondaryButton } from '../../components/Button.jsx';
 import { FormInput } from '../../components/Forms.jsx'
 import { iconList } from '../../data/iconData.js';
 import { getJadwalById, createJadwal, putJadwalById } from '../../handlers/JadwalHandler.jsx';
+import { getAllMapel } from '../../handlers/MapelHandler.jsx';
+import { getAllGuru } from '../../handlers/GuruHandler.jsx';
+import { getAllSiswa } from '../../handlers/SiswaHandler.jsx';
 
 // Default kosong
 const defaultForm = {
@@ -32,13 +35,40 @@ function JadwalForm() {
     const [pendingData, setPendingData] = useState(null);
     const [formData, setFormData] = useState(defaultForm);
     const [loading, setLoading] = useState(false);
-    const [errorMsg, setErrorMsg] = useState("");
+    const [errorMsg, setErrorMsg] = useState('');
+    const [mapelList, setMapelList] = useState([]);
+    const [guruList, setGuruList] = useState([]);
+    const [kelasList, setKelasList] = useState([]);
+    // const [selectedMapel, setSelectedMapel] = useState('');
+    // const [selectedGuru, setSelectedGuru] = useState('');
+    // const [selectedKelas, setSelectedKelas] = useState('');
+    // const [rangeWaktu, setRangeWaktu] = useState('');
 
     // Icon
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
     const blueWarningIcon = iconList.find(i => i.label === "Blue Warning Icon")?.src;
     const greenWarningIcon = iconList.find(i => i.label === "Green Warning Icon")?.src;
+
+    // Fetch data mapel, guru, kelas
+    useEffect(() => {
+        async function fetchDropdownData() {
+            // Ambil kode mapel
+            const mapel = await getAllMapel() || [];
+            setMapelList(mapel);
+
+            // Ambil nomor induk guru
+            const guru = await getAllGuru() || [];
+            setGuruList(guru);
+
+            // Ambil data kelas
+            const siswa = await getAllSiswa() || [];
+            // Ambil kelas unik
+            const kelasUnik = Array.from(new Set((siswa || []).map(s => s.kelas))).sort();
+            setKelasList(kelasUnik);
+        }
+        fetchDropdownData();
+    }, []);
 
     // Proses mengambil data dari JadwalHandler.jsx
     useEffect(() => {
@@ -172,7 +202,7 @@ function JadwalForm() {
                     {/* Form Profile */}
                     {loading ? (
                         <div style={{ textAlign: 'center', width: '100%', margin: '40px 0' }}>
-                            <span> Memuat data guru... </span>
+                            <span> Memuat data jadwal... </span>
                         </div>
                     ) : (
                         <Card
@@ -182,88 +212,122 @@ function JadwalForm() {
                                 padding: '30px',
                             }}
                         >
-                            <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '25px' }}> 
+                            <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '25px' }}>
                                 DATA JADWAL
                             </h3>
-
+                            
                             <div className="row" style={{ rowGap: '16px' }}>
-                                {[
-                                    ['Kode Mata Pelajaran', 'kodeMapel'],
-                                    ['Nomor Induk Guru', 'nip'],
-                                    ['Hari', 'hari'],
-                                    ['Waktu', 'waktu'],
-                                    ['Kelas', 'kelas'],
-                                    ['Tahun Ajaran', 'tahunAjar'],
-                                    ['Semester', 'semester'],
-                                ].map(([label, name], index) => {
-                                    const isRequired = [
-                                        'kodeMapel', 
-                                        'nip', 
-                                        'hari',
-                                        'waktu',
-                                        'kelas',
-                                        'tahunAjar',
-                                        'semester',
-                                    ].includes(name);
-                                    
-                                    return (
-                                        <div className="col-md-4 col-sm-12" key={index}>
-                                            {name === 'semester' ? (
-                                                <FormInput
-                                                    label={label}
-                                                    name={name}
-                                                    type='text'
-                                                    value={formData[name]}
-                                                    required={isRequired}
-                                                    placeholder={label}
-                                                    onChange={(e) =>
-                                                        setFormData((prev) => ({ ...prev, [name]: e.target.value }))
-                                                    }
-                                                    options={['Ganjil', 'Genap']}
-                                                />
-                                            ) : (
-                                                name === 'hari' ? (
-                                                    <FormInput
-                                                        label={label}
-                                                        name={name}
-                                                        type='text'
-                                                        value={formData[name]}
-                                                        required={isRequired}
-                                                        placeholder={label}
-                                                        onChange={(e) =>
-                                                            setFormData((prev) => ({ ...prev, [name]: e.target.value }))
-                                                        }
-                                                        options={[
-                                                            'Senin', 'Selasa', 'Rabu', 'Kamis', "Jumat", 'Sabtu', 'Minggu'
-                                                        ]}
-                                                    />
-                                                ) : (
-                                                    <FormInput
-                                                        label={label}
-                                                        name={name}
-                                                        type='text'
-                                                        value={formData[name]}
-                                                        required={isRequired}
-                                                        placeholder={label}
-                                                        onChange={(e) =>
-                                                            setFormData((prev) => ({ ...prev, [name]: e.target.value }))
-                                                        }
-                                                    />
-                                                )
-                                            )}
-                                        </div>
-                                    );
-                                })}
+                                {/* Kode Mapel */}
+                                <div className="col-md-4 col-sm-12">
+                                    <FormInput
+                                        label="Kode Mata Pelajaran"
+                                        name="kodeMapel"
+                                        type="select"
+                                        placeholder="Kode Mata Pelajaran"
+                                        value={formData.kodeMapel}
+                                        required
+                                        options={mapelList.map(m => ({
+                                            value: m.id_mapel,
+                                            label: `${m.id_mapel}`
+                                        }))}
+                                        onChange={e => setFormData(prev => ({ ...prev, kodeMapel: e.target.value }))}
+                                    />
+                                </div>
+
+                                {/* Nomor Induk Guru */}
+                                <div className="col-md-4 col-sm-12">
+                                    <FormInput
+                                        label="Nomor Induk Guru"
+                                        name="nip"
+                                        type="select"
+                                        placeholder="Nomor Induk Guru"
+                                        value={formData.nip}
+                                        required
+                                        options={guruList.map(g => ({
+                                            value: g.nomor_induk,
+                                            label: `${g.nomor_induk}`
+                                        }))}
+                                        onChange={e => setFormData(prev => ({ ...prev, nip: e.target.value }))}
+                                    />
+                                </div>
+
+                                {/* Hari */}
+                                <div className="col-md-4 col-sm-12">
+                                    <FormInput
+                                        label="Hari"
+                                        name="hari"
+                                        type="select"
+                                        value={formData.hari}
+                                        placeholder="Hari"
+                                        required
+                                        options={[
+                                            'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'
+                                        ]}
+                                        onChange={e => setFormData(prev => ({ ...prev, hari: e.target.value }))}
+                                    />
+                                </div>
+
+                                {/* Waktu (Range) */}
+                                <div className="col-md-4 col-sm-12">
+                                    <FormInput
+                                        label="Waktu"
+                                        name="waktu"
+                                        type="text"
+                                        placeholder="Waktu"
+                                        value={formData.waktu}
+                                        required
+                                        onChange={e => setFormData(prev => ({ ...prev, waktu: e.target.value }))}
+                                    />
+                                </div>
+
+                                {/* Kelas */}
+                                <div className="col-md-4 col-sm-12">
+                                    <FormInput
+                                        label="Kelas"
+                                        name="kelas"
+                                        type="select"
+                                        placeholder="Kelas"
+                                        value={formData.kelas}
+                                        required
+                                        options={kelasList.map(k => ({ value: k, label: k }))}
+                                        onChange={e => setFormData(prev => ({ ...prev, kelas: e.target.value }))}
+                                    />
+                                </div>
+                                
+                                {/* Tahun Ajaran */}
+                                <div className="col-md-4 col-sm-12">
+                                    <FormInput
+                                        label="Tahun Ajaran"
+                                        name="tahunAjar"
+                                        type="text"
+                                        value={formData.tahunAjar}
+                                        required
+                                        placeholder="Tahun Ajaran"
+                                        onChange={e => setFormData(prev => ({ ...prev, tahunAjar: e.target.value }))}
+                                    />
+                                </div>
+
+                                {/* Semester */}
+                                <div className="col-md-4 col-sm-12">
+                                    <FormInput
+                                        label="Semester"
+                                        name="semester"
+                                        type="select"
+                                        placeholder="Semester"
+                                        value={formData.semester}
+                                        required
+                                        options={['Ganjil', 'Genap']}
+                                        onChange={e => setFormData(prev => ({ ...prev, semester: e.target.value }))}
+                                    />
+                                </div>
                             </div>
 
-                            {/* Jika data yang bersifat required kosong */}
                             {errorMsg && (
                                 <div style={{ color: "red", fontWeight: "bold", marginBottom: 18 }}>
                                     {errorMsg}
                                 </div>
                             )}
 
-                            {/* Tombol Simpan */}
                             <div className="d-flex justify-content-end justify-content-md-center mt-4">
                                 <SuccessButton
                                     className="d-flex align-items-center justify-content-center"

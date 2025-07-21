@@ -32,7 +32,9 @@ export async function getJadwalById(idJadwal) {
 }
 
 export async function getJadwalByNomorInduk(nomorInduk) {
-    const response = await fetch(`${API}/api/jadwal/guru/${nomorInduk}`);
+    const response = await fetch(`${API}/api/jadwal/guru/${nomorInduk}`, {
+        method: 'GET',
+    });
     const data = await response.json();
     
     if (!response.ok) {
@@ -44,14 +46,30 @@ export async function getJadwalByNomorInduk(nomorInduk) {
 }
 
 export async function getJadwalByHaridanGuru(hari, guru) {
-    const response = await fetch(`${API}/api/jadwal/hari/${hari}/guru/${guru}`);
+    const response = await fetch(`${API}/api/jadwal/hari/${hari}/guru/${guru}`, {
+        method: 'GET',
+    });
     const data = await response.json();
     
     if (!response.ok) {
         return null;
     }
 
-    // Return detail jadwal, contoh: { nama: "...", ... }
+    // Return detail jadwal
+    return data.data || null;
+}
+
+export async function getJadwalByKelas(kelas) {
+    const response = await fetch(`${API}/api/jadwal/kelas/${kelas}`, {
+        method: 'GET',
+    });
+    const data = await response.json();
+    
+    if (!response.ok) {
+        return null;
+    }
+
+    // Return detail jadwal
     return data.data || null;
 }
 

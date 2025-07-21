@@ -141,7 +141,6 @@ function DashboardGuru() {
                 sidebarCustomMenu={{
                   sidebarMenu: [
                     { label: 'Minimize', icon: 'Back Icon Black' },
-                    { label: 'Beranda', icon: 'Dashboard Icon' },
                     { label: 'Profil', icon: 'Profile Icon' },
                     { label: 'Lihat Presensi', icon: 'Presensi Icon' },
                     { label: 'Cetak Presensi', icon: 'Cetak Icon' },
@@ -155,7 +154,6 @@ function DashboardGuru() {
                 }}
 
                 pathMap={{
-                  Beranda: '/guru',
                   Profil: '/guru/profile',
                   'Lihat Presensi': '/guru/kelas',
                   'Cetak Presensi': '/guru/kelas',
@@ -176,7 +174,6 @@ function DashboardGuru() {
               sidebarCustomMenu={{
                 sidebarMenu: [
                   { label: 'Minimize', icon: 'Back Icon Black' },
-                  { label: 'Beranda', icon: 'Dashboard Icon' },
                   { label: 'Profil', icon: 'Profile Icon' },
                   { label: 'Lihat Presensi', icon: 'Presensi Icon' },
                   { label: 'Cetak Presensi', icon: 'Cetak Icon' },
@@ -190,7 +187,6 @@ function DashboardGuru() {
               }}
               
               pathMap={{
-                Beranda: '/guru',
                 Profil: '/guru/profile',
                 'Lihat Presensi': '/guru/kelas',
                 'Cetak Presensi': '/guru/cetak-presensi',
@@ -413,7 +409,7 @@ function DashboardGuru() {
               </Card>
 
               {/* Pengumuman */}
-              <Card className="w-100 card-kecil" style={{ height: '270px' }}>
+              <Card className="w-100 card-kecil">
                 <p style={{ margin: '20px 0 15px 20px' }}> 
                   <strong> 
                     Pengumuman

@@ -74,34 +74,34 @@
   transition: background-color 0.2s ease-in;
 }
 
-.custom-radio.hadir:checked {
+.custom-radio.H:checked {
   border-color: #33DB00 !important;
 }
 
-.custom-radio.hadir:checked::before {
+.custom-radio.H:checked::before {
   background-color: #33DB00;
 }
 
-.custom-radio.izin:checked {
+.custom-radio.I:checked {
   border-color: #2B44E2 !important;
 }
 
-.custom-radio.izin:checked::before {
+.custom-radio.I:checked::before {
   background-color: #2B44E2;
 }
 
-.custom-radio.sakit:checked {
+.custom-radio.S:checked {
   border-color: #D4A328 !important;
 }
 
-.custom-radio.sakit:checked::before {
+.custom-radio.S:checked::before {
   background-color: #D4A328;
 }
 
-.custom-radio.alpa:checked {
+.custom-radio.A:checked {
   border-color: #DB0004 !important;
 }
 
-.custom-radio.alpa:checked::before {
+.custom-radio.A:checked::before {
   background-color: #DB0004;
 }

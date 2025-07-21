@@ -1,26 +1,84 @@
 // Filename: DaftarGuru.jsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card } from '../../components/Molekul.jsx';
 import { SecondaryButton, InfoButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
+import { getJadwalByKelas } from '../../handlers/JadwalHandler.jsx';
+import { getGuruByNomorInduk } from '../../handlers/GuruHandler.jsx'
+import { getMapelById } from '../../handlers/MapelHandler.jsx';
 
 function DaftarGuru() {
+    // Navigasi
     const navigate = useNavigate();
-    const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
-    const [hoveredId, setHoveredId] = useState(null);
     const { kelasId } = useParams();
 
+    // State
+    const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
+    const [hoveredId, setHoveredId] = useState(null);
+    const [jadwalHariIni, setJadwalHariIni] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
     const presensiButtonBlack = iconList.find((i) => i.label === 'Presensi Button Black')?.src;
 
-    // Dummy data guru
-    const daftarGuru = Array(8).fill({
-        nama: 'Nama Guru',
-        mapel: 'Mata Pelajaran',
-    });
+    // Dapatkan nama hari ini (Senin, Selasa, ...)
+    const hariIni = new Date().toLocaleDateString('id-ID', { weekday: 'long' });
+
+    // Fetch data guru dan nama mapel
+    useEffect(() => {
+        async function fetchData() {
+            setLoading(true);
+
+            try {
+                // 1. Ambil semua jadwal kelas ini
+                const dataJadwal = await getJadwalByKelas(kelasId) || [];
+
+                // 2. Filter jadwal hari ini
+                const jadwalFiltered = dataJadwal.filter(j => (j.hari || '').toLowerCase() === hariIni.toLowerCase());
+
+                // 3. Ambil nama guru & mapel untuk setiap jadwal hari ini (async semua)
+                const daftar = await Promise.all(jadwalFiltered.map(async (item) => {
+                    let namaGuru = item.nomor_induk_guru;
+                    let namaMapel = item.id_mapel;
+
+                    // Fetch nama guru
+                    try {
+                        const guru = await getGuruByNomorInduk(item.nomor_induk_guru);
+                        if (guru?.nama) namaGuru = guru.nama;
+                    } catch { 
+                        namaGuru = item.nomor_induk_guru
+                    }
+
+                    // Fetch nama mapel
+                    try {
+                        const mapel = await getMapelById(item.id_mapel);
+                        if (mapel?.nama) namaMapel = mapel.nama;
+                    } catch { 
+                        namaMapel = item.id_mapel 
+                    }
+
+                    return {
+                        namaGuru,
+                        namaMapel,
+                        id_jadwal: item.id_jadwal,
+                    };
+                }));
+
+                setJadwalHariIni(daftar);
+            } catch (err) {
+                console.error(err);
+                setJadwalHariIni([]);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchData();
+    }, [kelasId, hariIni]);
 
     return (
         <div>
@@ -36,7 +94,7 @@ function DaftarGuru() {
                         className="animate-button d-flex flex-row gap-2"
                         width="125px"
                         height="45px"
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate('/piket/kelas')}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
                         style={{ 
@@ -67,7 +125,7 @@ function DaftarGuru() {
 
                     </SecondaryButton>
 
-                    {/* Daftar Guru/Mapel */}
+                    {/* Daftar Guru & Mapel */}
                     <Card style={{ width: '100%', marginTop: '45px', padding: '30px' }}>
                         {/* Title */}
                         <h4 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '22px' }}> 
@@ -85,58 +143,71 @@ function DaftarGuru() {
                                 </thead>
 
                                 <tbody>
-                                    {daftarGuru.map((guru, i) => (
-                                        <tr key={i}>
-                                            <td style={{ padding: '14px 14px 14px 25px' }}>
-                                                <div className="d-flex align-items-start gap-3">
-                                                    {/* Bulatan Hijau */}
-                                                    <div
-                                                        className="my-auto"
-                                                        style={{
-                                                            width: '10px',
-                                                            height: '10px',
-                                                            borderRadius: '50%',
-                                                            backgroundColor: '#379777',
-                                                            marginTop: '4px',
-                                                        }}
-                                                    />
-
-                                                    {/* Nama Guru dan Mapel */}
-                                                    <div className="d-flex flex-column">
-                                                        <span style={{ fontWeight: 'bold', textAlign: 'left', marginBottom: '4px' }}> {guru.nama} </span>
-                                                        <span style={{ color: '#666', fontSize: '14px', textAlign: 'left' }}> {guru.mapel} </span>
-                                                    </div>
-                                                </div>
-                                            </td>
-
-                                            <td className="d-flex justify-content-end align-items-center" style={{ textAlign: 'right', padding: '20px 20px 14px 14px' }}>
-                                                {/* Tombol Presensi */}
-                                                <InfoButton
-                                                    height="35px"
-                                                    width="105px"
-                                                    style={{
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center',
-                                                        gap: '6px',
-                                                        boxShadow: hoveredId === i ? 'inset 2px 2px 10px rgba(0, 0, 0, 0.45)' : 'none',
-                                                        transition: 'box-shadow 0.2s ease-in-out',
-                                                    }}
-                                                    onClick={() => navigate(`/piket/kelas/${kelasId.toUpperCase()}/pertemuan`)}
-                                                    onMouseEnter={() => setHoveredId(i)}
-                                                    onMouseLeave={() => setHoveredId(null)}
-                                                >
-                                                    <img
-                                                        src={presensiButtonBlack}
-                                                        alt="Presensi"
-                                                        width="20"
-                                                        height="20"
-                                                    />
-                                                    <span style={{ fontWeight: 'bold', fontSize: '13px' }}> Presensi </span>
-                                                </InfoButton>
-                                            </td>
+                                    {loading ? (
+                                        <tr> <td colSpan={3} className="text-center"> Memuat data... </td> </tr>
+                                    ) : jadwalHariIni.length === 0 ? (
+                                        <tr> 
+                                            <td colSpan={3} className="text-center" style={{ textAlign: "center", padding: 20, color: "#000" }}> 
+                                                Tidak ada guru yang mengajar hari ini! 
+                                            </td> 
                                         </tr>
-                                    ))}
+                                    ) : (
+                                        jadwalHariIni.map((guru, i) => (
+                                            <tr key={i}>
+                                                <td style={{ padding: '14px 14px 14px 25px' }}>
+                                                    <div className="d-flex align-items-start gap-3">
+                                                        <div 
+                                                            className="my-auto" 
+                                                            style={{
+                                                                width: '10px',
+                                                                height: '10px',
+                                                                borderRadius: '50%',
+                                                                backgroundColor: '#379777',
+                                                                marginTop: '4px',
+                                                            }}
+                                                        />
+
+                                                        <div className="d-flex flex-column align-items-start">
+                                                            <span style={{ fontWeight: 'bold', textAlign: 'left', marginBottom: '6px' }}>
+                                                                {guru.namaGuru}
+                                                            </span>
+
+                                                            <span style={{ color: '#555', fontSize: '14px', textAlign: 'left' }}>
+                                                                {guru.namaMapel}
+                                                            </span>
+                                                        </div>
+
+                                                    </div>
+                                                </td>
+
+                                                <td className="d-flex justify-content-end align-items-center" style={{ textAlign: 'right', padding: '20px 20px 14px 14px' }}>
+                                                    <InfoButton
+                                                        height="35px"
+                                                        width="105px"
+                                                        style={{
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '6px',
+                                                            boxShadow: hoveredId === i ? 'inset 2px 2px 10px rgba(0, 0, 0, 0.45)' : 'none',
+                                                            transition: 'box-shadow 0.2s ease-in-out',
+                                                        }}
+                                                        onClick={() => navigate(`/piket/kelas/${kelasId.toUpperCase()}/pertemuan?id=${guru.id_jadwal}`)}
+                                                        onMouseEnter={() => setHoveredId(i)}
+                                                        onMouseLeave={() => setHoveredId(null)}
+                                                    >
+                                                        <img
+                                                            src={presensiButtonBlack}
+                                                            alt="Presensi"
+                                                            width="20"
+                                                            height="20"
+                                                        />
+                                                        <span style={{ fontWeight: 'bold', fontSize: '13px' }}> Presensi </span>
+                                                    </InfoButton>
+                                                </td>
+                                            </tr>
+                                        ))
+                                    )}
                                 </tbody>
                             </Table>
                         </div>

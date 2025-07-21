@@ -114,7 +114,6 @@ function DashboardPiket() {
                 sidebarCustomMenu={{
                   sidebarMenu: [
                     { label: 'Minimize', icon: 'Back Icon Black' },
-                    { label: 'Beranda', icon: 'Dashboard Icon' },
                     { label: 'Profil', icon: 'Profile Icon' },
                     { label: 'Cari Presensi', icon: 'Cari Presensi Icon' },
                     { label: 'Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
@@ -127,7 +126,6 @@ function DashboardPiket() {
                 }}
 
                 pathMap={{
-                  Beranda: '/piket',
                   Profil: statusPiket === 'OSIS' ? '/piket/profile/osis' : '/piket/profile',
                   'Cari Presensi': '/piket/cari-presensi',
                   Kontak: '/piket/kontak',
@@ -147,7 +145,6 @@ function DashboardPiket() {
               sidebarCustomMenu={{
                 sidebarMenu: [
                   { label: 'Minimize', icon: 'Back Icon Black' },
-                  { label: 'Beranda', icon: 'Dashboard Icon' },
                   { label: 'Profil', icon: 'Profile Icon' },
                   { label: 'Cari Presensi', icon: 'Cari Presensi Icon' },
                   { label: 'Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
@@ -160,7 +157,6 @@ function DashboardPiket() {
               }}
 
               pathMap={{
-                Beranda: '/piket',
                 Profil: statusPiket === 'OSIS' ? '/piket/profile/osis' : '/piket/profile',
                 'Cari Presensi': '/piket/cari-presensi',
                 Kontak: '/piket/kontak',

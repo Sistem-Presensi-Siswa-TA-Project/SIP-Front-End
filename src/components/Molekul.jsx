@@ -35,13 +35,16 @@ export const Header = ({ children='As User' }) => {
 
                 {/* Elemen children di sisi kanan */}
                 {children && (
-                    <span style={{
-                        color: 'white',
-                        fontSize: '20px',
-                        fontWeight: 'bold',
-                        marginLeft: 'auto',
-                        marginRight: '30px',
-                    }}>
+                    <span 
+                        className="header-children"
+                        style={{
+                            color: 'white',
+                            fontSize: '20px',
+                            fontWeight: 'bold',
+                            marginLeft: 'auto',
+                            marginRight: '30px',
+                        }}
+                    >
                         {children}
                     </span>
                 )}

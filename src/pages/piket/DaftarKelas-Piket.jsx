@@ -21,7 +21,7 @@ function DaftarKelasPiket() {
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
 
     // Fetch semua jadwal dan menghitung jumlah siswa
-    useEffect(() => {
+    React.useEffect(() => {
         async function fetchData() {
             setLoading(true);
             try {

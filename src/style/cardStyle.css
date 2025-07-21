@@ -12,6 +12,7 @@
   border-radius: 25px;
   box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.45);
   transition: box-shadow 0.3s ease;
+  width: fit-content;
 }
 
 .custom-card:hover {

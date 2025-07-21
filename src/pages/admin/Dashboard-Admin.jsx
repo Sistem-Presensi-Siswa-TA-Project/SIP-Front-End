@@ -53,7 +53,7 @@ function DashboardAdmin() {
   }, []);
 
   // Set waktu up-to-date
-  useEffect(() => {
+  React.useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
@@ -86,7 +86,6 @@ function DashboardAdmin() {
                 sidebarCustomMenu={{
                   sidebarMenu: [
                     { label: 'Minimize', icon: 'Back Icon Black' },
-                    { label: 'Beranda', icon: 'Dashboard Icon' },
                     { label: 'Ubah Password', icon: 'Ubah Password Icon' },
                     { label: 'Hak Akses Pengguna', icon: 'Hak Akses Icon' },
                     { label: 'Kelola Data Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
@@ -102,7 +101,6 @@ function DashboardAdmin() {
                 }}
 
                 pathMap={{
-                  Beranda: '/admin',
                   'Ubah Password': `/admin/ubah-password?id=${idUser}`,
                   'Hak Akses Pengguna': '/admin/user',
                   'Data Siswa': '/admin/data/siswa',
@@ -125,7 +123,6 @@ function DashboardAdmin() {
               sidebarCustomMenu={{
                 sidebarMenu: [
                   { label: 'Minimize', icon: 'Back Icon Black' },
-                  { label: 'Beranda', icon: 'Dashboard Icon' },
                   { label: 'Ubah Password', icon: 'Ubah Password Icon' },
                   { label: 'Hak Akses Pengguna', icon: 'Hak Akses Icon' },
                   { label: 'Kelola Data Lainnya', icon: 'Lainnya Icon Black', hasDropdown: true },
@@ -141,7 +138,6 @@ function DashboardAdmin() {
               }}
               
               pathMap={{
-                Beranda: '/admin',
                 'Ubah Password': `/admin/ubah-password?id=${idUser}`,
                 'Hak Akses Pengguna': '/admin/user',
                 'Data Siswa': '/admin/data/siswa',

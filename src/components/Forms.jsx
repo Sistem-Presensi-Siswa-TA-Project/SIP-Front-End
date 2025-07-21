@@ -64,11 +64,11 @@ export const FormInput = (props) => {
                     style={{ fontSize }}
                 >
                     <option value="" disabled hidden> {placeholder} </option>
-                    {options.map((opt, idx) => (
-                        <option key={idx} value={opt}>
-                            {opt}
-                        </option>
-                    ))}
+                    {options.map((opt, idx) =>
+                        typeof opt === "object"
+                            ? <option key={opt.value || idx} value={opt.value}>{opt.label}</option>
+                            : <option key={opt} value={opt}>{opt}</option>
+                    )}
                 </Form.Select>
             ) : isTextarea ? (
                 // === Input khusus textarea ===

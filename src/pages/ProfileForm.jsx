@@ -136,6 +136,14 @@ function ProfileForm() {
                 return;
             }
         }
+
+        // Validasi email format
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(formData.email)) {
+            setErrorMsg("Kolom Email harus berformat valid (misal: user@email.com)!");
+            return;
+        }
+        
         setErrorMsg('');
         setShowUpdatePopup(true);
     };

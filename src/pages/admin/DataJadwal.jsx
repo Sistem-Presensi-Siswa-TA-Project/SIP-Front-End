@@ -34,9 +34,10 @@ function DataJadwal() {
     const redWarningIcon = iconList.find(i => i.label === "Red Warning Icon")?.src;
 
     // Mengambil data dari JadwalHandler.jsx
-    useEffect(() => {
+    React.useEffect(() => {
         async function fetchData() {
             setLoading(true);
+
             try {
                 const data = await getAllJadwal();
                 setJadwalList(data);
@@ -44,6 +45,7 @@ function DataJadwal() {
                 setJadwalList([]);
                 alert("Gagal mengambil data jadwal.", e);
             }
+            
             setLoading(false);
         }
         fetchData();

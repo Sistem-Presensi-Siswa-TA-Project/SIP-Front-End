@@ -1,10 +1,11 @@
 // Filename: Kontak.jsx
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Header, Card } from '../components/Molekul.jsx';
+import { Header, Card, CardPopUp } from '../components/Molekul.jsx';
 import { SecondaryButton, PrimaryButton } from '../components/Button.jsx';
 import { FormInput } from '../components/Forms.jsx';
 import { iconList } from '../data/iconData.js';
+import { createSaran } from '../handlers/SaranHandler.jsx'
 
 function Kontak() {
     // Navigasi Page
@@ -17,6 +18,8 @@ function Kontak() {
     // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [primaryButtonHovering, setPrimaryButtonHovering] = useState(false);
+    const [showKirimPopup, setShowKirimPopup] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
 
     // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
@@ -24,17 +27,64 @@ function Kontak() {
     const lokasiIcon = iconList.find((i) => i.label === 'Lokasi Black')?.src;
     const emailIcon = iconList.find((i) => i.label === 'Email Icon')?.src;
     const phoneIcon = iconList.find((i) => i.label === 'Phone Icon')?.src;
+    const greenWarningIcon = iconList.find(i => i.label === "Green Warning Icon")?.src;
 
     const [formData, setFormData] = useState({
         nama: '',
+        username: '',
         email: '',
         subjek: '',
         pesan: '',
     });
 
+    const username = localStorage.getItem('username') || '-';
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
+    };
+
+    const handleKirim = () => {
+        // Daftar kolom yang wajib diisi beserta labelnya
+        const requiredFields = [
+            ['Nama', 'nama'],
+            ['Email', 'email'],
+            ['Subjek', 'subjek'],
+            ['Pesan', 'pesan'],
+        ];
+
+        for (const [label, name] of requiredFields) {
+            if (!formData[name] || !formData[name].toString().trim()) {
+                setErrorMsg(`Kolom ${label} wajib diisi!`);
+                return;
+            }
+        }
+        
+        // Validasi email format
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailPattern.test(formData.email)) {
+            setErrorMsg("Kolom Email harus berformat valid (misal: user@email.com)!");
+            return;
+        }
+        
+        setFormData(prev => ({ ...prev, username }));
+        setErrorMsg('');
+        setShowKirimPopup(true);
+    };
+
+    const handleConfirmKirim = async () => {
+        try {
+            await createSaran({ ...formData, username });
+            setShowKirimPopup(false);
+            setFormData({ nama: '', email: '', subjek: '', pesan: '', username: '' });
+            alert('Saran berhasil dikirim!');
+        } catch (e) {
+            setShowKirimPopup(false);
+            setErrorMsg(
+                "Gagal mengirim saran: " +
+                (e?.response?.data?.message || e?.message || JSON.stringify(e))
+            );
+        }
     };
 
     return (
@@ -97,6 +147,7 @@ function Kontak() {
                                         required
                                     />
                                 </div>
+
                                 <div className="col-md-6">
                                     <FormInput
                                         label="Email"
@@ -127,6 +178,14 @@ function Kontak() {
                                 required
                             />
 
+                            {/* Jika data yang bersifat required kosong */}
+                            {errorMsg && (
+                                <div className="d-flex flex-column" style={{ color: "red", fontWeight: 'bold', marginBottom: 18 }}>
+                                    <div> Harap periksa kembali setiap kolom yang diinput harus sesuai format! </div>
+                                    <div> {errorMsg} </div>
+                                </div>
+                            )}
+
                             {/* Tombol Kirim */}
                             <div className="d-flex justify-content-end" style={{ marginTop: '30px' }}>
                                 <PrimaryButton 
@@ -136,6 +195,7 @@ function Kontak() {
                                     className="width-button-mobile"
                                     onMouseEnter={() => setPrimaryButtonHovering(true)}
                                     onMouseLeave={() => setPrimaryButtonHovering(false)}
+                                    onClick={handleKirim}
                                     style={{ 
                                         justifyContent: 'center', 
                                         alignItems: 'center',
@@ -182,6 +242,34 @@ function Kontak() {
                     </Card>
                 </div>
             </main>
+
+            {/* Popup konfirmasi ubah data guru */}
+            <CardPopUp
+                open={showKirimPopup}
+                image={greenWarningIcon}
+                borderColor="#33DB00"
+                buttons={[
+                    {
+                        label: "Kembali",
+                        bgColor: "#FFFFFF",
+                        textColor: "#33DB00",
+                        borderColor: "#33DB00",
+                        onClick: () => setShowKirimPopup(false),
+                    },
+    
+                    {
+                        label: "Kirim",
+                        bgColor: "#33DB00",
+                        textColor: "#FFFFFF",
+                        borderColor: "#33DB00",
+                        onClick: handleConfirmKirim,
+                    }
+                ]}
+            >
+                <React.Fragment>
+                    Apakah Anda ingin mengirim pesan? 
+                </React.Fragment>
+            </CardPopUp>
 
             <footer>
                 <small style={{ fontSize: '14px', color: '#808080' }}>

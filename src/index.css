@@ -73,7 +73,9 @@ footer {
 /* Ukuran Desktop */
 @media (min-width: 1125px) {
   .card-kecil {
-    max-width: 100%;
+    max-width: 100% !important;
+    padding: 15px;
+    height: fit-content;
   }
 
   .custom-container {
@@ -96,6 +98,10 @@ footer {
 
 /* Ukuran Mobile */
 @media (max-width: 1124px) {
+  main {
+    padding: 90px 60px 60px 60px !important;
+  }
+
   .custom-flex-container {
     flex-direction: column !important;
     gap: 24px;
@@ -107,6 +113,8 @@ footer {
 
   .card-kecil {
     max-width: 100% !important;
+    padding: 15px;
+    height: fit-content;
   }
   
   .custom-card {
@@ -161,6 +169,19 @@ footer {
   h4 { font-size: 1rem; }     /* Sama dengan h5 mobile */
   h5 { font-size: 0.85rem; }  /* Sama dengan h6 mobile */
   h6 { font-size: 0.75rem; }  /* Semakin kecil */
+
+  main {
+    padding: 90px 30px 30px 30px !important;
+  }
+
+  .header-children {
+    display: none !important;
+  }
+
+  .custom-card {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 
   .btn-success {
     /* Mengurangi ukuran semua property button sebesar 15% */
@@ -222,8 +243,8 @@ footer {
 
 /* ~~~ Animasi Transisi ~~~ */
 
-/* Animasi background image slide in */
-.bg-slide-in {
+/* Animasi background image slide in ~~ */
+/* .bg-slide-in {
   transform: translateX(-100%);
   opacity: 0;
   animation: slideInLeft 1.0s ease-out forwards;
@@ -234,10 +255,10 @@ footer {
     transform: translateX(0);
     opacity: 1;
   }
-}
+} */
 
-/* Animasi form login fade-in dari bawah */
-.form-slide-in {
+/* Animasi form login fade-in dari bawah ~~ */
+/* .form-slide-in {
   transform: translateY(20px);
   opacity: 0;
   animation: slideInForm 1.0s ease forwards;
@@ -248,10 +269,10 @@ footer {
     transform: translateY(0);
     opacity: 1;
   }
-}
+} */
 
-/* Slide Down */
-@keyframes slideDown {
+/* Slide Down ~~ */
+/* @keyframes slideDown {
   from {
     transform: translateY(-100%);
     opacity: 0;
@@ -264,10 +285,10 @@ footer {
 
 .animate-slide-down {
   animation: slideDown 1.0s ease-out forwards;
-}
+} */
 
-/* Sidebar Slide In Left */
-@keyframes slideInLeftSidebar {
+/* Sidebar Slide In Left ~~ */
+/* @keyframes slideInLeftSidebar {
   from {
     transform: translateX(-100%);
     opacity: 0;
@@ -280,10 +301,10 @@ footer {
 
 .animate-sidebar {
   animation: slideInLeftSidebar 1.0s ease-out forwards;
-}
+} */
 
-/* Card Fade-In Center */
-@keyframes fadeIn {
+/* Card Fade-In Center ~~ */
+/* @keyframes fadeIn {
   from {
     transform: scale(0.75);
     opacity: 0;
@@ -300,7 +321,7 @@ footer {
 
 .animate-button {
   animation: fadeIn 1.2s ease-out forwards;
-}
+} */
 
 /* Bounce Effect */
 @keyframes bounce {
