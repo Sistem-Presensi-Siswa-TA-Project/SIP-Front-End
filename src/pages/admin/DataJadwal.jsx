@@ -195,7 +195,7 @@ function DataJadwal() {
                                             <tr key={jadwal.id_jadwal}>
                                                 <td className="border-right" style={{ padding: '14px' }}> {i + 1}. </td>
                                                 <td style={{ padding: '14px' }}> {jadwal.id_mapel || '-'} </td>
-                                                <td style={{ padding: '14px' }}> {jadwal.nomor_induk_guru || '-'} </td>
+                                                <td style={{ padding: '14px', textAlign: 'left' }}> {jadwal.nomor_induk_guru || '-'} </td>
                                                 <td style={{ padding: '14px' }}> {jadwal.hari || '-'} </td>
                                                 <td style={{ padding: '14px' }}> {jadwal.waktu || '-'} </td>
                                                 <td style={{ padding: '14px' }}> {jadwal.kelas || '-'} </td>

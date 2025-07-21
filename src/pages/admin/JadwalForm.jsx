@@ -274,6 +274,7 @@ function JadwalForm() {
                                         name="waktu"
                                         type="text"
                                         placeholder="Waktu"
+                                        autoComplete="off"
                                         value={formData.waktu}
                                         required
                                         onChange={e => setFormData(prev => ({ ...prev, waktu: e.target.value }))}
