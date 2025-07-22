@@ -217,15 +217,27 @@ function Kontak() {
                         <div className="d-flex flex-column" style={{ gap: '22px' }}>
                             <div className="d-flex align-items-center justify-content-start" style={{ gap: '16px' }}>
                                 <img src={lokasiIcon} alt="Lokasi" width="28    " height="28    " />
-                                <div>
-                                    <strong> Lokasi </strong><br />
+                                <div 
+                                    style={{
+                                        wordBreak: 'break-word',
+                                        whiteSpace: 'pre-line',
+                                        maxWidth: '100%'
+                                    }}
+                                >
+                                    <strong> Lokasi </strong> <br />
                                     SMP Plus Babussalam, Cibural, Kecamatan Cimenyan, Kabupaten Bandung, Jawa Barat
                                 </div>
                             </div>
 
                             <div className="d-flex align-items-center justify-content-start" style={{ gap: '16px' }}>
                                 <img src={emailIcon} alt="Email" width="28  " height="28  " />
-                                <div>
+                                <div
+                                    style={{
+                                        wordBreak: 'break-word',
+                                        whiteSpace: 'pre-line',
+                                        maxWidth: '100%'
+                                    }}
+                                >
                                     <strong> Email </strong><br />
                                     smpplusbabussalamdago@gmail.com
                                 </div>
@@ -233,7 +245,13 @@ function Kontak() {
 
                             <div className="d-flex align-items-center justify-content-start" style={{ gap: '16px' }}>
                                 <img src={phoneIcon} alt="Phone" width="28  " height="28  " />
-                                <div>
+                                <div
+                                    style={{
+                                        wordBreak: 'break-word',
+                                        whiteSpace: 'pre-line',
+                                        maxWidth: '100%'
+                                    }}
+                                >
                                     <strong> Telepon </strong><br />
                                     +62-858-6082-9640
                                 </div>

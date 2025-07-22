@@ -23,7 +23,9 @@ function LihatPresensi() {
   const navigate = useNavigate();
   const { kelasId } = useParams();
   const location = useLocation();
-  const prefix = location.pathname.startsWith('/piket') ? '/piket' : '/guru';
+  const prefix = location.pathname.startsWith('/admin') 
+    ? '/admin' : (location.pathname.startsWith('/guru') 
+    ? '/guru' : '/piket');
   const params = new URLSearchParams(location.search);
   const idJadwal = params.get('id');
   const tanggalPresensi = params.get('tgl');
@@ -124,7 +126,7 @@ function LihatPresensi() {
             className="animate-button d-flex flex-row gap-2"
             width="125px"
             height="45px"
-            onClick={() => navigate(-1)}
+            onClick={() => navigate(`${prefix}/kelas/${kelasId}/pertemuan?id=${idJadwal}`)}
             onMouseEnter={() => setSecondaryButtonHovering(true)}
             onMouseLeave={() => setSecondaryButtonHovering(false)}
             style={{ 

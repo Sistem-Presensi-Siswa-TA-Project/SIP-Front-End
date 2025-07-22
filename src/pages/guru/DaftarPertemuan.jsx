@@ -21,7 +21,9 @@ function DaftarPertemuan() {
     const navigate = useNavigate();
     const { kelasId } = useParams();
     const location = useLocation();
-    const prefix = location.pathname.startsWith('/piket') ? '/piket' : '/guru';
+    const prefix = location.pathname.startsWith('/admin') 
+    ? '/admin' : (location.pathname.startsWith('/guru') 
+    ? '/guru' : '/piket');
     const params = new URLSearchParams(location.search);
     const idJadwal = params.get('id');
 
@@ -86,7 +88,17 @@ function DaftarPertemuan() {
                         className="animate-button d-flex flex-row gap-2"
                         width="125px"
                         height="45px"
-                        onClick={() => navigate(-1)}
+                        onClick={() => {
+                            if (prefix === '/admin') {
+                                navigate(`${prefix}/data/kelas/${kelasId}`);
+                            } else if (prefix === '/piket') {
+                                navigate(`${prefix}/kelas/${kelasId}`);
+                            } else if (prefix === '/guru') {
+                                navigate(`${prefix}/kelas`);
+                            } else {
+                                navigate(-1);
+                            }
+                        }}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
                         style={{ 
@@ -266,7 +278,7 @@ function DaftarPertemuan() {
                 ]}
             >
                 <React.Fragment>
-                    Anda telah melakukan presensi di hari ini <br /> ({formatTanggalIndo(todayString)})!
+                    Presensi telah dilakukan di hari ini <br /> ({formatTanggalIndo(todayString)})!
                 </React.Fragment>
             </CardPopUp>
 

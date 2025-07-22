@@ -349,7 +349,7 @@ function DashboardGuru() {
                               }}
                               onMouseEnter={() => setHoveredId(item.id_jadwal)}
                               onMouseLeave={() => setHoveredId(null)}
-                              onClick={() => navigate(`${prefix}/kelas/${item.kelas}/pertemuan`)}
+                              onClick={() => navigate(`${prefix}/kelas/${item.kelas}/pertemuan?id=${item.id_jadwal}`)}
                             >
                               <img src={presensiButtonBlack} alt="Presensi" width="20" height="20" />
                               <span style={{ fontWeight: 'bold', fontSize: '13px' }}> Presensi </span>

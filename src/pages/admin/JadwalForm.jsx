@@ -223,7 +223,7 @@ function JadwalForm() {
                                         label="Kode Mata Pelajaran"
                                         name="kodeMapel"
                                         type="select"
-                                        placeholder="Kode Mata Pelajaran"
+                                        placeholder="Pilih Kode Mata Pelajaran"
                                         value={formData.kodeMapel}
                                         required
                                         options={mapelList.map(m => ({
@@ -240,7 +240,7 @@ function JadwalForm() {
                                         label="Nomor Induk Guru"
                                         name="nip"
                                         type="select"
-                                        placeholder="Nomor Induk Guru"
+                                        placeholder="Pilih Nomor Induk Guru"
                                         value={formData.nip}
                                         required
                                         options={guruList.map(g => ({
@@ -258,7 +258,7 @@ function JadwalForm() {
                                         name="hari"
                                         type="select"
                                         value={formData.hari}
-                                        placeholder="Hari"
+                                        placeholder="Pilih Hari"
                                         required
                                         options={[
                                             'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu', 'Minggu'
@@ -273,7 +273,7 @@ function JadwalForm() {
                                         label="Waktu"
                                         name="waktu"
                                         type="text"
-                                        placeholder="Waktu"
+                                        placeholder="Masukkan Waktu"
                                         autoComplete="off"
                                         value={formData.waktu}
                                         required
@@ -287,7 +287,7 @@ function JadwalForm() {
                                         label="Kelas"
                                         name="kelas"
                                         type="select"
-                                        placeholder="Kelas"
+                                        placeholder="Pilih Kelas"
                                         value={formData.kelas}
                                         required
                                         options={kelasList.map(k => ({ value: k, label: k }))}
@@ -303,7 +303,7 @@ function JadwalForm() {
                                         type="text"
                                         value={formData.tahunAjar}
                                         required
-                                        placeholder="Tahun Ajaran"
+                                        placeholder="Masukkan Tahun Ajaran"
                                         onChange={e => setFormData(prev => ({ ...prev, tahunAjar: e.target.value }))}
                                     />
                                 </div>
@@ -314,7 +314,7 @@ function JadwalForm() {
                                         label="Semester"
                                         name="semester"
                                         type="select"
-                                        placeholder="Semester"
+                                        placeholder="Pilih Semester"
                                         value={formData.semester}
                                         required
                                         options={['Ganjil', 'Genap']}
