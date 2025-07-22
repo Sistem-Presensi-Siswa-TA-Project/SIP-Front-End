@@ -1,15 +1,23 @@
 // Filename: Daftar-GuruMapel.jsx
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card } from '../components/Molekul.jsx';
 import { SecondaryButton } from '../components/Button.jsx';
 import { iconList } from '../data/iconData.js';
 
 function Informasi() {
+    // Navigasi
+    const location = useLocation();
+    const prefix = location.pathname.startsWith('/admin') 
+        ? '/admin' : (location.pathname.startsWith('/guru') 
+        ? '/guru' : '/piket');
     const navigate = useNavigate();
+
+    // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
 
+    // Icon from iconList
     const leftArrowBlack = iconList.find((i) => i.label === 'Left Arrow Black')?.src;
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
 
@@ -27,7 +35,7 @@ function Informasi() {
                         className="animate-button d-flex flex-row gap-2"
                         width="125px"
                         height="45px"
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate(`${prefix}`)}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
                         style={{ 

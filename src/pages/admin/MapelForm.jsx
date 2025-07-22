@@ -112,7 +112,7 @@ function MapelForm() {
 
     return (
         <div>
-        <Header> Form Siswa </Header>
+        <Header> Form Mata Pelajaran </Header>
 
         <main
             className="d-flex justify-content-center flex-wrap"
@@ -124,7 +124,7 @@ function MapelForm() {
                     className="animate-button d-flex flex-row gap-2"
                     width="125px"
                     height="45px"
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate('/admin/data/mapel')}
                     onMouseEnter={() => setSecondaryButtonHovering(true)}
                     onMouseLeave={() => setSecondaryButtonHovering(false)}
                     style={{ 

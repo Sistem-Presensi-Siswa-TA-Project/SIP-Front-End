@@ -142,7 +142,7 @@ function DataJadwal() {
                     <Card style={{ width: '100%', marginTop: '45px', padding: '30px' }}>
                         {/* Title */}
                         <h3 style={{ fontWeight: 'bold', color: '#379777', marginBottom: '22px' }}> 
-                            DATA JADWAL
+                            DATA JADWAL PELAJARAN
                         </h3>
 
                         {/* Wrap Button Simpan & Hapus (Sejajar Rata Kanan) */}

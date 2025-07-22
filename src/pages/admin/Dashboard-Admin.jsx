@@ -50,7 +50,7 @@ function DashboardAdmin() {
       }
     }
     fetchIdUser();
-  }, []);
+  }, [username]);
 
   // Set waktu up-to-date
   React.useEffect(() => {
@@ -96,7 +96,7 @@ function DashboardAdmin() {
                     { label: 'Data Guru', icon: 'Guru Grey Icon' },
                     { label: 'Data Mata Pelajaran', icon: 'Data Mapel Icon' },
                     { label: 'Data Presensi', icon: 'Data Presensi Icon' },
-                    { label: 'Jadwal', icon: 'Jadwal Icon Gray' },
+                    { label: 'Jadwal Pelajaran', icon: 'Jadwal Icon Gray' },
                   ]
                 }}
 
@@ -106,8 +106,8 @@ function DashboardAdmin() {
                   'Data Siswa': '/admin/data/siswa',
                   'Data Guru': '/admin/data/guru',
                   'Data Mata Pelajaran': '/admin/data/mapel',
-                  'Data Presensi': '/admin/data/presensi',
-                  'Jadwal': '/admin/data/jadwal',
+                  'Data Presensi': '/admin/data/kelas',
+                  'Jadwal Pelajaran': '/admin/data/jadwal',
                 }}
               />
             </div>
@@ -133,7 +133,7 @@ function DashboardAdmin() {
                   { label: 'Data Guru', icon: 'Guru Grey Icon' },
                   { label: 'Data Mata Pelajaran', icon: 'Data Mapel Icon' },
                   { label: 'Data Presensi', icon: 'Data Presensi Icon' },
-                  { label: 'Jadwal', icon: 'Jadwal Icon Gray' },
+                  { label: 'Jadwal Pelajaran', icon: 'Jadwal Icon Gray' },
                 ]
               }}
               
@@ -144,7 +144,7 @@ function DashboardAdmin() {
                 'Data Guru': '/admin/data/guru',
                 'Data Mata Pelajaran': '/admin/data/mapel',
                 'Data Presensi': '/admin/data/kelas',
-                'Jadwal': '/admin/data/jadwal',
+                'Jadwal Pelajaran': '/admin/data/jadwal',
               }}
             />
           </div>
@@ -195,7 +195,6 @@ function DashboardAdmin() {
                 onMouseLeave={() => setIsHovering(false)}
                 onClick={handleToggleSidebar}
               >
-
                 <img
                   src={
                     sidebarOpen

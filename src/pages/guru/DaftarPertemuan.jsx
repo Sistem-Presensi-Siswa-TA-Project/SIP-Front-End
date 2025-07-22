@@ -14,8 +14,6 @@ function DaftarPertemuan() {
     const [hoveredId, setHoveredId] = useState(null);
     const [daftarPertemuan, setDaftarPertemuan] = useState([]);
     const [showWarningPopup, setShowWarningPopup] = useState(false);
-    const todayString = new Date().toISOString().slice(0, 10);
-    const yellowWarningIcon = iconList.find(i => i.label === "Yellow Warning Icon")?.src;
     
     // Navigasi Page
     const navigate = useNavigate();
@@ -33,6 +31,18 @@ function DaftarPertemuan() {
     const presensiButtonBlack = iconList.find((i) => i.label === 'Presensi Button Black')?.src;
     const addWhite = iconList.find((i) => i.label === 'Add White')?.src;
     const addGreen = iconList.find((i) => i.label === 'Add Green')?.src;
+    const yellowWarningIcon = iconList.find(i => i.label === "Yellow Warning Icon")?.src;
+
+    // Ambil tanggal lokal sesuai zona waktu device user (misal WIB, bukan UTC)
+    function getTodayLocalString() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    const todayString = getTodayLocalString();
 
     // Ubah format tanggal agar sesuai
     function formatTanggalIndo(dateStr) {
@@ -278,7 +288,7 @@ function DaftarPertemuan() {
                 ]}
             >
                 <React.Fragment>
-                    Presensi telah dilakukan di hari ini <br /> ({formatTanggalIndo(todayString)})!
+                    Presensi telah dilakukan di hari ini! <br /> ({formatTanggalIndo(todayString)})
                 </React.Fragment>
             </CardPopUp>
 

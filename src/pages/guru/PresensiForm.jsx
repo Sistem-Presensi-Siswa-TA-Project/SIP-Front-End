@@ -1,10 +1,9 @@
 // Filename: PresensiForm.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card, CardPopUp } from '../../components/Molekul.jsx';
 import { DangerButton, SecondaryButton, SuccessButton } from '../../components/Button.jsx';
-// import { handlePresensiChange } from '../../handlers/PresensiHandler.jsx';
 import { iconList } from '../../data/iconData.js';
 import { getPresensiMapelByJadwalTanggal, createPresensiMapel, updatePresensiMapel } from '../../handlers/PresensiHandler.jsx';
 import { getJadwalById } from '../../handlers/JadwalHandler.jsx';
@@ -47,7 +46,16 @@ function PresensiForm() {
     const greenWarningIcon = iconList.find(i => i.label === "Green Warning Icon")?.src;
 
     const nomor_induk_guru = localStorage.getItem('username') || '-';
-    const todayString = new Date().toISOString().slice(0, 10);
+
+    // SOLUSI: Gunakan tanggal lokal, bukan UTC
+    function getTodayLocalString() {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+    const todayString = getTodayLocalString();
 
     // Ubah format tanggal agar sesuai
     function formatTanggalIndo(dateStr) {
@@ -55,14 +63,14 @@ function PresensiForm() {
             "Januari","Februari","Maret","April","Mei","Juni",
             "Juli","Agustus","September","Oktober","November","Desember"
         ];
-
+        if (!dateStr || !dateStr.includes('-')) return '-';
         const [year, month, day] = dateStr.split('-');
         return `${day} ${bulanIndo[parseInt(month)-1]} ${year}`;
     }
 
     const [presensiData, setPresensiData] = useState([]);
 
-    useEffect(() => {
+    React.useEffect(() => {
         if (dataSiswa.length > 0) {
             setPresensiData(Array(dataSiswa.length).fill('H'));
         } else {
@@ -76,7 +84,7 @@ function PresensiForm() {
     };
 
     // Fetch siswa setiap kali kelasId berubah
-    useEffect(() => {
+    React.useEffect(() => {
         async function fetchSiswa() {
             if (!kelasId) return;
             try {
@@ -99,7 +107,7 @@ function PresensiForm() {
     }, [kelasId]);
 
     // Fetch data profil presensi
-    useEffect(() => {
+    React.useEffect(() => {
         async function fetchProfilPresensi() {
             if (!idJadwal) return;
 
@@ -130,7 +138,7 @@ function PresensiForm() {
     }, [idJadwal]);
 
     // Fetch data presensi mapel
-    useEffect(() => {
+    React.useEffect(() => {
         async function fetchPresensi() {
             if (!idJadwal || !tanggalPresensi) return;
 
@@ -175,7 +183,7 @@ function PresensiForm() {
                 payload = dataSiswa.map((siswa, i) => ({
                     id_jadwal: idJadwal,
                     nisn: siswa.nis,
-                    tanggal_presensi: todayString,
+                    tanggal_presensi: todayString, // <-- Tanggal sudah PASTI tanggal LOKAL!
                     waktu_presensi: waktuPresensi,
                     keterangan: presensiData[i],
                     nama_siswa: siswa.nama,
@@ -206,6 +214,7 @@ function PresensiForm() {
             setShowSimpanPopup(false);
         }
     };
+
     return (
         <div>
             <Header> Form Presensi </Header>
@@ -220,7 +229,7 @@ function PresensiForm() {
                         className="animate-button d-flex flex-row gap-2"
                         width="125px"
                         height="45px"
-                        onClick={() => navigate(-1)}
+                        onClick={() => navigate(`${prefix}/kelas/${kelasId}/pertemuan/lihat-presensi`)}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
                         style={{ 
@@ -300,15 +309,12 @@ function PresensiForm() {
                             <div className="d-flex align-items-center gap-1">
                                 <img src={hadirIcon} alt="Hadir" width="28" height="28" /> <strong> = Hadir </strong>
                             </div>
-
                             <div className="d-flex align-items-center gap-1">
                                 <img src={izinIcon} alt="Izin" width="28" height="28" /> <strong> = Izin </strong>
                             </div>
-
                             <div className="d-flex align-items-center gap-1">
                                 <img src={sakitIcon} alt="Sakit" width="28" height="28" /> <strong> = Sakit </strong>
                             </div>
-                            
                             <div className="d-flex align-items-center gap-1">
                                 <img src={alpaIcon} alt="Alpa" width="28" height="28" /> <strong> = Alpa </strong>
                             </div>
@@ -460,9 +466,9 @@ function PresensiForm() {
                 ]}
             >
                 {tanggalPresensi ? (
-                    <>Apakah Anda yakin ingin memperbarui data presensi? </>
+                    <React.Fragment>Apakah Anda yakin ingin memperbarui data presensi? </React.Fragment>
                 ) : (
-                    <>Apakah Anda yakin ingin menyimpan data presensi? </>
+                    <React.Fragment>Apakah Anda yakin ingin menyimpan data presensi? </React.Fragment>
                 )}
             </CardPopUp>
 

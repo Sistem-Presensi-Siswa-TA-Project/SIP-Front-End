@@ -33,6 +33,17 @@ export async function getPresensiMapelByJadwalTanggal(idJadwal, tanggal) {
     }
 }
 
+export async function deletePresensiMapelByJadwalAndTanggal(idJadwal, tanggal) {
+    try {
+        const res = await axios.delete(`${API}/api/presensi-mapel/jadwal/${idJadwal}/tanggal/${tanggal}`);
+        // Return message response dari backend
+        return res.data;
+    } catch (error) {
+        // Return error
+        throw error.response?.data || { message: "Gagal menghapus data presensi!" };
+    }
+}
+
 export async function createPresensiMapel(dataPresensi) {
     // dataPresensi: array of objects (batch)
     return axios.post(`${API}/api/presensi-mapel`, dataPresensi)
