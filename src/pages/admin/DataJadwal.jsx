@@ -1,22 +1,23 @@
 // Filename: DataJadwal.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card, CardPopUp } from '../../components/Molekul.jsx';
-import { SecondaryButton, SuccessButton } from '../../components/Button.jsx';
+import { SecondaryButton, SuccessButton, DangerButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
-import { getAllJadwal, deleteJadwalById } from '../../handlers/JadwalHandler.jsx';
+import { getAllJadwal, deleteJadwalById, deleteAllJadwal } from '../../handlers/JadwalHandler.jsx';
 
 function DataJadwal() {
     // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
+    const [dangerButtonHovering, setDangerButtonHovering] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [showDeleteAllPopup, setShowDeleteAllPopup] = useState(false);
     const [idJadwalToDelete, setIdJadwalToDelete] = useState(null);
     const [jadwalList, setJadwalList] = useState([]);
     const [loading, setLoading] = useState(true);
     
-
     // Navigasi Page
     const location = useLocation();
     const prefix = location.pathname.startsWith('/admin') 
@@ -51,6 +52,25 @@ function DataJadwal() {
         fetchData();
     }, []);
 
+    // Menjalankan fungsi hapus semua data jadwal
+    const handleDeleteAll = () => {
+        setShowDeleteAllPopup(true);
+    };
+
+    const handleConfirmDeleteAll = async () => {
+        setShowDeleteAllPopup(false);
+        try {
+            await deleteAllJadwal();
+            setJadwalList([]);
+
+            // Refresh halaman:
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert('Gagal menghapus semua data jadwal! Coba lagi.');
+        }
+    };
+
     // Handler untuk menampilkan popup delete
     const handleDelete = (id_guru) => {
         setIdJadwalToDelete(id_guru);
@@ -64,10 +84,9 @@ function DataJadwal() {
             await deleteJadwalById(idJadwalToDelete);
             setJadwalList(prev => prev.filter(item => item.id_guru !== idJadwalToDelete));
             setIdJadwalToDelete(null);
-            alert('Data jadwal berhasil dihapus!');
     
             // Refresh halaman:
-            // window.location.reload();
+            window.location.reload();
         } catch (error) {
             setIdJadwalToDelete(null);
             console.error("Gagal menghapus data jadwal.", error);
@@ -126,8 +145,31 @@ function DataJadwal() {
                             DATA JADWAL
                         </h3>
 
-                        {/* Tombol Tambah Data Guru */}
-                        <div className="d-flex justify-content-end" style={{ marginRight: '5px' }}>
+                        {/* Wrap Button Simpan & Hapus (Sejajar Rata Kanan) */}
+                        <div className="d-flex flex-row justify-content-end align-items-center gap-4" style={{ marginBottom: '5px' }}>
+                            {/* Button Hapus Semua Data */}
+                            <DangerButton
+                                className="d-flex align-items-center justify-content-center"
+                                width="200px"
+                                height="42px"
+                                style={{
+                                    padding: '8px 28px',
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    borderRadius: '6px',
+                                    boxShadow: dangerButtonHovering
+                                        ? '4px 4px 8px rgba(0, 0, 0, 0.5)'
+                                        : '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                    transition: 'box-shadow 0.2s ease-in-out',
+                                }}
+                                onMouseEnter={() => setDangerButtonHovering(true)}
+                                onMouseLeave={() => setDangerButtonHovering(false)}
+                                onClick={handleDeleteAll}
+                            >
+                                Hapus Semua Data
+                            </DangerButton>
+
+                            {/* Button Tambah Data */}
                             <SuccessButton
                                 className="d-flex align-items-center justify-content-center"
                                 height="43px"
@@ -142,19 +184,16 @@ function DataJadwal() {
                                         : '2px 2px 4px rgba(0, 0, 0, 0.5)',
                                     transition: 'box-shadow 0.2s ease-in-out',
                                 }}
-                                onClick={() => navigate(
-                                    `${prefix}/data/jadwal/form`
-                                )}
+                                onClick={() => navigate(`${prefix}/data/jadwal/form`)}
                                 onMouseEnter={() => setSuccessButtonHovering(true)}
                                 onMouseLeave={() => setSuccessButtonHovering(false)}
                             >
-                                <img 
-                                    src={successButtonHovering ? addGreen : addWhite} 
-                                    alt="Presensi" 
-                                    width="20" 
+                                <img
+                                    src={successButtonHovering ? addGreen : addWhite}
+                                    alt="Presensi"
+                                    width="20"
                                     height="20"
                                 />
-
                                 Tambah Data
                             </SuccessButton>
                         </div>
@@ -163,7 +202,7 @@ function DataJadwal() {
                         <div 
                             className="table-responsive" 
                             style={{ 
-                            marginTop: '23px', 
+                            marginTop: '18px', 
                             borderRadius: '10px', 
                             border: '2px solid #D6D6D6',
                             }}
@@ -259,7 +298,32 @@ function DataJadwal() {
                 </div>
             </main>
 
-            {/* Popup konfirmasi hapus data guru*/}
+            {/* Popup konfirmasi hapus semua data jadwal */}
+            <CardPopUp
+                open={showDeleteAllPopup}
+                image={redWarningIcon}
+                borderColor="#DB4437"
+                buttons={[
+                    {
+                        label: "Kembali",
+                        bgColor: "#FFFFFF",
+                        textColor: "#DB4437",
+                        borderColor: "#DB4437",
+                        onClick: () => setShowDeleteAllPopup(false),
+                    },
+                    {
+                        label: "Hapus Semua Jadwal",
+                        bgColor: "#DB4437",
+                        textColor: "#FFFFFF",
+                        borderColor: "#DB4437",
+                        onClick: handleConfirmDeleteAll,
+                    }
+                ]}
+            >
+                Apakah Anda yakin ingin menghapus semua data jadwal?
+            </CardPopUp>
+
+            {/* Popup konfirmasi hapus data jadwal */}
             <CardPopUp
                 open={showDeletePopup}
                 image={redWarningIcon}

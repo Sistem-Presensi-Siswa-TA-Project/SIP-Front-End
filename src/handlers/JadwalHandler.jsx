@@ -113,6 +113,21 @@ export async function putJadwalById(id_jadwal, jadwalData) {
     return data;
 }
 
+export async function deleteAllJadwal() {
+    const response = await fetch(`${API}/api/jadwal`, {
+        method: 'DELETE',
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw { code: 'DELETE_ALL_JADWAL_FAILED', message: data.message || 'Gagal menghapus semua jadwal!' };
+    }
+
+    // data: { message, affectedRows }
+    return data;
+}
+
 export async function deleteJadwalById(id_jadwal) {
     const response = await fetch(`${API}/api/jadwal/${id_jadwal}`, {
         method: 'DELETE',
