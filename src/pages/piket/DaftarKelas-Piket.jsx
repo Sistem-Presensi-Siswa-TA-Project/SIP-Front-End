@@ -1,6 +1,6 @@
 // Filename: DaftarKelas-Piket.jsx
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Header, Card, CardPresensi } from '../../components/Molekul.jsx';
 import { SecondaryButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
@@ -9,6 +9,10 @@ import { getSiswaByKelas } from '../../handlers/SiswaHandler.jsx';
 
 function DaftarKelasPiket() {
     // Navigasi
+    const location = useLocation();
+    const prefix = location.pathname.startsWith('/admin') 
+        ? '/admin' : (location.pathname.startsWith('/guru') 
+        ? '/guru' : '/piket');
     const navigate = useNavigate();
 
     // State
@@ -76,7 +80,7 @@ function DaftarKelasPiket() {
                         className="animate-button d-flex flex-row gap-2"
                         width="125px"
                         height="45px"
-                        onClick={() => navigate(`/guru`)}
+                        onClick={() => navigate(`${prefix}`)}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
                         style={{
@@ -129,16 +133,27 @@ function DaftarKelasPiket() {
                                             <b> Tidak ada kelas ditemukan! </b>
                                         </div>
                                     ) : (
-                                        jadwalList.map((jadwal, index) => (
-                                            <div className="col-md-4 col-sm-6 col-12 d-flex justify-content-center" key={index}>
-                                                <CardPresensi
-                                                    namaKelas={`Kelas ${jadwal.kelas}`}
-                                                    tahunAjar={`${jadwal.tahun_ajaran || "202X/202X"} ${jadwal.semester || ""}`}
-                                                    totalSiswa={jadwal.totalSiswa || "-"}
-                                                    children="Lihat Detail" to={`/piket/kelas/${jadwal.kelas.toUpperCase()}`}
-                                                />
-                                            </div>
-                                        ))
+                                        jadwalList.map((jadwal, index) => {
+                                            let linkDetail = "";
+
+                                            if (prefix === "/admin") {
+                                                linkDetail = `${prefix}/data/kelas/${jadwal.kelas.toUpperCase()}`;
+                                            } else if (prefix === "/piket") {
+                                                linkDetail = `${prefix}/kelas/${jadwal.kelas.toUpperCase()}`;
+                                            }
+
+                                            return (
+                                                <div className="col-md-4 col-sm-6 col-12 d-flex justify-content-center" key={index}>
+                                                    <CardPresensi
+                                                        namaKelas={`Kelas ${jadwal.kelas}`}
+                                                        tahunAjar={`${jadwal.tahun_ajaran || "202X/202X"} ${jadwal.semester || ""}`}
+                                                        totalSiswa={jadwal.totalSiswa || "-"}
+                                                        children="Lihat Detail"
+                                                        to={linkDetail}
+                                                    />
+                                                </div>
+                                            );
+                                        })
                                     )}
                                 </>
                             )}

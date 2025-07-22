@@ -1,6 +1,6 @@
 // Filename: DaftarGuru.jsx
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card } from '../../components/Molekul.jsx';
 import { SecondaryButton, InfoButton } from '../../components/Button.jsx';
@@ -11,13 +11,17 @@ import { getMapelById } from '../../handlers/MapelHandler.jsx';
 
 function DaftarGuru() {
     // Navigasi
+    const location = useLocation();
+    const prefix = location.pathname.startsWith('/admin') 
+        ? '/admin' : (location.pathname.startsWith('/guru') 
+        ? '/guru' : '/piket');
     const navigate = useNavigate();
     const { kelasId } = useParams();
 
     // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [hoveredId, setHoveredId] = useState(null);
-    const [jadwalHariIni, setJadwalHariIni] = useState([]);
+    const [jadwalKelas, setJadwalKelas] = useState([]);
     const [loading, setLoading] = useState(true);
 
     // Icon from iconList
@@ -25,23 +29,16 @@ function DaftarGuru() {
     const leftArrowYellow = iconList.find((i) => i.label === 'Left Arrow Yellow')?.src;
     const presensiButtonBlack = iconList.find((i) => i.label === 'Presensi Button Black')?.src;
 
-    // Dapatkan nama hari ini (Senin, Selasa, ...)
-    const hariIni = new Date().toLocaleDateString('id-ID', { weekday: 'long' });
-
-    // Fetch data guru dan nama mapel
+    // Fetch semua jadwal kelas ini (tanpa filter hari)
     useEffect(() => {
         async function fetchData() {
             setLoading(true);
-
             try {
                 // 1. Ambil semua jadwal kelas ini
                 const dataJadwal = await getJadwalByKelas(kelasId) || [];
 
-                // 2. Filter jadwal hari ini
-                const jadwalFiltered = dataJadwal.filter(j => (j.hari || '').toLowerCase() === hariIni.toLowerCase());
-
-                // 3. Ambil nama guru & mapel untuk setiap jadwal hari ini (async semua)
-                const daftar = await Promise.all(jadwalFiltered.map(async (item) => {
+                // 2. Ambil nama guru & mapel untuk setiap jadwal
+                const daftar = await Promise.all(dataJadwal.map(async (item) => {
                     let namaGuru = item.nomor_induk_guru;
                     let namaMapel = item.id_mapel;
 
@@ -50,7 +47,7 @@ function DaftarGuru() {
                         const guru = await getGuruByNomorInduk(item.nomor_induk_guru);
                         if (guru?.nama) namaGuru = guru.nama;
                     } catch { 
-                        namaGuru = item.nomor_induk_guru
+                        namaGuru = item.nomor_induk_guru;
                     }
 
                     // Fetch nama mapel
@@ -58,27 +55,29 @@ function DaftarGuru() {
                         const mapel = await getMapelById(item.id_mapel);
                         if (mapel?.nama) namaMapel = mapel.nama;
                     } catch { 
-                        namaMapel = item.id_mapel 
+                        namaMapel = item.id_mapel;
                     }
 
+                    // Hari, jika ingin ditampilkan
                     return {
                         namaGuru,
                         namaMapel,
+                        hari: item.hari,
                         id_jadwal: item.id_jadwal,
                     };
                 }));
 
-                setJadwalHariIni(daftar);
+                setJadwalKelas(daftar);
             } catch (err) {
                 console.error(err);
-                setJadwalHariIni([]);
+                setJadwalKelas([]);
             } finally {
                 setLoading(false);
             }
         }
 
         fetchData();
-    }, [kelasId, hariIni]);
+    }, [kelasId]);
 
     return (
         <div>
@@ -94,7 +93,15 @@ function DaftarGuru() {
                         className="animate-button d-flex flex-row gap-2"
                         width="125px"
                         height="45px"
-                        onClick={() => navigate('/piket/kelas')}
+                        onClick={() => {
+                            if (prefix === '/admin') {
+                                navigate(`${prefix}/data/kelas`);
+                            } else if (prefix === '/piket') {
+                                navigate(`${prefix}/kelas`);
+                            } else {
+                                navigate(-1);
+                            }
+                        }}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
                         style={{ 
@@ -145,14 +152,14 @@ function DaftarGuru() {
                                 <tbody>
                                     {loading ? (
                                         <tr> <td colSpan={3} className="text-center"> Memuat data... </td> </tr>
-                                    ) : jadwalHariIni.length === 0 ? (
+                                    ) : jadwalKelas.length === 0 ? (
                                         <tr> 
                                             <td colSpan={3} className="text-center" style={{ textAlign: "center", padding: 20, color: "#000" }}> 
                                                 Tidak ada guru yang mengajar hari ini! 
                                             </td> 
                                         </tr>
                                     ) : (
-                                        jadwalHariIni.map((guru, i) => (
+                                        jadwalKelas.map((guru, i) => (
                                             <tr key={i}>
                                                 <td style={{ padding: '14px 14px 14px 25px' }}>
                                                     <div className="d-flex align-items-start gap-3">
@@ -192,7 +199,13 @@ function DaftarGuru() {
                                                             boxShadow: hoveredId === i ? 'inset 2px 2px 10px rgba(0, 0, 0, 0.45)' : 'none',
                                                             transition: 'box-shadow 0.2s ease-in-out',
                                                         }}
-                                                        onClick={() => navigate(`/piket/kelas/${kelasId.toUpperCase()}/pertemuan?id=${guru.id_jadwal}`)}
+                                                        onClick={() => {
+                                                            if (prefix === '/admin') {
+                                                                navigate(`${prefix}/data/kelas/${kelasId.toUpperCase()}/pertemuan?id=${guru.id_jadwal}`);
+                                                            } else if (prefix === '/piket') {
+                                                                navigate(`${prefix}/kelas/${kelasId.toUpperCase()}/pertemuan?id=${guru.id_jadwal}`);
+                                                            }
+                                                        }}
                                                         onMouseEnter={() => setHoveredId(i)}
                                                         onMouseLeave={() => setHoveredId(null)}
                                                     >

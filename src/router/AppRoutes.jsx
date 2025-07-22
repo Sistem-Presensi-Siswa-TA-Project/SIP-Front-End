@@ -27,8 +27,6 @@ import DataGuru from '../pages/admin/DataGuru.jsx';
 import GuruForm from '../pages/admin/GuruForm.jsx';
 import DataMapel from '../pages/admin/DataMapel.jsx';
 import MapelForm from '../pages/admin/MapelForm.jsx';
-import DataPresensi from '../pages/admin/DaftarKelas-Admin.jsx';
-import DaftarGuruAdmin from '../pages/admin/DaftarGuru-Admin.jsx';
 import DaftarPertemuanAdmin from '../pages/admin/DaftarPertemuan-Admin.jsx';
 import DataJadwal from '../pages/admin/DataJadwal.jsx';
 import JadwalForm from '../pages/admin/JadwalForm.jsx';
@@ -81,8 +79,8 @@ function AppRoutes() {
       <Route path="/admin/data/mapel" element={<ProtectedRoute allowedRole="admin"> <DataMapel /> </ProtectedRoute>} />
       <Route path="/admin/data/mapel/form" element={<ProtectedRoute allowedRole="admin"> <MapelForm /> </ProtectedRoute>} />
 
-      <Route path="/admin/data/kelas" element={<ProtectedRoute allowedRole="admin"> <DataPresensi /> </ProtectedRoute>} />
-      <Route path="/admin/data/kelas/:kelasId" element={<ProtectedRoute allowedRole="admin"> <DaftarGuruAdmin /> </ProtectedRoute>} />
+      <Route path="/admin/data/kelas" element={<ProtectedRoute allowedRole="admin"> <DaftarKelasPiket /> </ProtectedRoute>} />
+      <Route path="/admin/data/kelas/:kelasId" element={<ProtectedRoute allowedRole="admin"> <DaftarGuru /> </ProtectedRoute>} />
       <Route path="/admin/data/kelas/:kelasId/pertemuan" element={<ProtectedRoute allowedRole="admin"> <DaftarPertemuanAdmin /> </ProtectedRoute>} />
 
       <Route path="/admin/data/jadwal" element={<ProtectedRoute allowedRole="admin"> <DataJadwal /> </ProtectedRoute>} />

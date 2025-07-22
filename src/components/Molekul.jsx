@@ -307,7 +307,7 @@ export const CardPresensi = (props) => {
     const jumlahSiswa = iconList.find((i) => i.label === 'Jumlah Siswa Icon')?.src;
 
     return (
-        <div className="card-presensi">
+        <div className="card-presensi" onClick={() => navigate(to)}>
             {/* Header */}
             <div className="card-presensi-header">
                 <h5 className="card-presensi-title"> {namaKelas} </h5>
@@ -336,7 +336,7 @@ export const CardPresensi = (props) => {
             </div>
 
             {/* Footer */}
-            <div className="card-presensi-footer" onClick={() => navigate(to)}>
+            <div className="card-presensi-footer">
                 <span className="fw-bold"> {children} </span>
                 <img src={arrowRightIcon} alt="Lihat Detail" width="20" height="20" className="ms-2" draggable={false} />
             </div>
