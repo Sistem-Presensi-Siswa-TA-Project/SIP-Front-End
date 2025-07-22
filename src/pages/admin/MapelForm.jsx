@@ -179,17 +179,20 @@ function MapelForm() {
                                         label="Kode Mata Pelajaran"
                                         name="kode"
                                         placeholder="Kode Mata Pelajaran"
+                                        autoComplete="off"
                                         value={formData.kode}
                                         onChange={handleChange}
                                         readOnly={idMapel}
                                         required
                                     />
                                 </div>
+
                                 <div className="col-md-6">
                                     <FormInput
                                         label="Nama Mata Pelajaran"
                                         name="nama"
                                         type="text"
+                                        autoComplete="off"
                                         placeholder="Nama Mata Pelajaran"
                                         value={formData.nama}
                                         onChange={handleChange}

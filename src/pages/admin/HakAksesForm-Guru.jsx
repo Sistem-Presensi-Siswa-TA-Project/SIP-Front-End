@@ -198,6 +198,7 @@ function HakAksesFormGuru() {
                                                 label={label}
                                                 name={name}
                                                 type='text'
+                                                autoComplete='off'
                                                 value={formData[name]}
                                                 required={isRequired}
                                                 placeholder={label}

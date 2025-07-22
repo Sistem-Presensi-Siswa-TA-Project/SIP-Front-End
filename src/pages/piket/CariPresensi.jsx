@@ -40,6 +40,7 @@ function CariPresensi() {
 
     const handleCari = async () => {
         setError('');
+        
         if (!formData.tanggal) {
             setError("Kolom Tanggal Presensi wajib diisi!");
             return;
@@ -167,7 +168,6 @@ function CariPresensi() {
                                     fontSize="15px"
                                     type="select"
                                     options={listMapel.map(mp => ({ label: mp.nama, value: mp.nama }))}
-                                    required
                                 />
                             )}
 
@@ -180,7 +180,6 @@ function CariPresensi() {
                                 fontSize="15px"
                                 type="select"
                                 options={listKelas.map(kls => ({ label: kls, value: kls }))}
-                                required
                             />
                         </div>
 

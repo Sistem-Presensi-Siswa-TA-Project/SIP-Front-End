@@ -74,6 +74,11 @@ export async function updateSiswaById(idSiswa, data) {
     return response.data;
 }
 
+export async function deleteAllSiswa() {
+    const response = await axios.delete(`${API}/api/siswa`);
+    return response.data;
+}
+
 export async function deleteSiswaById(idSiswa) {
     const response = await axios.delete(`${API}/api/siswa/${idSiswa}`);
     return response.data;

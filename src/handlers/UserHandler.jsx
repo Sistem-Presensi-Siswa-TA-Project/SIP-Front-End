@@ -128,6 +128,28 @@ export async function deleteUserById(idUser) {
     return response.data.data || [];
 }
 
+export async function deleteAllUserGuru() {
+    const response = await axios.delete(`${API}/api/users/guru`);
+
+    if (response.status !== 200) {
+        throw { code: 'GET_USER_ROLE_FAILED', message: response.data?.message || 'Gagal mengambil user by role' };
+    }
+
+    // return { message, data: [...] }
+    return response.data.data || [];
+}
+
+export async function deleteAllUserPiket() {
+    const response = await axios.delete(`${API}/api/users/piket`);
+
+    if (response.status !== 200) {
+        throw { code: 'GET_USER_ROLE_FAILED', message: response.data?.message || 'Gagal mengambil user by role' };
+    }
+
+    // return { message, data: [...] }
+    return response.data.data || [];
+}
+
 export async function deleteUserByUsername(username) {
     const response = await axios.delete(`${API}/api/users/username/${username}`);
 

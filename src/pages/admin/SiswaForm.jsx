@@ -202,6 +202,13 @@ function SiswaForm() {
                                     'kelas', 
                                     'jenisKelamin', 
                                 ].includes(name);
+
+                                const inputType =
+                                    name === 'tanggalLahir'
+                                        ? 'date'
+                                        : name === 'hp'
+                                        ? 'tel'
+                                        : 'text'
                                 
                                 return (
                                     <div className="col-md-4 col-sm-12" key={index}>
@@ -221,16 +228,11 @@ function SiswaForm() {
                                             <FormInput
                                                 label={label}
                                                 name={name}
-                                                type={
-                                                    name === 'tanggalLahir'
-                                                        ? 'date'
-                                                        : name === 'hp'
-                                                        ? 'tel'
-                                                        : 'text'
-                                                }
+                                                type={inputType}
                                                 value={formData[name]}
                                                 required={isRequired}
                                                 placeholder={label}
+                                                autoComplete={inputType === 'text' ? 'off' : 'on'}
                                                 onChange={(e) =>
                                                     setFormData((prev) => ({ ...prev, [name]: e.target.value }))
                                                 }

@@ -41,6 +41,11 @@ export async function updateMapel(idMapel, dataMapel) {
     return response.data;
 }
 
+export async function deleteAllMapel() {
+    const response = await axios.delete(`${API}/api/mapel`);
+    return response.data;
+}
+
 export async function deleteMapelById(idMapel) {
     const response = await axios.delete(`${API}/api/mapel/${idMapel}`);
     return response.data;

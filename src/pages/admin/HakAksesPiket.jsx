@@ -3,19 +3,21 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card, CardPopUp } from '../../components/Molekul.jsx';
-import { SecondaryButton, SuccessButton } from '../../components/Button.jsx';
+import { SecondaryButton, SuccessButton, DangerButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
-import { getAllPiket, deletePiketById } from '../../handlers/PiketHandler.jsx';
+import { getAllPiket, deletePiketById, deleteAllPiket } from '../../handlers/PiketHandler.jsx';
 import { getGuruByNomorInduk } from '../../handlers/GuruHandler.jsx';
 import { getSiswaByNISN } from '../../handlers/SiswaHandler.jsx';
-import { deleteUserByUsername } from '../../handlers/UserHandler.jsx';
+import { deleteUserByUsername, deleteAllUserPiket } from '../../handlers/UserHandler.jsx';
 
 function HakAksesPiket() {
     // State Hovering
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
+    const [dangerButtonHovering, setDangerButtonHovering] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [idPiketToDelete, setIdPiketToDelete] = useState(null);
+    const [showDeleteAllPopup, setShowDeleteAllPopup] = useState(false);
     const [piketList, setPiketList] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -75,6 +77,27 @@ function HakAksesPiket() {
         fetchData();
     }, []);
 
+    // Menjalankan fungsi hapus semua user dengan role piket
+    const handleDeleteAll = () => {
+        setShowDeleteAllPopup(true);
+    };
+
+    const handleConfirmDeleteAll = async () => {
+        setShowDeleteAllPopup(false);
+
+        try {
+            await deleteAllUserPiket(); // Menghapus semua user dengan role piket
+            await deleteAllPiket(); // Menghapus semua data di tabel Piket
+            setPiketList([]);
+
+            // Refresh halaman:
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert('Gagal menghapus semua user dengan role piket! Coba lagi.');
+        }
+    };
+
     // Handler untuk menampilkan popup delete
     const handleDelete = (id_piket) => {
         setIdPiketToDelete(id_piket);
@@ -101,8 +124,9 @@ function HakAksesPiket() {
             // 4. Refresh data piket
             setPiketList(prev => prev.filter(item => item.id_piket !== idPiketToDelete));
             setIdPiketToDelete(null);
-            alert('Data piket & user berhasil dihapus!');
-            // window.location.reload();
+
+            // Refresh page
+            window.location.reload();
         } catch (error) {
             setIdPiketToDelete(null);
             alert('Gagal menghapus data piket atau user:', error);
@@ -160,8 +184,31 @@ function HakAksesPiket() {
                             DATA AKSES PETUGAS PIKET
                         </h3>
 
-                        {/* Tombol Tambah Data Guru */}
-                        <div className="d-flex justify-content-end" style={{ marginRight: '5px' }}>
+                        {/* Tombol Data Hak Akses Guru */}
+                        <div className="d-flex flex-row justify-content-end align-items-center gap-4" style={{ marginBottom: '5px' }}>
+                            {/* Button Hapus Semua Data */}
+                            <DangerButton
+                                className="d-flex align-items-center justify-content-center"
+                                width="200px"
+                                height="42px"
+                                style={{
+                                    padding: '8px 28px',
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    borderRadius: '6px',
+                                    boxShadow: dangerButtonHovering
+                                        ? '4px 4px 8px rgba(0, 0, 0, 0.5)'
+                                        : '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                    transition: 'box-shadow 0.2s ease-in-out',
+                                }}
+                                onMouseEnter={() => setDangerButtonHovering(true)}
+                                onMouseLeave={() => setDangerButtonHovering(false)}
+                                onClick={handleDeleteAll}
+                            >
+                                Hapus Semua Data
+                            </DangerButton>
+
+                            {/* Button Tambah Data */}
                             <SuccessButton
                                 className="d-flex align-items-center justify-content-center"
                                 height="43px"
@@ -197,7 +244,7 @@ function HakAksesPiket() {
                         <div 
                             className="table-responsive" 
                             style={{ 
-                            marginTop: '23px', 
+                            marginTop: '16px', 
                             borderRadius: '10px', 
                             border: '2px solid #D6D6D6',
                             }}
@@ -292,6 +339,31 @@ function HakAksesPiket() {
                     </Card>
                 </div>
             </main>
+
+            {/* Popup konfirmasi hapus semua user dengan role piket */}
+            <CardPopUp
+                open={showDeleteAllPopup}
+                image={redWarningIcon}
+                borderColor="#DB4437"
+                buttons={[
+                    {
+                        label: "Kembali",
+                        bgColor: "#FFFFFF",
+                        textColor: "#DB4437",
+                        borderColor: "#DB4437",
+                        onClick: () => setShowDeleteAllPopup(false),
+                    },
+                    {
+                        label: "Hapus Semua Mapel",
+                        bgColor: "#DB4437",
+                        textColor: "#FFFFFF",
+                        borderColor: "#DB4437",
+                        onClick: handleConfirmDeleteAll,
+                    }
+                ]}
+            >
+                Apakah Anda yakin ingin menghapus semua user piket?
+            </CardPopUp>
 
             {/* Popup konfirmasi hapus data guru*/}
             <CardPopUp

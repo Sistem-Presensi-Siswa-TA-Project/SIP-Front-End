@@ -84,6 +84,20 @@ export async function putGuruById(id_guru, guruData) {
     return data;
 }
 
+export async function deleteAllGuru() {
+    const response = await fetch(`${API}/api/guru`, {
+        method: 'DELETE',
+    });
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw { code: 'DELETE_GURU_FAILED', message: data.message || 'Gagal menghapus semua data guru!' };
+    }
+
+    // data berupa message"
+    return data;
+}
+
 export async function deleteGuruById(id_guru) {
     const response = await fetch(`${API}/api/guru/${id_guru}`, {
         method: 'DELETE',

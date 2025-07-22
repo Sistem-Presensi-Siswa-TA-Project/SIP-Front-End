@@ -84,6 +84,21 @@ export async function putPiketById(id_piket, piketData) {
     return data;
 }
 
+export async function deleteAllPiket() {
+    const response = await fetch(`${API}/api/piket`, {
+        method: 'DELETE',
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw { code: 'DELETE_PIKET_FAILED', message: data.message || 'Gagal menghapus data piket!' };
+    }
+
+    // data berupa message"
+    return data;
+}
+
 export async function deletePiketById(id_piket) {
     const response = await fetch(`${API}/api/piket/${id_piket}`, {
         method: 'DELETE',

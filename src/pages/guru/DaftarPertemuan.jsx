@@ -15,7 +15,7 @@ function DaftarPertemuan() {
     const [daftarPertemuan, setDaftarPertemuan] = useState([]);
     const [showWarningPopup, setShowWarningPopup] = useState(false);
     const todayString = new Date().toISOString().slice(0, 10);
-    const blueWarningIcon = iconList.find(i => i.label === "Blue Warning Icon")?.src;
+    const yellowWarningIcon = iconList.find(i => i.label === "Yellow Warning Icon")?.src;
     
     // Navigasi Page
     const navigate = useNavigate();
@@ -265,12 +265,12 @@ function DaftarPertemuan() {
             {/* Popup konfirmasi simpan data user */}
             <CardPopUp
                 open={showWarningPopup}
-                image={blueWarningIcon}
-                borderColor="#1976D2"
+                image={yellowWarningIcon}
+                borderColor="#FFC107"
                 buttons={[
                     {
                         label: "Kembali",
-                        bgColor: "#1976D2",
+                        bgColor: "#FFC107",
                         textColor: "#FFFFFF",
                         borderColor: "#FFFFFF",
                         onClick: () => setShowWarningPopup(false),

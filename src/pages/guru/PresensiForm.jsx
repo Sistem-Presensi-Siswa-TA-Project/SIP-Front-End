@@ -60,14 +60,19 @@ function PresensiForm() {
         return `${day} ${bulanIndo[parseInt(month)-1]} ${year}`;
     }
 
-    const [presensiData, setPresensiData] = useState(
-        // default semua "H"
-        Array(20).fill('H')
-    );
+    const [presensiData, setPresensiData] = useState([]);
 
-    // Reset presensi jadi H semua
+    useEffect(() => {
+        if (dataSiswa.length > 0) {
+            setPresensiData(Array(dataSiswa.length).fill('H'));
+        } else {
+            setPresensiData([]);
+        }
+    }, [dataSiswa]);
+
+    // Reset presensi sesuai jumlah siswa saat ini
     const handleReset = () => {
-        setPresensiData(Array(20).fill('H')); 
+        setPresensiData(Array(dataSiswa.length).fill('H')); 
     };
 
     // Fetch siswa setiap kali kelasId berubah

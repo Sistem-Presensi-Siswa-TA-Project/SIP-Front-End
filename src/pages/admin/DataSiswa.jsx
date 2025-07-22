@@ -3,16 +3,18 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Table } from 'react-bootstrap';
 import { Header, Card, CardPopUp } from '../../components/Molekul.jsx';
-import { SecondaryButton, SuccessButton } from '../../components/Button.jsx';
+import { SecondaryButton, SuccessButton, DangerButton } from '../../components/Button.jsx';
 import { iconList } from '../../data/iconData.js';
-import { getAllSiswa, deleteSiswaById } from '../../handlers/SiswaHandler.jsx'
+import { getAllSiswa, deleteSiswaById, deleteAllSiswa } from '../../handlers/SiswaHandler.jsx'
 
 function DataSiswa() {
     // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [successButtonHovering, setSuccessButtonHovering] = useState(false);
+    const [dangerButtonHovering, setDangerButtonHovering] = useState(false);
     const [showDeletePopup, setShowDeletePopup] = useState(false);
     const [idSiswaToDelete, setIdSiswaToDelete] = useState(null);
+    const [showDeleteAllPopup, setShowDeleteAllPopup] = useState(false);
     const [siswaList, setSiswaList] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -44,6 +46,25 @@ function DataSiswa() {
         fetchData();
     }, []);
 
+    // Menjalankan fungsi hapus semua data siswa
+    const handleDeleteAll = () => {
+        setShowDeleteAllPopup(true);
+    };
+
+    const handleConfirmDeleteAll = async () => {
+        setShowDeleteAllPopup(false);
+        try {
+            await deleteAllSiswa();
+            setSiswaList([]);
+
+            // Refresh halaman:
+            window.location.reload();
+        } catch (error) {
+            console.error(error);
+            alert('Gagal menghapus semua data siswa! Coba lagi.');
+        }
+    };
+
     // Handler untuk menampilkan popup delete
     const handleDelete = (id_siswa) => {
         setIdSiswaToDelete(id_siswa);
@@ -57,10 +78,9 @@ function DataSiswa() {
             await deleteSiswaById(idSiswaToDelete);
             setSiswaList(prev => prev.filter(item => item.id_siswa !== idSiswaToDelete));
             setIdSiswaToDelete(null);
-            alert('Data siswa berhasil dihapus!');
             
             // Refresh halaman:
-            // window.location.reload();
+            window.location.reload();
         } catch (error) {
             setIdSiswaToDelete(null);
             alert("Gagal menghapus data siswa.", error);
@@ -118,8 +138,31 @@ function DataSiswa() {
                             DATA SISWA
                         </h3>
 
-                        {/* Tombol Tambah Data Siswa */}
-                        <div className="d-flex justify-content-end" style={{ marginRight: '5px' }}>
+                        {/* Tombol Data Siswa */}
+                        <div className="d-flex flex-row justify-content-end align-items-center gap-4" style={{ marginBottom: '5px' }}>
+                            {/* Button Hapus Semua Data */}
+                            <DangerButton
+                                className="d-flex align-items-center justify-content-center"
+                                width="200px"
+                                height="42px"
+                                style={{
+                                    padding: '8px 28px',
+                                    fontWeight: 'bold',
+                                    fontSize: '15px',
+                                    borderRadius: '6px',
+                                    boxShadow: dangerButtonHovering
+                                        ? '4px 4px 8px rgba(0, 0, 0, 0.5)'
+                                        : '2px 2px 4px rgba(0, 0, 0, 0.5)',
+                                    transition: 'box-shadow 0.2s ease-in-out',
+                                }}
+                                onMouseEnter={() => setDangerButtonHovering(true)}
+                                onMouseLeave={() => setDangerButtonHovering(false)}
+                                onClick={handleDeleteAll}
+                            >
+                                Hapus Semua Data
+                            </DangerButton>
+
+                            {/* Button Tambah Data */}
                             <SuccessButton
                                 className="d-flex align-items-center justify-content-center"
                                 height="43px"
@@ -155,7 +198,7 @@ function DataSiswa() {
                         <div 
                             className="table-responsive" 
                             style={{ 
-                            marginTop: '23px', 
+                            marginTop: '16px', 
                             borderRadius: '10px', 
                             border: '2px solid #D6D6D6',
                             }}
@@ -250,6 +293,31 @@ function DataSiswa() {
                     </Card>
                 </div>
             </main>
+
+            {/* Popup konfirmasi hapus semua data siswa */}
+            <CardPopUp
+                open={showDeleteAllPopup}
+                image={redWarningIcon}
+                borderColor="#DB4437"
+                buttons={[
+                    {
+                        label: "Kembali",
+                        bgColor: "#FFFFFF",
+                        textColor: "#DB4437",
+                        borderColor: "#DB4437",
+                        onClick: () => setShowDeleteAllPopup(false),
+                    },
+                    {
+                        label: "Hapus Semua Siswa",
+                        bgColor: "#DB4437",
+                        textColor: "#FFFFFF",
+                        borderColor: "#DB4437",
+                        onClick: handleConfirmDeleteAll,
+                    }
+                ]}
+            >
+                Apakah Anda yakin ingin menghapus semua data siswa?
+            </CardPopUp>
 
             {/* Popup konfirmasi hapus data siswa */}
             <CardPopUp
