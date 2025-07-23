@@ -42,8 +42,8 @@ function LihatPresensi() {
   // Ubah format tanggal agar sesuai
   function formatTanggalIndo(dateStr) {
     const bulanIndo = [
-        "Januari","Februari","Maret","April","Mei","Juni",
-        "Juli","Agustus","September","Oktober","November","Desember"
+      "Januari","Februari","Maret","April","Mei","Juni",
+      "Juli","Agustus","September","Oktober","November","Desember"
     ];
 
     const [year, month, day] = dateStr.split('-');
