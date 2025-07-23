@@ -98,8 +98,8 @@ footer {
 
 /* Ukuran Mobile */
 @media (max-width: 1124px) {
-  main {
-    padding: 90px 60px 60px 60px !important;
+  main, footer {
+    padding: 90px 40px 40px 40px !important;
   }
 
   .custom-flex-container {
@@ -132,7 +132,7 @@ footer {
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
-    position: fixed; /* penting agar overlay tetap */
+    position: fixed !important; /* penting agar overlay tetap */
   }
 
   .sidebar-overlay .sidebar {
@@ -170,8 +170,13 @@ footer {
   h5 { font-size: 0.85rem; }  /* Sama dengan h6 mobile */
   h6 { font-size: 0.75rem; }  /* Semakin kecil */
 
-  main {
-    padding: 90px 30px 30px 30px !important;
+  main, footer {
+    padding: 90px 10px 10px 10px !important;
+  }
+
+  .custom-table tbody td,
+  .custom-table tbody th {
+    font-size: 15px !important;
   }
 
   .header-children {

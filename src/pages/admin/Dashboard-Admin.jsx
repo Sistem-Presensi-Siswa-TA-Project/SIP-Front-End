@@ -1,5 +1,5 @@
 // Filename: Dashboard-Admin.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header, Sidebar, Card } from '../../components/Molekul.jsx';
 import { LightButton } from '../../components/Button.jsx';
@@ -35,7 +35,7 @@ function DashboardAdmin() {
   const username = localStorage.getItem('username');
 
   // Mengambil id_user berdasarkan username dari localStorage saat mount
-  useEffect(() => {
+  React.useEffect(() => {
     async function fetchIdUser() {
       if (!username) return;
       
@@ -61,6 +61,18 @@ function DashboardAdmin() {
     return () => clearInterval(timer);
   }, []);
 
+  // Lock scroll on mobile/tablet when sidebar open
+  React.useEffect(() => {
+    if (sidebarOpen && window.innerWidth < '560px') {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [sidebarOpen]);
+
   return (
     <div>
       <Header> Beranda </Header>
@@ -71,9 +83,9 @@ function DashboardAdmin() {
       >
         {/* Sidebar Overlay for Mobile and Tablet */}
         {sidebarOpen && (
-          <>
+          <React.Fragment>
             {/* Overlay yang menutupi seluruh layar, tidak bisa di klik */}
-            <div className="sidebar-overlay d-lg-none"/>
+            <div className="sidebar" style={{ maxHeight: '100vh', overflowY: 'auto' }} />
 
             {/* Sidebar tetap bisa di klik */}
             <div
@@ -111,7 +123,7 @@ function DashboardAdmin() {
                 }}
               />
             </div>
-          </>
+          </React.Fragment>
         )}
 
         {/* Sidebar for Desktop only */}

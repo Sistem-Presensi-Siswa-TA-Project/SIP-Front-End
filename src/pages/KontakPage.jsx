@@ -181,7 +181,6 @@ function Kontak() {
                             {/* Jika data yang bersifat required kosong */}
                             {errorMsg && (
                                 <div className="d-flex flex-column" style={{ color: "red", fontWeight: 'bold', marginBottom: 18 }}>
-                                    <div> Harap periksa kembali setiap kolom yang diinput harus sesuai format! </div>
                                     <div> {errorMsg} </div>
                                 </div>
                             )}
