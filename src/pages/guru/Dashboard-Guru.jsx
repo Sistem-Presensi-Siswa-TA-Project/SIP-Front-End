@@ -1,5 +1,5 @@
 // Filename: Dashboard-Guru.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Header, Sidebar, Card } from '../../components/Molekul.jsx';
 import { LightButton, InfoButton } from '../../components/Button.jsx';
@@ -43,7 +43,7 @@ function DashboardGuru() {
   const nomorIndukGuru = localStorage.getItem("username");
 
   // Mengambil data guru
-  useEffect(() => {
+  React.useEffect(() => {
     let isMounted = true;
 
     async function fetchGuru() {
@@ -70,7 +70,7 @@ function DashboardGuru() {
   }, [nomorIndukGuru]);
 
   // Mengambil data dari JadwalHandler.jsx
-  useEffect(() => {
+  React.useEffect(() => {
     let isMounted = true;
 
     async function fetchData() {
@@ -108,7 +108,7 @@ function DashboardGuru() {
   };
 
   // Set waktu up-to-date
-  useEffect(() => {
+  React.useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
@@ -126,7 +126,7 @@ function DashboardGuru() {
       >
         {/* Sidebar Overlay for Mobile and Tablet */}
         {sidebarOpen && (
-          <>
+          <React.Fragment>
             {/* Overlay yang menutupi seluruh layar, tidak bisa di klik */}
             <div className="sidebar-overlay d-lg-none"/>
 
@@ -162,7 +162,7 @@ function DashboardGuru() {
                 }}
               />
             </div>
-          </>
+          </React.Fragment>
         )}
 
         {/* Sidebar for Desktop only */}

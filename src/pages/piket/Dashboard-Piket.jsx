@@ -1,5 +1,5 @@
 // Filename: Dashboard-Piket.jsx
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header, Sidebar, Card, CardPopUp } from '../../components/Molekul.jsx';
 import { LightButton } from '../../components/Button.jsx';
@@ -37,7 +37,7 @@ function DashboardPiket() {
   const yellowWarning = iconList.find(i => i.label === "Yellow Warning Icon")?.src;
 
   // Proses fetch data
-  useEffect(() => {
+  React.useEffect(() => {
     async function fetchPetugasPiket() {
       try {
         // 1. Ambil kode piket dari localStorage
@@ -81,7 +81,7 @@ function DashboardPiket() {
   };
 
   // Set waktu up-to-date
-  useEffect(() => {
+  React.useEffect(() => {
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 1000);
@@ -99,7 +99,7 @@ function DashboardPiket() {
       >
         {/* Sidebar Overlay for Mobile and Tablet */}
         {sidebarOpen && (
-          <>
+          <React.Fragment>
             {/* Overlay yang menutupi seluruh layar, tidak bisa di klik */}
             <div className="sidebar-overlay d-lg-none"/>
 
@@ -133,7 +133,7 @@ function DashboardPiket() {
                 }}
               />
             </div>
-          </>
+          </React.Fragment>
         )}
 
         {/* Sidebar for Desktop only */}

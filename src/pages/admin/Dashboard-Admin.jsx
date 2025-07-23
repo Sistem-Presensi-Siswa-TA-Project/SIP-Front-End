@@ -61,18 +61,6 @@ function DashboardAdmin() {
     return () => clearInterval(timer);
   }, []);
 
-  // Lock scroll on mobile/tablet when sidebar open
-  React.useEffect(() => {
-    if (sidebarOpen && window.innerWidth < 560) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [sidebarOpen]);
-
   return (
     <div>
       <Header> Beranda </Header>
@@ -85,7 +73,7 @@ function DashboardAdmin() {
         {sidebarOpen && (
           <React.Fragment>
             {/* Overlay yang menutupi seluruh layar, tidak bisa di klik */}
-            <div className="sidebar" style={{ maxHeight: '100vh', overflowY: 'auto' }} />
+            <div className="sidebar-overlay d-lg-none"/>
 
             {/* Sidebar tetap bisa di klik */}
             <div
