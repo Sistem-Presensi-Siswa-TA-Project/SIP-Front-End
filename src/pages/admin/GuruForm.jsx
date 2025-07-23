@@ -284,9 +284,9 @@ function GuruForm() {
                 ]}
             >
                 {idGuru ? (
-                    <>Apakah Anda yakin ingin <b> memperbarui </b> data "<b>{formData.nama || 'guru ini'}</b>"? </>
+                    <React.Fragment> Apakah Anda yakin ingin <b> memperbarui </b> data "<b>{formData.nama || 'guru ini'}</b>"? </React.Fragment>
                 ) : (
-                    <>Apakah Anda yakin ingin <b> menyimpan </b> data guru baru dengan nama "<b>{formData.nama || 'guru ini'}</b>"? </>
+                    <React.Fragment> Apakah Anda yakin ingin <b> menyimpan </b> data guru baru dengan nama "<b>{formData.nama || 'guru ini'}</b>"? </React.Fragment>
                 )}
             </CardPopUp>
 

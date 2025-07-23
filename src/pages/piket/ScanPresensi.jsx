@@ -1,15 +1,19 @@
 // Filename: ScanPresensi.jsx
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header, Card, CardPopUp } from '../../components/Molekul.jsx';
 import { CustomButton, SecondaryButton } from '../../components/Button.jsx';
 import { FormInput } from '../../components/Forms.jsx';
 import { iconList } from '../../data/iconData.js';
-import { getAllSiswa, getSiswaByNISN } from '../../handlers/SiswaHandler.jsx';
+import { getSiswaByNISN } from '../../handlers/SiswaHandler.jsx';
+import { createPresensiPiket } from '../../handlers/PresensiHandler.jsx';
+import { getPiketByKodePiket } from '../../handlers/PiketHandler.jsx';
 import { Html5Qrcode } from 'html5-qrcode';
 
 function ScanPresensi() {
     const navigate = useNavigate();
+
+    // State
     const [secondaryButtonHovering, setSecondaryButtonHovering] = useState(false);
     const [customButtonHovering, setCustomButtonHovering] = useState(false);
     const [qrCodeHovering, setQRCodeHovering] = useState(false);
@@ -17,12 +21,17 @@ function ScanPresensi() {
     const [cancelButtonHovering, setCancelButtonHovering] = useState(false);
     const [swapButtonHovering, setSwapButtonHovering] = useState(false);
     const [showCam, setShowCam] = useState(false);
-    const [kelasList, setKelasList] = useState([]);
     const [scanned, setScanned] = useState(false);
     const [facingMode, setFacingMode] = useState('environment');
     const [errorMsg, setErrorMsg] = useState('');
-    // ==== Tambahan untuk popup QR code tidak valid ====
     const [showQrInvalidPopup, setShowQrInvalidPopup] = useState(false);
+    const [showSimpanPopup, setShowSimpanPopup] = useState(false);
+    const [errorMsg2, setErrorMsg2] = useState('');
+    const [loadingSimpan, setLoadingSimpan] = useState(false);
+    const [loadingPiket, setLoadingPiket] = useState(true);
+    const [nomorIndukPiket, setNomorIndukPiket] = useState('');
+    const [loadingSearchNisn, setLoadingSearchNisn] = useState(false);
+    const [searchNisnError, setSearchNisnError] = useState('');
 
     const qrRef = useRef(null);
     const html5QrCodeInstance = useRef(null);
@@ -35,6 +44,8 @@ function ScanPresensi() {
     const cancelIconB = iconList.find((i) => i.label === 'Cancel Icon B')?.src;
     const swapCamera = iconList.find((i) => i.label === 'Swap Camera')?.src;
     const yellowWarningIcon = iconList.find(i => i.label === "Yellow Warning Icon")?.src;
+    const greenWarningIcon = iconList.find(i => i.label === "Green Warning Icon")?.src;
+    const searchIcon = iconList.find(i => i.label === "Search Icon")?.src;
 
     // Form data
     const [formData, setFormData] = useState({
@@ -46,7 +57,7 @@ function ScanPresensi() {
         cat: '',
     });
 
-    // Form required (selain cat)
+    // Form required (selain kolom catatan)
     const requiredFields = ['waktu', 'nisn', 'nama', 'kelas', 'jenis'];
     const isButtonDisabled = requiredFields.some(field => !formData[field] || !formData[field].trim());
 
@@ -55,23 +66,108 @@ function ScanPresensi() {
         setFormData({ ...formData, [name]: value });
     };
 
-    // Ambil kelas dari semua siswa (unik, urut)
-    useEffect(() => {
-        async function fetchKelas() {
+    // Handler tombol simpan (validasi & popup)
+    const handleSimpan = () => {
+        if (isButtonDisabled) {
+            setErrorMsg2("Mohon isi field wajib!");
+            return;
+        }
+
+        setErrorMsg2('');
+        setShowSimpanPopup(true);
+    };
+
+    // Handler confirm simpan
+    const handleConfirmSimpan = async () => {
+        setLoadingSimpan(true);
+        setErrorMsg2('');
+        try {
+            // Ambil tanggal hari ini (format YYYY-MM-DD)
+            const todayString = new Date().toISOString().slice(0, 10);
+
+            // Siapkan payload
+            const payload = {
+                nisn: formData.nisn,
+                tanggal_presensi: todayString,
+                waktu: formData.waktu,
+                nama_siswa: formData.nama,
+                kelas: formData.kelas,
+                nomor_induk_piket: nomorIndukPiket || '-',
+                jenis: formData.jenis,
+                catatan: formData.cat
+            };
+
+            await createPresensiPiket(payload);
+            setShowSimpanPopup(false);
+            setErrorMsg2('');
+
+            // Refresh halaman:
+            window.location.reload();
+        } catch (err) {
+            setErrorMsg2(err.message);
+        } finally {
+            setShowSimpanPopup(false);
+            setLoadingSimpan(false);
+        }
+    };
+
+    const handleSearchNisn = async () => {
+        setLoadingSearchNisn(true);
+        setSearchNisnError('');
+        try {
+            if (!formData.nisn) {
+                setSearchNisnError('Nomor induk siswa wajib diisi!');
+                setLoadingSearchNisn(false);
+                return;
+            }
+            const siswa = await getSiswaByNISN(formData.nisn);
+            if (siswa) {
+                setFormData(prev => ({
+                    ...prev,
+                    nama: siswa.nama || '',
+                    kelas: siswa.kelas || '',
+                }));
+            } else {
+                setFormData(prev => ({
+                    ...prev,
+                    nama: '',
+                    kelas: '',
+                }));
+                setSearchNisnError('Nomor induk siswa belum terdaftar!');
+            }
+        } catch (err) {
+            console.error(err);
+            setSearchNisnError('Terjadi kesalahan saat mencari nomor induk siswa!');
+        } finally {
+            setLoadingSearchNisn(false);
+        }
+    };
+
+    // Ambil nomor induk piket
+    React.useEffect(() => {
+        async function fetchNomorIndukPiket() {
+            setLoadingPiket(true);
             try {
-                const siswa = await getAllSiswa() || [];
-                const kelasUnik = Array.from(new Set((siswa || []).map(s => s.kelas))).sort();
-                setKelasList(kelasUnik);
+                const kodePiket = localStorage.getItem('username');
+                if (!kodePiket) {
+                    setNomorIndukPiket('');
+                    setLoadingPiket(false);
+                    return;
+                }
+                const data = await getPiketByKodePiket(kodePiket);
+                setNomorIndukPiket(data?.nomor_induk || '');
             } catch (err) {
                 console.error(err);
-                setKelasList([]);
+                setNomorIndukPiket('');
+            } finally {
+                setLoadingPiket(false);
             }
         }
-        fetchKelas();
+        fetchNomorIndukPiket();
     }, []);
 
     // Ambil waktu up-to-date (real-time)
-    useEffect(() => {
+    React.useEffect(() => {
         const interval = setInterval(() => {
             const now = new Date().toLocaleTimeString('en-GB', { hour12: false });
             setFormData((prev) => ({ ...prev, waktu: now }));
@@ -83,6 +179,7 @@ function ScanPresensi() {
     const handleScan = async (data) => {
         if (data && !scanned) {
             setScanned(true);
+            setSearchNisnError('');
 
             const nisn = data.trim();
             setFormData(prev => ({ ...prev, nisn }));
@@ -90,6 +187,7 @@ function ScanPresensi() {
             // Get data siswa by NISN, lalu set nama dan kelas
             try {
                 const siswa = await getSiswaByNISN(nisn);
+
                 if (siswa) {
                     setFormData(prev => ({
                         ...prev,
@@ -122,6 +220,7 @@ function ScanPresensi() {
                 await html5QrCodeInstance.current.stop();
                 html5QrCodeInstance.current.clear();
             }
+
             html5QrCodeInstance.current = new Html5Qrcode("qr-reader-box");
             await html5QrCodeInstance.current.start(
                 { facingMode },
@@ -150,7 +249,7 @@ function ScanPresensi() {
     };
 
     // Auto start/stop scanner on showCam
-    useEffect(() => {
+    React.useEffect(() => {
         if (showCam) {
             startScanner();
         } else {
@@ -167,7 +266,7 @@ function ScanPresensi() {
     // Handler tutup popup invalid QR
     const handleCloseQrInvalidPopup = () => {
         setShowQrInvalidPopup(false);
-        // Reset form jika ingin (optional)
+        // Reset form
         setFormData(prev => ({
             ...prev,
             nisn: '',
@@ -227,19 +326,10 @@ function ScanPresensi() {
                                 // === Div Kamera Aktif (html5-qrcode) ===
                                 <React.Fragment>
                                     <div
+                                        className="qr-reader-responsive"
                                         style={{
-                                            position: 'relative',
-                                            marginTop: '12px',
-                                            borderRadius: '16px',
-                                            boxShadow: '2px 2px 12px rgba(0, 0, 0, 0.4)',
-                                            width: 400,
-                                            height: 300,
-                                            background: "#222",
-                                            overflow: 'hidden',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            marginBottom: '24px',
+                                        marginTop: '12px',
+                                        marginBottom: '24px',
                                         }}
                                     >
                                         <div
@@ -345,70 +435,133 @@ function ScanPresensi() {
                         </div>
 
                         {/* Form Presensi Piket */}
-                        <div
-                            className="d-flex flex-column justify-content-center align-items-center w-full"
-                            style={{ marginTop: '15px' }}
-                        >
-                            {[
-                                ['Waktu Presensi', 'Waktu Presensi', 'waktu'],
-                                ['Nomor Induk Siswa', 'Nomor Induk Siswa', 'nisn'],
-                                ['Nama Siswa', 'Nama Siswa', 'nama'],
-                                ['Kelas', 'Kelas', 'kelas'],
-                                ['Jenis Presensi', 'Jenis Presensi', 'jenis'],
-                                ['Catatan', 'Catatan', 'cat'],
-                            ].map(([label, placeholder, name], index) => {
-                                const isRequired = requiredFields.includes(name);
-                                return (
-                                    <div style={{ maxWidth: '650px', width: '100%' }} key={index}>
-                                        {name === 'jenis' ? (
-                                            <FormInput
-                                                label={label}
-                                                name={name}
-                                                value={formData[name]}
-                                                required={isRequired}
-                                                placeholder={placeholder}
-                                                onChange={handleChange}
-                                                type="select"
-                                                options={[
-                                                    { label: 'Presensi Masuk', value: 'Presensi Masuk' },
-                                                    { label: 'Presensi Pulang', value: 'Presensi Pulang' }
-                                                ]}
-                                            />
-                                        ) : name === 'kelas' ? (
-                                            <FormInput
-                                                label={label}
-                                                name={name}
-                                                value={formData[name]}
-                                                required={isRequired}
-                                                placeholder={placeholder}
-                                                onChange={handleChange}
-                                                type="select"
-                                                options={kelasList.map(k => ({ value: k, label: k }))}
-                                            />
-                                        ) : name === 'waktu' ? (
-                                            <FormInput
-                                                label={label}
-                                                name={name}
-                                                value={formData[name]}
-                                                required={isRequired}
-                                                placeholder={placeholder}
-                                                onChange={handleChange}
-                                                readOnly
-                                            />
-                                        ) : (
-                                            <FormInput
-                                                label={label}
-                                                name={name}
-                                                value={formData[name]}
-                                                required={isRequired}
-                                                placeholder={placeholder}
-                                                onChange={handleChange}
-                                            />
-                                        )}
-                                    </div>
-                                );
-                            })}
+                        <div className="d-flex flex-column justify-content-center align-items-center w-full" style={{ marginTop: '15px' }}>
+                            {/* Waktu Presensi */}
+                            <div style={{ maxWidth: '650px', width: '100%' }}>
+                                <FormInput
+                                    label="Waktu Presensi"
+                                    name="waktu"
+                                    value={formData.waktu}
+                                    required
+                                    placeholder="Waktu Presensi"
+                                    onChange={handleChange}
+                                    readOnly
+                                />
+                            </div>
+                            
+                            {/* Nomor Induk Siswa + Search */}
+                            <div style={{ maxWidth: '650px', width: '100%', display: 'flex', alignItems: 'center', gap: 8 }}>
+                                <FormInput
+                                    label="Nomor Induk Siswa"
+                                    name="nisn"
+                                    value={formData.nisn}
+                                    required
+                                    placeholder="Nomor Induk Siswa"
+                                    autoComplete="off"
+                                    onChange={handleChange}
+                                    style={{ marginBottom: 0, width: '100%' }}
+                                />
+
+                                {/* Button Search Nomor Induk Siswa */}
+                                <button
+                                    type="button"
+                                    onClick={handleSearchNisn}
+                                    disabled={loadingSearchNisn || !formData.nisn}
+                                    style={{
+                                        height: 37,
+                                        width: 37,
+                                        borderRadius: 6,
+                                        border: '1.5px solid #000',
+                                        background: loadingSearchNisn ? '#EEE' : '#FFF',
+                                        cursor: loadingSearchNisn ? 'not-allowed' : 'pointer',
+                                        marginLeft: 4,
+                                        marginTop: 19,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        padding: 0,
+                                        boxShadow: '0px 2px 3px rgba(0, 0, 0, 0.25)',
+                                    }}
+                                    title="Cari Siswa"
+                                >
+                                    {loadingSearchNisn ? (
+                                        <span className="spinner-border spinner-border-sm" />
+                                    ) : searchIcon ? (
+                                        <img src={searchIcon} alt="Search" width="27px" height="27px" />
+                                    ) : (
+                                        <span role="img" aria-label="search"> 🔍 </span>
+                                    )}
+                                </button>
+                            </div>
+
+                            {searchNisnError && (
+                                <div style={{ color: 'red', fontWeight: 'bold', fontSize: 16, marginTop: 4, marginBottom: 8, maxWidth: 650 }}>
+                                    {searchNisnError}
+                                </div>
+                            )}
+
+                            {/* Nama Siswa */}
+                            <div style={{ maxWidth: '650px', width: '100%' }}>
+                                <FormInput
+                                    label="Nama Siswa"
+                                    name="nama"
+                                    value={formData.nama}
+                                    required
+                                    placeholder="Nama Siswa"
+                                    onChange={handleChange}
+                                    readOnly
+                                />
+                            </div>
+
+                            {/* Kelas */}
+                            <div style={{ maxWidth: '650px', width: '100%' }}>
+                                <FormInput
+                                    label="Kelas"
+                                    name="kelas"
+                                    value={formData.kelas}
+                                    required
+                                    placeholder="Kelas"
+                                    onChange={handleChange}
+                                    readOnly
+                                />
+                            </div>
+
+                            {/* Jenis Presensi */}
+                            <div style={{ maxWidth: '650px', width: '100%' }}>
+                                <FormInput
+                                    label="Jenis Presensi"
+                                    name="jenis"
+                                    value={formData.jenis}
+                                    required
+                                    placeholder="Jenis Presensi"
+                                    onChange={handleChange}
+                                    type="select"
+                                    options={[
+                                        { label: 'Presensi Masuk', value: 'Presensi Masuk' },
+                                        { label: 'Presensi Pulang', value: 'Presensi Pulang' }
+                                    ]}
+                                />
+                            </div>
+
+                            {/* Catatan */}
+                            <div style={{ maxWidth: '650px', width: '100%' }}>
+                                <FormInput
+                                    label="Catatan"
+                                    name="cat"
+                                    value={formData.cat}
+                                    placeholder="Catatan"
+                                    autoComplete="off"
+                                    onChange={handleChange}
+                                />
+                            </div>
                         </div>
+
+                        {/* Error Message untuk SIMPAN */}
+                        {errorMsg2 && (
+                            <div style={{ color: "red", fontWeight: "bold", textAlign: 'center' }}>
+                                {errorMsg2}
+                            </div>
+                        )}
 
                         {/* Tombol Simpan */}
                         <div className="d-flex justify-content-end justify-content-md-center mt-4">
@@ -435,19 +588,40 @@ function ScanPresensi() {
                                 }}
                                 onMouseEnter={() => !isButtonDisabled && setCustomButtonHovering(true)}
                                 onMouseLeave={() => !isButtonDisabled && setCustomButtonHovering(false)}
-                                onClick={() => {
-                                    if (!isButtonDisabled) {
-                                        // aksi simpan
-                                        console.log("Simpan data presensi", formData);
-                                    }
-                                }}
+                                onClick={handleSimpan}
                             >
-                                SIMPAN
+                                {loadingSimpan ? 'Menyimpan...' : (loadingPiket ? '...' : 'SIMPAN')}
                             </CustomButton>
                         </div>
                     </Card>
                 </div>
             </main>
+
+            {/* Popup jika QR code tidak valid */}
+            <CardPopUp
+                open={showSimpanPopup}
+                image={greenWarningIcon}
+                borderColor="#33DB00"
+                buttons={[
+                    {
+                        label: "Tidak",
+                        bgColor: "#FFFFFF",
+                        textColor: "#33DB00",
+                        borderColor: "#33DB00",
+                        onClick: () => setShowSimpanPopup(false),
+                    },
+    
+                    {
+                        label: "Simpan",
+                        bgColor: "#33DB00",
+                        textColor: "#FFFFFF",
+                        borderColor: "#33DB00",
+                        onClick: handleConfirmSimpan,
+                    }
+                ]}
+            >
+                <React.Fragment> Apakah Anda yakin ingin menambahkan presensi "<b>{formData.nama || 'siswa ini'}</b>"? </React.Fragment>
+            </CardPopUp>
 
             {/* Popup jika QR code tidak valid */}
             <CardPopUp
@@ -464,8 +638,8 @@ function ScanPresensi() {
                     }
                 ]}
             >
-                    QR Code tidak valid!! <br />
-                    Data siswa tidak ditemukan.
+                QR Code tidak valid!! <br />
+                Data siswa tidak ditemukan.
             </CardPopUp>
 
             <footer>

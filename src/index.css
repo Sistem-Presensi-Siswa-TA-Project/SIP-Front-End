@@ -61,6 +61,22 @@ footer {
   border-right: 1px solid #D6D6D6 !important;
 }
 
+/* QR code reader */
+.qr-reader-responsive {
+  width: 100%;
+  max-width: 400px;
+  aspect-ratio: 4/3;
+  background: #222;
+  border-radius: 16px;
+  box-shadow: 2px 2px 12px rgba(0,0,0,0.4);
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
 
 /* === Responsive === */
 .custom-flex-container {
@@ -162,7 +178,7 @@ footer {
 }
 
 /* Ukuran Mobile Sedang -> Kecil */
-@media (max-width: 560px) {
+@media (max-width: 600px) {
   h1 { font-size: 2rem; }     /* Sama dengan h2 mobile */
   h2 { font-size: 1.5rem; }   /* Sama dengan h3 mobile */
   h3 { font-size: 1.25rem; }  /* Sama dengan h4 mobile */
@@ -177,6 +193,14 @@ footer {
   .custom-table tbody td,
   .custom-table tbody th {
     font-size: 15px !important;
+  }
+
+  .qr-reader-responsive {
+    max-width: 100vw;
+    min-width: 240px;
+    aspect-ratio: 1/1;
+    height: 55vw;
+    min-height: 240px;
   }
 
   .header-children {

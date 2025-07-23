@@ -74,6 +74,16 @@ export async function searchPresensiMapel({ tanggal, nama, mapel, kelas }) {
 }
 
 // Presensi Piket ~~~
+export async function createPresensiPiket(data) {
+    // data: { nisn, tanggal_presensi, waktu, nama_siswa, kelas, nomor_induk_piket, jenis }
+    try {
+        const res = await axios.post(`${API}/api/presensi-piket`, data);
+        return res.data; // { message, id_presensipiket? }
+    } catch (error) {
+        throw error.response?.data || { message: "Gagal simpan presensi piket!" };
+    }
+}
+
 export async function searchPresensiPiket({ tanggal_presensi, nama_siswa, kelas }) {
     try {
         const res = await axios.post(`${API}/api/presensi-piket/search`, {

@@ -66,6 +66,7 @@ import QRCode from "../assets/qrcode-icon.png";
 import RedWarning from "../assets/redWarning-icon.svg";
 import RightArrowWhite from "../assets/rightArrow-white.svg";
 import SakitIcon from "../assets/sakit-icon.svg";
+import SearchIcon from "../assets/search-icon.svg";
 import ScanPresensi from "../assets/scan-presensi.svg";
 import Siswa from "../assets/siswa.svg";
 import SiswaGrey from "../assets/siswaIcon-grey.svg";
@@ -147,4 +148,5 @@ export const iconList = [
   { id: 70, label: "Ubah Password Icon", src: UbahPassword },
   { id: 71, label: "User Icon", src: UserIcon },
   { id: 72, label: "Yellow Warning Icon", src: YellowWarning },
+  { id: 73, label: "Search Icon", src: SearchIcon },
 ];
