@@ -61,10 +61,17 @@ function JadwalForm() {
             const guru = await getAllGuru() || [];
             setGuruList(guru);
 
-            // Ambil data kelas
+            // Ambil data kelas dan kelas_gabungan
             const siswa = await getAllSiswa() || [];
-            // Ambil kelas unik
-            const kelasUnik = Array.from(new Set((siswa || []).map(s => s.kelas))).sort();
+
+            // Gabung semua kelas dan kelas_gabungan (jika ada)
+            const kelasArr = [
+                ...((siswa || []).map(s => s.kelas)), // mengambil kelas biasa
+                ...((siswa || []).map(s => s.kelas_gabungan).filter(Boolean)), // mengambil kelas_gabungan yang TIDAK kosong/null/undefined
+            ];
+
+            // Buat Set untuk menghilangkan duplikat lalu urutkan
+            const kelasUnik = Array.from(new Set(kelasArr)).sort();
             setKelasList(kelasUnik);
         }
         fetchDropdownData();

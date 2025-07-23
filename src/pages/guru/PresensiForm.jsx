@@ -229,7 +229,13 @@ function PresensiForm() {
                         className="animate-button d-flex flex-row gap-2"
                         width="125px"
                         height="45px"
-                        onClick={() => navigate(`${prefix}/kelas/${kelasId}/pertemuan/lihat-presensi`)}
+                        onClick={() => {
+                            if (tanggalPresensi) {
+                                navigate(`${prefix}/kelas/${kelasId}/pertemuan/lihat-presensi?id=${idJadwal}&tgl=${tanggalPresensi}`);
+                            } else {
+                                navigate(`${prefix}/kelas/${kelasId}/pertemuan?id=${idJadwal}`);
+                            }
+                        }}
                         onMouseEnter={() => setSecondaryButtonHovering(true)}
                         onMouseLeave={() => setSecondaryButtonHovering(false)}
                         style={{ 

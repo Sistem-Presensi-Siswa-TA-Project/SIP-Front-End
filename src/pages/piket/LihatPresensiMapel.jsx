@@ -171,7 +171,7 @@ function LihatPresensiPiket() {
                 <tbody>
                   {result.length === 0 ? (
                     <tr>
-                      <td colSpan="6">Data tidak ditemukan</td>
+                      <td colSpan="6"> Data tidak ditemukan! </td>
                     </tr>
                   ) : (
                     result.map((row, i) => (
