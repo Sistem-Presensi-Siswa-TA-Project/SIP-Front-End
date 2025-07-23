@@ -63,7 +63,7 @@ function DashboardAdmin() {
 
   // Lock scroll on mobile/tablet when sidebar open
   React.useEffect(() => {
-    if (sidebarOpen && window.innerWidth < '560px') {
+    if (sidebarOpen && window.innerWidth < 560) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
