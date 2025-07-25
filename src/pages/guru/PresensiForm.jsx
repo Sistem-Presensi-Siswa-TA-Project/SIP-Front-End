@@ -463,7 +463,7 @@ function PresensiForm() {
                         onClick: () => setShowSimpanPopup(false),
                     },
                     {
-                        label: tanggalPresensi ? "Perbarui Data" : "Simpan Data",
+                        label: tanggalPresensi ? "Perbarui Data" : "Simpan",
                         bgColor: tanggalPresensi ? "#1976D2" : "#33DB00",
                         textColor: "#FFFFFF",
                         borderColor: tanggalPresensi ? "#1976D2" : "#33DB00",
