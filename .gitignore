@@ -2,7 +2,7 @@
 node_modules/
 
 #Package-lock
-# package-lock.json
+package-lock.json
 
 # Build output
 dist/
@@ -12,7 +12,7 @@ build/
 .vite/
 
 # Local env files
-# .env
+.env
 .env.local
 .env.development
 .env.test
